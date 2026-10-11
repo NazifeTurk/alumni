@@ -1,17 +1,22 @@
-FROM python:3.11-slim
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
 
+COPY ["src/Alumni.csproj", "src/"]
+RUN dotnet restore "src/Alumni.csproj"
+
+COPY src/ src/
+WORKDIR "/src/src"
+RUN dotnet build "Alumni.csproj" -c Release -o /app/build
+RUN dotnet publish "Alumni.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS final
 WORKDIR /app
+COPY --from=build /app/publish .
 
-# Prevent Python from writing .pyc files and enable unbuffered logging
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
-
-COPY requirements.txt .
-
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . .
-
+ENV ASPNETCORE_URLS=http://+:8000
+ENV ASPNETCORE_ENVIRONMENT=Development
 EXPOSE 8000
 
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+ENTRYPOINT ["dotnet", "Alumni.dll"]

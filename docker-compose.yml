@@ -7,11 +7,9 @@ services:
     ports:
       - "${APP_PORT:-8000}:8000"
     environment:
-      - APP_ENV=${APP_ENV:-development}
-      - APP_PORT=${APP_PORT:-8000}
-      - DATABASE_URL=${DATABASE_URL:-postgresql://alumni_user:alumni_password@db:5432/alumni_db}
-    volumes:
-      - ./src:/app/src
+      - ASPNETCORE_ENVIRONMENT=${APP_ENV:-Development}
+      - ASPNETCORE_URLS=http://+:8000
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${DB_NAME:-alumni_db};Username=${DB_USER:-alumni_user};Password=${DB_PASSWORD:-alumni_password}
     depends_on:
       db:
         condition: service_healthy
