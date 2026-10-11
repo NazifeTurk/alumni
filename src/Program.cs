@@ -7,8 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddControllersWithViews();
 
-// Register In-Memory User Service (Week 03 Data Store)
+// Register In-Memory Services (Week 03 & Week 04 Data Stores)
 builder.Services.AddSingleton<InMemoryUserService>();
+builder.Services.AddSingleton<IAnnouncementService, InMemoryAnnouncementService>();
 
 // 📖 Week 03 Task 7: Swagger / OpenAPI Configuration
 builder.Services.AddEndpointsApiExplorer();
@@ -53,8 +54,11 @@ app.UseAuthorization();
 // 🚪 Week 02: Basic & Whiteboard Routes
 app.MapBasicRoutes();
 
-// 🔄 Week 03: CRUD In-Memory User & Alumni API Routes
+// 🔄 Week 03: Minimal User API Routes
 app.MapUserApiRoutes();
+
+// 🏛️ Week 04: MVC Controllers (UserController, ApiUserController, AnnouncementController, ApiAnnouncementController)
+app.MapControllers();
 
 // 🚫 Slide Section D & E: ANY /* -> 404 Not Found Fallback Handler
 app.MapFallback((HttpContext context) =>

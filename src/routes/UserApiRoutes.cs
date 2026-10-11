@@ -22,8 +22,7 @@ public static class UserApiRoutes
         .WithName("HealthCheck")
         .WithTags("Health");
 
-        // Map both /api/users (Whiteboard) and /api/alumni (Slide)
-        MapCrudEndpoints(app, "/api/users");
+        // Map /api/alumni as alias for REST resources
         MapCrudEndpoints(app, "/api/alumni");
     }
 

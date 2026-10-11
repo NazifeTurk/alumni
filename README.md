@@ -224,6 +224,49 @@ Explore, test, and execute live HTTP requests directly from the browser without 
 
 ---
 
+## 🏛️ Week 04: MVC Architecture & Dual Controller Pattern
+
+In Week 04, the application formalizes the **Model-View-Controller (MVC)** design pattern, demonstrating clear separation of concerns without database coupling:
+
+```text
+       ┌────────────────────────────────────────────────────────┐
+       │             Browser / Client HTTP Request              │
+       └───────────────────────────┬────────────────────────────┘
+                                   │
+              ┌────────────────────┴────────────────────┐
+              ▼                                         ▼
+    [ GET/POST /users ]                     [ GET/POST /api/users ]
+              │                                         │
+              ▼                                         ▼
+   ┌──────────────────────┐                  ┌──────────────────────┐
+   │    UserController    │                  │  ApiUserController   │
+   │  (Web/View Controller│                  │   (API Controller)   │
+   └──────────┬───────────┘                  └──────────┬───────────┘
+              │                                         │
+              ├───────────────┐         ┌───────────────┤
+              ▼               ▼         ▼               ▼
+      ┌──────────────┐   ┌───────────────────┐   ┌──────────────┐
+      │  View Layer  │   │    Model Layer    │   │  JSON Output │
+      │ (HTML/CSS UI)│   │ (User/Announcement│   │  (Swagger UI)│
+      └──────────────┘   └───────────────────┘   └──────────────┘
+```
+
+### 1. Dual Controller Pattern
+To differentiate between human-facing UI and machine-facing data contracts:
+* **Web / View Controllers (`UserController`, `AnnouncementController`)**: Serves semantic HTML views (`text/html`), table listings, input forms, and redirects.
+* **API Controllers (`ApiUserController`, `ApiAnnouncementController`)**: Decorated with `[ApiController]`, serving raw JSON payloads, RFC status codes (`200`, `201`, `400`, `404`), and documented via Swagger.
+
+### 2. Controller & Route Mapping
+
+| Domain | Controller | Base Route | Response Type | Role |
+| :--- | :--- | :--- | :---: | :--- |
+| **Users** | `UserController` | `/users` | HTML View | Human interface: List, Add, Detail, Delete alumni |
+| **Users** | `ApiUserController` | `/api/users` | JSON | Programmatic REST API with full CRUD |
+| **Homework** | `AnnouncementController` | `/announcements` | HTML View | Campus announcements noticeboard & publish form |
+| **Homework** | `ApiAnnouncementController` | `/api/announcements` | JSON | REST API backed by `IAnnouncementService` interface |
+
+---
+
 ## 📂 Repository Structure
 
 ```text
@@ -235,17 +278,24 @@ alumni/
 ├── README.md                       # Architecture, design decisions, and system contract
 └── src/                            # ASP.NET Core Web Application
     ├── Alumni.csproj               # .NET 7 Web SDK project file (Swashbuckle Swagger enabled)
-    ├── Program.cs                  # Pipeline bootstrap, Swagger UI & fallback 404
+    ├── Program.cs                  # Pipeline bootstrap, Swagger UI & controller mapping
     ├── appsettings.json            # Configuration settings & database connection strings
-    ├── models/                     # (Week 03) Domain Entities & DTOs
-    │   └── User.cs                 # User entity, CreateUserRequest, PatchUserRequest
-    ├── services/                   # (Week 03) Business Logic & Data Stores
-    │   └── InMemoryUserService.cs  # Thread-safe in-memory store (pre-seeded slide records)
-    ├── routes/                     # Modular Routing Handlers
-    │   ├── BasicRoutes.cs          # Week 02 whiteboard routes: /ok, /hello, /sum, /home, /about
-    │   ├── UserApiRoutes.cs        # Week 03 whiteboard CRUD: /api/users, /api/health
-    │   └── AlumniApiRoutes.cs      # Slide D REST resources: /api/alumni, /api/alumni/{id}/jobs
-    ├── Controllers/                # (Week 04) REST API and MVC Controllers
+    ├── models/                     # 📦 Model Layer (Domain Entities & Embedded CRUD)
+    │   ├── User.cs                 # User entity with in-memory CRUD methods
+    │   └── Announcement.cs         # (Homework) Announcement entity & DTOs
+    ├── services/                   # ⚙️ Service & Interface Layer
+    │   ├── InMemoryUserService.cs  # In-memory user management
+    │   ├── IAnnouncementService.cs # (Homework) Interface contract to manage announcements
+    │   └── InMemoryAnnouncementService.cs # (Homework) In-memory announcement implementation
+    ├── Controllers/                # 🎮 Controller Layer (MVC & API)
+    │   ├── UserController.cs       # View Controller -> renders HTML at /users
+    │   ├── ApiUserController.cs    # API Controller -> returns JSON at /api/users
+    │   ├── AnnouncementController.cs # (Homework) View Controller -> HTML at /announcements
+    │   └── ApiAnnouncementController.cs # (Homework) API Controller -> JSON at /api/announcements
+    ├── routes/                     # Modular Routing Handlers (Week 02 & 03)
+    │   ├── BasicRoutes.cs          # Whiteboard routes: /ok, /hello, /sum, /home, /about
+    │   ├── UserApiRoutes.cs        # Health check diagnostics (/api/health)
+    │   └── AlumniApiRoutes.cs      # Slide D REST resources: /api/alumni
     ├── Data/                       # (Week 05 & 06) Entity Framework Core DbContext
     ├── Middlewares/                # (Week 09) Custom HTTP request pipeline bouncers
     └── Views/                      # (Week 10) Presentation layer components
