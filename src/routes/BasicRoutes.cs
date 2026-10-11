@@ -202,7 +202,8 @@ public static class BasicRoutes
                     <nav>
                         <a href="/" class="active">Home</a>
                         <a href="/about">About</a>
-                        <a href="/api/alumni">Alumni API</a>
+                        <a href="/api/users">Users API</a>
+                        <a href="/api/swagger" style="color: #34d399; font-weight: 700;">Swagger UI ⚡</a>
                     </nav>
                 </header>
 

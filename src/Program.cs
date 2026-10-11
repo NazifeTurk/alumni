@@ -1,9 +1,31 @@
 using Alumni.Routes;
+using Alumni.Services;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container (Controllers, Views, Services)
+// Add services to the container
 builder.Services.AddControllersWithViews();
+
+// Register In-Memory User Service (Week 03 Data Store)
+builder.Services.AddSingleton<InMemoryUserService>();
+
+// 📖 Week 03 Task 7: Swagger / OpenAPI Configuration
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Alumni Tracking System API",
+        Version = "v1",
+        Description = "Week 03 — HTTP Methods, Status Codes & In-Memory CRUD Operations (Assoc. Prof. Dr. Emre Akadal)",
+        Contact = new OpenApiContact
+        {
+            Name = "Nazife Türk",
+            Email = "nazife.turk@ogr.iu.edu.tr"
+        }
+    });
+});
 
 var app = builder.Build();
 
@@ -14,12 +36,25 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// 📖 Expose Swagger at both /api/swagger and /swagger
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Alumni API v1");
+    c.RoutePrefix = "api/swagger";
+});
+
+// Also support root /swagger redirect/view
+app.MapGet("/swagger", () => Results.Redirect("/api/swagger"));
+
 app.UseRouting();
 app.UseAuthorization();
 
-// 🚪 Week 02: Register Route Modules
+// 🚪 Week 02: Basic & Whiteboard Routes
 app.MapBasicRoutes();
-app.MapAlumniApiRoutes();
+
+// 🔄 Week 03: CRUD In-Memory User & Alumni API Routes
+app.MapUserApiRoutes();
 
 // 🚫 Slide Section D & E: ANY /* -> 404 Not Found Fallback Handler
 app.MapFallback((HttpContext context) =>
@@ -31,7 +66,7 @@ app.MapFallback((HttpContext context) =>
         code = 404,
         message = $"Route '{context.Request.Path}' does not exist on this server.",
         method = context.Request.Method,
-        hint = "Refer to / (or /home) for the routing table, or /api/alumni for resources."
+        hint = "Inspect available endpoints at /api/swagger or visit /home."
     });
 });
 

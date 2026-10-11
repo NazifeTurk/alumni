@@ -192,6 +192,38 @@ The application implements full RESTful resource semantics, parameterized path e
 
 ---
 
+## 🔄 Week 03: HTTP Methods, Status Codes & In-Memory CRUD
+
+As instructed during Week 03 (*"don't use any database yet"*), the platform implements thread-safe in-memory User CRUD operations backed by a `ConcurrentDictionary`, accompanied by interactive Swagger/OpenAPI documentation and REST status codes:
+
+### 📖 Interactive Swagger API Documentation
+Explore, test, and execute live HTTP requests directly from the browser without manual Postman configuration:
+* **Interactive UI**: [http://localhost:8000/api/swagger](http://localhost:8000/api/swagger) (also accessible at [http://localhost:8000/swagger](http://localhost:8000/swagger))
+* **OpenAPI V1 Spec**: [http://localhost:8000/swagger/v1/swagger.json](http://localhost:8000/swagger/v1/swagger.json)
+
+---
+
+### 📡 Week 03 Whiteboard Assigned Endpoints
+
+| # | Method | Endpoint | Description | Status Code | Example cURL |
+|---|:---:|:---|:---|:---:|:---|
+| **1** | `GET` | `/api/health` | Comprehensive JSON diagnostics & uptime | `200 OK` | `curl -s http://localhost:8000/api/health` |
+| **2** | - | *Postman / Swagger* | Use Swagger at `/api/swagger` or Postman for testing | - | [Swagger UI](http://localhost:8000/api/swagger) |
+| **3** | `POST` | `/api/users` | Create user in in-memory store | `201 Created` | `curl -X POST http://localhost:8000/api/users -H "Content-Type: application/json" -d '{"name":"Elif Kaya","graduationYear":2024}'` |
+| **4** | `GET` | `/api/users` | List all users (pre-seeded slide dataset) | `200 OK` | `curl -s http://localhost:8000/api/users` |
+| **4b** | `GET` | `/api/users/{id}` | Retrieve single user by ID | `200 OK` / `404 Not Found` | `curl -s http://localhost:8000/api/users/42` |
+| **5a** | `PUT` | `/api/users/{id}` | Replace entire user record | `200 OK` / `404 Not Found` | `curl -X PUT http://localhost:8000/api/users/42 -H "Content-Type: application/json" -d '{"name":"Elif Kaya","email":"elif@iu.edu.tr","graduationYear":2025,"role":"lead"}'` |
+| **5b** | `PATCH` | `/api/users/{id}` | Partially update single field | `200 OK` / `404 Not Found` | `curl -X PATCH http://localhost:8000/api/users/42 -H "Content-Type: application/json" -d '{"role":"director"}'` |
+| **6** | `DELETE` | `/api/users/{id}` | Remove user from in-memory store | `200 OK` / `404 Not Found` | `curl -X DELETE http://localhost:8000/api/users/42` |
+
+> **Pre-Seeded Alumni Dataset (From Lecture Slide B):**
+> 1. `Id: 42` — **Elif Kaya** (Graduation: 2024)
+> 2. `Id: 43` — **Mert Aydın** (Graduation: 2021)
+> 3. `Id: 44` — **Zeynep Arslan** (Graduation: 2019)
+> 4. `Id: 45` — **Can Öztürk** (Graduation: 2023)
+
+---
+
 ## 📂 Repository Structure
 
 ```text
@@ -202,17 +234,20 @@ alumni/
 ├── .gitignore                      # .NET build artifacts (bin/, obj/, .vs/) & secrets
 ├── README.md                       # Architecture, design decisions, and system contract
 └── src/                            # ASP.NET Core Web Application
-    ├── Alumni.csproj               # .NET 7 Web SDK project file
-    ├── Program.cs                  # WebApplication bootstrap, middleware & fallback 404
+    ├── Alumni.csproj               # .NET 7 Web SDK project file (Swashbuckle Swagger enabled)
+    ├── Program.cs                  # Pipeline bootstrap, Swagger UI & fallback 404
     ├── appsettings.json            # Configuration settings & database connection strings
-    ├── routes/                     # (Week 02) Modular Routing Handlers
-    │   ├── BasicRoutes.cs          # Whiteboard routes: /ok, /hello, /sum, /home, /about
-    │   └── AlumniApiRoutes.cs      # Slide D resources: /api/alumni, /api/alumni/{id}/jobs
+    ├── models/                     # (Week 03) Domain Entities & DTOs
+    │   └── User.cs                 # User entity, CreateUserRequest, PatchUserRequest
+    ├── services/                   # (Week 03) Business Logic & Data Stores
+    │   └── InMemoryUserService.cs  # Thread-safe in-memory store (pre-seeded slide records)
+    ├── routes/                     # Modular Routing Handlers
+    │   ├── BasicRoutes.cs          # Week 02 whiteboard routes: /ok, /hello, /sum, /home, /about
+    │   ├── UserApiRoutes.cs        # Week 03 whiteboard CRUD: /api/users, /api/health
+    │   └── AlumniApiRoutes.cs      # Slide D REST resources: /api/alumni, /api/alumni/{id}/jobs
     ├── Controllers/                # (Week 04) REST API and MVC Controllers
-    ├── Models/                     # (Week 05) Domain entities, DTOs, and view models
     ├── Data/                       # (Week 05 & 06) Entity Framework Core DbContext
     ├── Middlewares/                # (Week 09) Custom HTTP request pipeline bouncers
-    ├── Services/                   # (Week 12) Encapsulated business logic
     └── Views/                      # (Week 10) Presentation layer components
 ```
 
