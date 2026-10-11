@@ -50,7 +50,7 @@ The system conforms to the course's cardinal rule: **single-command startup**.
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/<your-username>/alumni.git
+   git clone https://github.com/NazifeTurk/alumni.git
    cd alumni
    ```
 
