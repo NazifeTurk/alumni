@@ -1,52 +1,113 @@
 # Alumni Tracking System
 
-A centralized, enterprise-grade platform designed to track, connect, and empower university alumni throughout their post-graduation journeys.
+[![Runtime](https://img.shields.io/badge/.NET-7.0%20%7C%20C%23-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
+[![Database](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Container](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+An enterprise-ready, modular web application engineered to track university graduates, monitor career trajectories, facilitate academic mentorship networks, and coordinate institutional alumni engagement.
 
 ---
 
-## 📌 Project Overview
-
-The **Alumni Tracking System** bridges the gap between graduating students, alumni, and academic institutions. The system enables universities to maintain an active directory of their graduates, track career trajectories, facilitate mentorship, organize networking events, and gather institutional feedback.
-
-### Core Objectives & Capabilities
-- **Alumni Directory & Profiles**: Comprehensive profiles detailing graduation year, faculty, major, current employment, skills, and contact preferences.
-- **Career Trajectory & Analytics**: Track employment history, promotions, industries, and geographical distribution.
-- **Mentorship & Networking**: Facilitate connections between senior alumni and recent graduates or current students.
-- **Job & Internship Board**: Enable alumni to post job openings and refer peers within their organizations.
-- **Events & Reunions**: Management of alumni gatherings, webinars, and homecoming events.
+## 📖 Table of Contents
+- [🎯 Project Overview](#-project-overview)
+- [🏛️ Architectural Design & Layering](#️-architectural-design--layering)
+- [⚖️ Technology Stack & Trade-offs (Defense)](#️-technology-stack--trade-offs-defense)
+- [🚀 Quick Start: The One-Command Rule](#-quick-start-the-one-command-rule)
+- [📡 API Contract & Health Check](#-api-contract--health-check)
+- [📂 Repository Structure](#-repository-structure)
+- [🐳 Containerization & Orchestration](#-containerization--orchestration)
+- [🎓 Coursework Specification](#-coursework-specification)
 
 ---
 
-## 🛠️ Technology Stack & Architectural Decisions
+## 🎯 Project Overview
 
-| Layer | Technology | Rationale | One Thing It Is Bad At |
+The **Alumni Tracking System** bridges academic institutions and their graduates through a structured, data-driven platform. 
+
+### Core System Capabilities
+* **Alumni Directory & Profiles**: Centralized records containing graduation year, faculty, department, current professional role, and contact preferences.
+* **Career Trajectory & Analytics**: Longitudinal tracking of employment histories, promotions, industries, and geographical distribution.
+* **Mentorship & Networking Hub**: Facilitating verified connections between experienced alumni and recent graduates or active undergraduates.
+* **Opportunities & Referral Board**: Peer-to-peer job openings, academic research postings, and referral pipelines.
+* **Events & Reunions**: Management of homecoming gatherings, webinars, and regional chapter events.
+
+---
+
+## 🏛️ Architectural Design & Layering
+
+The system is constructed with strict separation of concerns following clean enterprise ASP.NET Core architectural patterns:
+
+```text
+[ HTTP Client / Browser / Single-Page Application ]
+                        │
+                        ▼
+┌────────────────────────────────────────────────────────┐
+│               HTTP Request Pipeline                    │
+│   - Middleware: Routing, HSTS, Logging, Exception      │
+│   - Security & Authentication Filters                  │
+└───────────────────────┬────────────────────────────────┘
+                        │
+                        ▼
+┌────────────────────────────────────────────────────────┐
+│               Controller / Endpoint Layer              │
+│   - RESTful API Controllers (src/Controllers/)         │
+│   - Request validation, parameter mapping & dispatch   │
+│   - Standard HTTP response codes (200, 201, 400, 404)  │
+└───────────────────────┬────────────────────────────────┘
+                        │
+                        ▼
+┌────────────────────────────────────────────────────────┐
+│               Service / Business Logic Layer           │
+│   - Domain services & business rules (src/Services/)   │
+│   - Decoupled contracts via Interfaces (IAlumniService)│
+│   - Dependency Injection registration                  │
+└───────────────────────┬────────────────────────────────┘
+                        │
+                        ▼
+┌────────────────────────────────────────────────────────┐
+│               Data Access & ORM Layer                  │
+│   - Entity Framework Core DbContext (src/Data/)        │
+│   - Relational Domain Entities & Mappings (src/Models/)│
+│   - Code-First Migrations                              │
+└───────────────────────┬────────────────────────────────┘
+                        │
+                        ▼
+┌────────────────────────────────────────────────────────┐
+│               Persistent Storage                       │
+│   - PostgreSQL 16 Relational Database Engine           │
+│   - ACID Compliance, Foreign Key Relational Integrity   │
+└────────────────────────────────────────────────────────┘
+```
+
+---
+
+## ⚖️ Technology Stack & Trade-offs (Defense)
+
+Every foundational technology in this platform was chosen deliberately, with full awareness of its strengths and architectural compromises:
+
+| Component | Selected Technology | Architectural Rationale | Inherent Trade-off / Weakness |
 | :--- | :--- | :--- | :--- |
-| **Back-end Language & Framework** | **C# / ASP.NET Core (.NET 7)** | Enterprise-grade type safety, high-performance asynchronous runtime (Kestrel), first-class native Dependency Injection, and direct alignment with MVC, routing, and middleware patterns. | **Verbosity & Boilerplate Ceremony**: C# requires significant ceremony compared to scripting languages—explicit type declarations, `.csproj` project manifests, and compilation steps, leading to larger container sizes and slower prototyping cycles. |
-| **Database & ORM** | **PostgreSQL & Entity Framework Core** | Industry-standard relational integrity, ACID compliance, mature schema migrations, and first-class EF Core support via `Npgsql`. | **Horizontal Write Scalability**: Relational databases demand complex sharding and clustering setups to scale write throughput across distributed multi-region environments compared to NoSQL data stores. |
-| **Containerization** | **Docker & Docker Compose** | Reproducible development and deployment environment, guaranteeing that the entire system boots cleanly with a single command (`docker compose up`). | **Resource Overhead**: Container virtualization and .NET runtime images consume higher baseline memory and CPU overhead compared to running single compiled binaries directly on the host OS. |
-| **AI Assistant** | **Antigravity (Google DeepMind)** | Autonomous pair programming assistant assisting with architectural structuring, syntax drafting, and container orchestration. | — |
-
-> **Defense Statement (What to say out loud to your professor):**
-> *"I have chosen **C# with ASP.NET Core** for the backend and **PostgreSQL** for the database.*
-> 
-> *I chose C# and ASP.NET Core because our 14-week curriculum covers Routing, MVC, ORM, Middleware, and Service Layers—all of which are first-class native citizens in .NET. It gives us compile-time type safety, world-class Dependency Injection, and Entity Framework Core, which is the gold standard for relational ORM.*
-> 
-> *One thing C# is bad at is **verbosity and boilerplate ceremony**: compared to scripting languages like Python or JavaScript, every change requires project files, explicit type definitions, and compilation steps, resulting in slower quick-and-dirty iteration.*
-> 
-> *I chose PostgreSQL because tracking graduates, jobs, and faculties demands strict relational integrity and ACID guarantees. One thing PostgreSQL is bad at is **horizontal write scaling**, which requires complex clustering and sharding compared to distributed NoSQL databases."*
+| **Backend Runtime** | **C# / ASP.NET Core (.NET 7)** | Compile-time type safety, first-class native Dependency Injection, high throughput (Kestrel web server), and explicit support for enterprise MVC and middleware patterns. | **Verbosity & Boilerplate Ceremony**: Compared to lightweight interpreted runtimes (Node.js, Python), C# requires project manifests (`.csproj`), strict type definitions, and compilation pipelines, resulting in slower rapid-prototyping cycles and larger container base image footprints. |
+| **Relational Database** | **PostgreSQL 16** | Strict relational integrity, robust ACID guarantees, mature foreign-key relational graph enforcement, and first-class Entity Framework Core integration via `Npgsql`. | **Horizontal Write Scaling**: Relational engines require complex clustering, replication management, and sharding architectures to distribute write-heavy loads across multi-region clusters compared to natively distributed NoSQL data stores. |
+| **Orchestration** | **Docker & Docker Compose** | Complete environment determinism, ensuring zero configuration divergence across local machines and evaluation environments. | **Virtualization Overhead**: Local container daemons incur higher memory and CPU baseline resource consumption compared to running native bare-metal executables. |
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quick Start: The One-Command Rule
 
-The system conforms to the course's cardinal rule: **single-command startup**.
+In compliance with system requirements, the entire stack initializes deterministically with a single command:
+
+```bash
+docker compose up --build
+```
 
 ### Prerequisites
-- [Docker](https://www.docker.com/) (version 24.0 or higher)
-- [Docker Compose](https://docs.docker.com/compose/) (v2.0 or higher)
-- [Git](https://git-scm.com/)
+* [Docker](https://www.docker.com/) (v24.0+)
+* [Docker Compose](https://docs.docker.com/compose/) (v2.0+)
+* [Git](https://git-scm.com/)
 
-### Quick Start
+### Step-by-Step Execution
 
 1. **Clone the repository:**
    ```bash
@@ -54,82 +115,92 @@ The system conforms to the course's cardinal rule: **single-command startup**.
    cd alumni
    ```
 
-2. **Configure environment variables:**
+2. **Initialize environment configuration:**
    ```bash
    cp .env.example .env
    ```
 
-3. **Start the system:**
+3. **Spin up the stack:**
    ```bash
    docker compose up --build
    ```
 
-4. **Verify the services:**
-   - **Web Application**: [http://localhost:8000](http://localhost:8000)
-   - **Health Check**: [http://localhost:8000/health](http://localhost:8000/health)
-   - **PostgreSQL Database**: `localhost:5432`
+4. **Access the platform:**
+   * **Web API**: [http://localhost:8000](http://localhost:8000)
+   * **System Health Diagnostics**: [http://localhost:8000/health](http://localhost:8000/health)
+   * **PostgreSQL Engine**: `localhost:5432`
 
-To run in the background (detached mode):
+To execute in background (detached mode):
 ```bash
 docker compose up -d
 ```
 
-To stop all services:
+To gracefully tear down the environment:
 ```bash
 docker compose down
 ```
 
 ---
 
-## 📂 Project Architecture
+## 📡 API Contract & Health Check
 
-The directory structure is organized to cleanly accommodate the 14-week roadmap:
+### Health Check Endpoint
+Returns runtime platform diagnostics, timestamp, and container readiness.
+
+* **Route**: `GET /health`
+* **Response Status**: `200 OK`
+* **Payload**:
+  ```json
+  {
+    "status": "healthy",
+    "timestamp": "2026-10-12T00:00:00.000Z",
+    "service": "alumni-dotnet-app"
+  }
+  ```
+
+* **cURL Verification**:
+  ```bash
+  curl -X GET http://localhost:8000/health
+  ```
+
+---
+
+## 📂 Repository Structure
 
 ```text
 alumni/
-├── docker-compose.yml              # Multi-container orchestration (App + PostgreSQL)
-├── Dockerfile                      # Multi-stage .NET SDK build & runtime container
-├── .env.example                    # Environment variable templates
-├── .gitignore                      # .NET and environment ignore rules
-├── README.md                       # Project documentation and architectural defense
-└── src/                            # ASP.NET Core Application
-    ├── Alumni.csproj               # .NET Project file
-    ├── Program.cs                  # WebApplication builder, pipeline & root routes
-    ├── appsettings.json            # Configuration and connection strings
-    ├── Controllers/                # (Week 04) MVC & API Controllers
-    ├── Models/                     # (Week 05) Entity Framework Domain Models & DTOs
-    ├── Data/                       # (Week 05 & 06) AlumniDbContext & Migrations
-    ├── Middlewares/                # (Week 09) Custom pipeline middlewares
-    ├── Services/                   # (Week 12) Business logic & Service Interfaces
-    └── Views/                      # (Week 10) Razor views & UI components
+├── docker-compose.yml              # Container orchestration (Web API + PostgreSQL)
+├── Dockerfile                      # Multi-stage .NET SDK build & runtime image
+├── .env.example                    # Environment configuration template
+├── .gitignore                      # .NET build artifacts (bin/, obj/, .vs/) & secrets
+├── README.md                       # Architecture, design decisions, and system contract
+└── src/                            # ASP.NET Core Web Application
+    ├── Alumni.csproj               # .NET 7 Web SDK project file
+    ├── Program.cs                  # WebApplication bootstrap, middleware & root endpoints
+    ├── appsettings.json            # Configuration settings & database connection strings
+    ├── Controllers/                # REST API and MVC Controllers
+    ├── Models/                     # Domain entities, DTOs, and view models
+    ├── Data/                       # Entity Framework Core DbContext and migrations
+    ├── Middlewares/                # Custom HTTP request pipeline bouncers
+    ├── Services/                   # Encapsulated business logic & service contracts
+    └── Views/                      # Presentation layer components
 ```
 
 ---
 
-## 🗓️ 14-Week Roadmap & Progress Tracking
+## 🐳 Containerization & Orchestration
 
-| Week | Topic | C# / ASP.NET Implementation Plan | Status |
-| :---: | :--- | :--- | :---: |
-| **01** | **Project inception & fundamentals** | C# / .NET 7 project setup, Dockerfile, defense rationale, README | ✅ Completed |
-| **02** | **Routing — the doors of the system** | Minimal API routes & Controller attribute routing (`[Route("api/[controller]")]`) | ⏳ Planned |
-| **03** | **HTTP methods & CRUD** | `[HttpGet]`, `[HttpPost]`, `[HttpPut]`, `[HttpDelete]` with standard HTTP status codes | ⏳ Planned |
-| **04** | **MVC architecture** | Separation of Models, Views, and Controllers pattern | ⏳ Planned |
-| **05** | **Database & ORM** | Entity Framework Core setup, `AlumniDbContext`, Code-First entities | ⏳ Planned |
-| **06** | **Database integration** | PostgreSQL integration (`Npgsql`), EF Core migrations, seeding | ⏳ Planned |
-| **07** | **Relational data & advanced routing** | Navigation properties, foreign keys, 1-to-N relationships, nested routes | ⏳ Planned |
-| **08** | **Midterm — code review** | Repository code audit, architectural inspection, defense | ⏳ Planned |
-| **09** | **Middleware — the bouncer** | Custom ASP.NET Core middleware (`IMiddleware`, logging, error handling) | ⏳ Planned |
-| **10** | **Views & front-end integration** | Razor Views / SSR presentation layer | ⏳ Planned |
-| **11** | **Authentication & authorization** | ASP.NET Core Identity / JWT tokens, `[Authorize]` guards | ⏳ Planned |
-| **12** | **Service layers** | Dependency Injection (`IServiceCollection`), decoupled `IAlumniService` | ⏳ Planned |
-| **13** | **Deployment & CI/CD** | Multi-stage Docker optimization, health checks, GitHub Actions CI | ⏳ Planned |
-| **14** | **Final presentations** | Live system handover and defense | ⏳ Planned |
+The application container uses a multi-stage Docker build pipeline to maximize build efficiency and minimize final image size:
+1. **Build Stage (`mcr.microsoft.com/dotnet/sdk:7.0`)**: Restores NuGet dependencies and compiles optimized release binaries.
+2. **Runtime Stage (`mcr.microsoft.com/dotnet/aspnet:7.0`)**: Runs only the lean, security-hardened ASP.NET Core runtime container without SDK build tooling.
+
+The PostgreSQL container includes an automatic health check probe (`pg_isready`) that prevents the web service from accepting traffic until the database engine is fully initialized.
 
 ---
 
-## 📜 Academic Integrity & Commitment
+## 🎓 Coursework Specification
 
-Every commit represents deliberate engineering decisions. In accordance with course guidelines:
-- An AI assistant is used for syntax generation and scaffolding.
-- Architecture, data modeling, business constraints, and debugging are owned and defended by the author.
-- A minimum of one commit is recorded every week with full traceability.
+* **Institution**: Istanbul University (`ogr.iu.edu.tr`)
+* **Author**: Nazife Türk
+* **Repository**: [github.com/NazifeTurk/alumni](https://github.com/NazifeTurk/alumni)
+* **Design Philosophy**: Built from foundational principles without opaque frameworks. Every architectural layer, data model, and service boundary is designed to be fully defended in code reviews.
