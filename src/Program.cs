@@ -1,3 +1,5 @@
+using Alumni.Routes;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container (Controllers, Views, Services)
@@ -15,24 +17,22 @@ if (!app.Environment.IsDevelopment())
 app.UseRouting();
 app.UseAuthorization();
 
-// Root endpoint for Week 1 Project Inception
-app.MapGet("/", () => Results.Ok(new
-{
-    project = "Alumni Tracking System",
-    status = "online",
-    runtime = ".NET 7 / ASP.NET Core",
-    current_week = "01 - Project inception & fundamentals",
-    message = "Welcome to the Alumni Tracking System API."
-}));
+// 🚪 Week 02: Register Route Modules
+app.MapBasicRoutes();
+app.MapAlumniApiRoutes();
 
-// Health check endpoint
-app.MapGet("/health", () => Results.Ok(new
+// 🚫 Slide Section D & E: ANY /* -> 404 Not Found Fallback Handler
+app.MapFallback((HttpContext context) =>
 {
-    status = "healthy",
-    timestamp = DateTime.UtcNow,
-    service = "alumni-dotnet-app"
-}));
-
-app.MapControllers();
+    context.Response.StatusCode = StatusCodes.Status404NotFound;
+    return Results.Json(new
+    {
+        status = "error",
+        code = 404,
+        message = $"Route '{context.Request.Path}' does not exist on this server.",
+        method = context.Request.Method,
+        hint = "Refer to / (or /home) for the routing table, or /api/alumni for resources."
+    });
+});
 
 app.Run();

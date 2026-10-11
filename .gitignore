@@ -9,6 +9,8 @@
 .vs/
 _ReSharper*/
 *.suo
+.aspnet/
+.local/
 
 # Environment variables & secrets
 .env

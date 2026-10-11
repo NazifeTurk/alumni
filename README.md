@@ -142,26 +142,53 @@ docker compose down
 
 ---
 
-## 📡 API Contract & Health Check
+## 📡 API Contract & Routing Specifications (Week 02)
 
-### Health Check Endpoint
-Returns runtime platform diagnostics, timestamp, and container readiness.
+The application implements full RESTful resource semantics, parameterized path extraction, query filtering, and status code handling:
 
-* **Route**: `GET /health`
-* **Response Status**: `200 OK`
-* **Payload**:
+### 1. Whiteboard Assigned Endpoints
+
+| Method | Route | Description | Status Code | Example cURL |
+| :---: | :--- | :--- | :---: | :--- |
+| `GET` | `/` or `/ok` | System health confirmation ("ok") or interactive web dashboard | `200 OK` | `curl -s http://localhost:8000/ok` |
+| `GET` | `/hello` | Static greeting response | `200 OK` | `curl -s http://localhost:8000/hello` |
+| `GET` | `/hello/{name}` | Dynamic path extraction (e.g. `/hello/emre`) | `200 OK` | `curl -s http://localhost:8000/hello/emre` |
+| `GET` | `/sum/{n1}/{n2}` | Mathematical summation with numerical validation | `200 OK` / `400 Bad Request` | `curl -s http://localhost:8000/sum/15/27` |
+| `GET` | `/home` | Temporary semantic HTML main landing page | `200 OK` | (Open in browser: `http://localhost:8000/home`) |
+| `GET` | `/about` | Temporary semantic HTML about page | `200 OK` | (Open in browser: `http://localhost:8000/about`) |
+
+#### Parameterized Summation Verification:
+* **Valid Request**: `GET /sum/15/27` → `200 OK`
   ```json
   {
-    "status": "healthy",
-    "timestamp": "2026-10-12T00:00:00.000Z",
-    "service": "alumni-dotnet-app"
+    "status": "success",
+    "operation": "sum",
+    "number1": 15,
+    "number2": 27,
+    "result": 42,
+    "expression": "15 + 27 = 42"
+  }
+  ```
+* **Invalid Request (Type Mismatch)**: `GET /sum/abc/27` → `400 Bad Request`
+  ```json
+  {
+    "status": "error",
+    "code": 400,
+    "message": "Both parameters must be valid numeric values."
   }
   ```
 
-* **cURL Verification**:
-  ```bash
-  curl -X GET http://localhost:8000/health
-  ```
+---
+
+### 2. Resource Routing Table (Slide Section D)
+
+| Method | Endpoint | Description | Status Code | Example cURL |
+| :---: | :--- | :--- | :---: | :--- |
+| `GET` | `/api/alumni` | List alumni resources (optional `?sort=year`) | `200 OK` | `curl -s http://localhost:8000/api/alumni` |
+| `POST` | `/api/alumni` | Create new alumnus record | `201 Created` | `curl -X POST http://localhost:8000/api/alumni -H "Content-Type: application/json" -d '{"name":"Ada Lovelace","faculty":"Computing"}'` |
+| `GET` | `/api/alumni/{id}` | Dynamic wildcard lookup by ID (e.g. `/api/alumni/42`) | `200 OK` / `404 Not Found` | `curl -s http://localhost:8000/api/alumni/42` |
+| `GET` | `/api/alumni/{id}/jobs` | Dynamic nested wildcard route: employment history | `200 OK` / `404 Not Found` | `curl -s http://localhost:8000/api/alumni/42/jobs` |
+| `ANY` | `/*` | Unmatched path catch-all fallback | `404 Not Found` | `curl -s http://localhost:8000/invalid-route` |
 
 ---
 
@@ -176,14 +203,17 @@ alumni/
 ├── README.md                       # Architecture, design decisions, and system contract
 └── src/                            # ASP.NET Core Web Application
     ├── Alumni.csproj               # .NET 7 Web SDK project file
-    ├── Program.cs                  # WebApplication bootstrap, middleware & root endpoints
+    ├── Program.cs                  # WebApplication bootstrap, middleware & fallback 404
     ├── appsettings.json            # Configuration settings & database connection strings
-    ├── Controllers/                # REST API and MVC Controllers
-    ├── Models/                     # Domain entities, DTOs, and view models
-    ├── Data/                       # Entity Framework Core DbContext and migrations
-    ├── Middlewares/                # Custom HTTP request pipeline bouncers
-    ├── Services/                   # Encapsulated business logic & service contracts
-    └── Views/                      # Presentation layer components
+    ├── routes/                     # (Week 02) Modular Routing Handlers
+    │   ├── BasicRoutes.cs          # Whiteboard routes: /ok, /hello, /sum, /home, /about
+    │   └── AlumniApiRoutes.cs      # Slide D resources: /api/alumni, /api/alumni/{id}/jobs
+    ├── Controllers/                # (Week 04) REST API and MVC Controllers
+    ├── Models/                     # (Week 05) Domain entities, DTOs, and view models
+    ├── Data/                       # (Week 05 & 06) Entity Framework Core DbContext
+    ├── Middlewares/                # (Week 09) Custom HTTP request pipeline bouncers
+    ├── Services/                   # (Week 12) Encapsulated business logic
+    └── Views/                      # (Week 10) Presentation layer components
 ```
 
 ---
