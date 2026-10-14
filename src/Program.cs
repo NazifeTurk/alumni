@@ -1,5 +1,7 @@
+using Alumni.Data;
 using Alumni.Routes;
 using Alumni.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddControllersWithViews();
 
-// Register In-Memory Services (Week 03 & Week 04 Data Stores)
+// 🗄️ Week 05: PostgreSQL Database & Entity Framework Core ORM
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? "Host=db;Port=5432;Database=alumni_db;Username=alumni_user;Password=alumni_password";
+
+builder.Services.AddDbContext<AlumniDbContext>(options =>
+{
+    options.UseNpgsql(connectionString);
+});
+
+// Register In-Memory Services (Week 03 & Week 04 Fallback Stores)
 builder.Services.AddSingleton<InMemoryUserService>();
 builder.Services.AddSingleton<IAnnouncementService, InMemoryAnnouncementService>();
 
@@ -19,7 +30,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Alumni Tracking System API",
         Version = "v1",
-        Description = "Week 03 — HTTP Methods, Status Codes & In-Memory CRUD Operations (Assoc. Prof. Dr. Emre Akadal)",
+        Description = "Alumni Tracking System — MVC, PostgreSQL ORM & Persistent CRUD (Assoc. Prof. Dr. Emre Akadal)",
         Contact = new OpenApiContact
         {
             Name = "Nazife Türk",
@@ -29,6 +40,21 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+
+// Automatically ensure PostgreSQL tables exist when database is ready
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AlumniDbContext>();
+    try
+    {
+        db.Database.EnsureCreated();
+        Console.WriteLine("[Database] PostgreSQL connection established and tables verified.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[Database Notice] PostgreSQL not reachable at startup ({ex.Message}). Will connect when containers are up.");
+    }
+}
 
 // Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())

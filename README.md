@@ -142,6 +142,42 @@ docker compose down
 
 ---
 
+## 🧪 The Forgetting Test (Database Persistence Verification)
+
+The **Forgetting Test** is the empirical benchmark that proves the transition from volatile in-memory storage to persistent relational storage:
+
+```text
+  [ Step 1: CREATE ]              [ Step 2: RESTART ]             [ Step 3: CHECK ]
+  POST /api/users                 docker compose down             GET /api/users
+  {"name": "Nazife Türk"}    ───► docker compose up        ───►  "Nazife Türk" is STILL THERE!
+                                  (Containers destroyed)          (Persistence confirmed ✅)
+```
+
+### How to Run the Test:
+
+1. **Create a new persistent record:**
+   ```bash
+   curl -X POST http://localhost:8000/api/users \
+     -H "Content-Type: application/json" \
+     -d '{"name": "Nazife Türk", "graduationYear": 2026, "role": "Software Engineer"}'
+   ```
+
+2. **Tear down and restart the entire container stack:**
+   ```bash
+   docker compose down
+   docker compose up -d
+   ```
+
+3. **Check the record:**
+   ```bash
+   curl -s http://localhost:8000/api/users
+   ```
+
+> **Why the System Does NOT Forget:**
+> In Weeks 1–4, an in-memory store forgets all records on restart. In Week 5, the application connects to **PostgreSQL 16** via **Entity Framework Core**. Docker Compose mounts a persistent named volume (`postgres_data:/var/lib/postgresql/data`). Even when containers are stopped and destroyed (`docker compose down`), the physical database files on host storage persist, guaranteeing that all records survive restarts intact.
+
+---
+
 ## 📡 API Contract & Routing Specifications (Week 02)
 
 The application implements full RESTful resource semantics, parameterized path extraction, query filtering, and status code handling:

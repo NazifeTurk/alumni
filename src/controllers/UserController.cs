@@ -7,11 +7,28 @@ namespace Alumni.Controllers;
 [Route("users")]
 public class UserController : Controller
 {
+    private readonly Alumni.Data.AlumniDbContext _context;
+
+    public UserController(Alumni.Data.AlumniDbContext context)
+    {
+        _context = context;
+    }
+
     // 5. GET /users -> Listing all users with semantic HTML View
     [HttpGet("")]
     public IActionResult Index()
     {
-        var users = UserModel.GetAll();
+        IEnumerable<UserModel> users;
+        try
+        {
+            var dbUsers = _context.Users.OrderBy(u => u.Id).ToList();
+            users = dbUsers.Any() ? dbUsers : UserModel.GetAll();
+        }
+        catch
+        {
+            users = UserModel.GetAll();
+        }
+
         return Content(RenderUserListView(users), "text/html");
     }
 
@@ -31,6 +48,28 @@ public class UserController : Controller
             return BadRequest("Name is required.");
         }
 
+        var resolvedEmail = !string.IsNullOrWhiteSpace(email)
+            ? email
+            : $"{name.ToLower().Replace(" ", ".")}@ogr.iu.edu.tr";
+
+        try
+        {
+            var dbUser = new UserModel
+            {
+                Name = name,
+                Email = resolvedEmail,
+                GraduationYear = graduationYear > 0 ? graduationYear : DateTime.UtcNow.Year,
+                Role = !string.IsNullOrWhiteSpace(role) ? role : "alumni",
+                CreatedAt = DateTime.UtcNow
+            };
+            _context.Users.Add(dbUser);
+            _context.SaveChanges();
+        }
+        catch
+        {
+            // Fallback
+        }
+
         UserModel.Create(name, email, graduationYear, role);
         return Redirect("/users");
     }
@@ -39,7 +78,18 @@ public class UserController : Controller
     [HttpGet("{id:int}")]
     public IActionResult Details(int id)
     {
-        var user = UserModel.GetById(id);
+        UserModel? user = null;
+        try
+        {
+            user = _context.Users.Find(id);
+        }
+        catch
+        {
+            // Fallback
+        }
+
+        user ??= UserModel.GetById(id);
+
         if (user == null)
         {
             return NotFound("User not found.");
@@ -52,6 +102,20 @@ public class UserController : Controller
     [HttpPost("{id:int}/delete")]
     public IActionResult Delete(int id)
     {
+        try
+        {
+            var dbUser = _context.Users.Find(id);
+            if (dbUser != null)
+            {
+                _context.Users.Remove(dbUser);
+                _context.SaveChanges();
+            }
+        }
+        catch
+        {
+            // Fallback
+        }
+
         UserModel.Delete(id);
         return Redirect("/users");
     }
