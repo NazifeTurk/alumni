@@ -1,5 +1,5 @@
-using Alumni.Data;
 using Alumni.Models;
+using Alumni.Services;
 using Microsoft.AspNetCore.Mvc;
 using UserModel = Alumni.Models.User;
 
@@ -11,11 +11,11 @@ namespace Alumni.Controllers;
 [Tags("Users API (ApiUserController)")]
 public class ApiUserController : ControllerBase
 {
-    private readonly AlumniDbContext _context;
+    private readonly IUserService _userService;
 
-    public ApiUserController(AlumniDbContext context)
+    public ApiUserController(IUserService userService)
     {
-        _context = context;
+        _userService = userService;
     }
 
     // GET /api/users -> List all users (JSON)
@@ -23,17 +23,7 @@ public class ApiUserController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<UserModel>), StatusCodes.Status200OK)]
     public IActionResult GetAll()
     {
-        try
-        {
-            var users = _context.Users.OrderBy(u => u.Id).ToList();
-            if (users.Any()) return Ok(users);
-        }
-        catch
-        {
-            // Fallback to in-memory if DB is momentarily unreachable
-        }
-
-        return Ok(UserModel.GetAll());
+        return Ok(_userService.GetAll());
     }
 
     // GET /api/users/{id} -> Get single user by ID (JSON)
@@ -42,17 +32,7 @@ public class ApiUserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetById(int id)
     {
-        try
-        {
-            var dbUser = _context.Users.Find(id);
-            if (dbUser != null) return Ok(dbUser);
-        }
-        catch
-        {
-            // Fallback to in-memory
-        }
-
-        var user = UserModel.GetById(id);
+        var user = _userService.GetById(id);
         if (user == null)
         {
             return NotFound(new { error = 404, message = $"User with ID '{id}' was not found." });
@@ -72,35 +52,8 @@ public class ApiUserController : ControllerBase
             return BadRequest(new { error = 400, message = "Name is required." });
         }
 
-        var resolvedEmail = !string.IsNullOrWhiteSpace(request.Email)
-            ? request.Email
-            : $"{request.Name.ToLower().Replace(" ", ".")}@ogr.iu.edu.tr";
-
-        try
-        {
-            var dbUser = new UserModel
-            {
-                Name = request.Name,
-                Email = resolvedEmail,
-                GraduationYear = request.GraduationYear > 0 ? request.GraduationYear : DateTime.UtcNow.Year,
-                Role = !string.IsNullOrWhiteSpace(request.Role) ? request.Role : "alumni",
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _context.Users.Add(dbUser);
-            _context.SaveChanges();
-
-            // Sync with in-memory model as well
-            UserModel.Create(request.Name, request.Email, request.GraduationYear, request.Role);
-
-            return Created($"/api/users/{dbUser.Id}", dbUser);
-        }
-        catch
-        {
-            // Fallback to in-memory creation
-            var created = UserModel.Create(request.Name, request.Email, request.GraduationYear, request.Role);
-            return Created($"/api/users/{created.Id}", created);
-        }
+        var created = _userService.Create(request);
+        return Created($"/api/users/{created.Id}", created);
     }
 
     // PUT /api/users/{id} -> Replace entire user (JSON)
@@ -109,28 +62,7 @@ public class ApiUserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Update(int id, [FromBody] UpdateUserRequest request)
     {
-        try
-        {
-            var dbUser = _context.Users.Find(id);
-            if (dbUser != null)
-            {
-                dbUser.Name = request.Name;
-                dbUser.Email = request.Email;
-                dbUser.GraduationYear = request.GraduationYear;
-                dbUser.Role = request.Role;
-                dbUser.UpdatedAt = DateTime.UtcNow;
-                _context.SaveChanges();
-
-                UserModel.Update(id, request.Name, request.Email, request.GraduationYear, request.Role);
-                return Ok(dbUser);
-            }
-        }
-        catch
-        {
-            // Fallback
-        }
-
-        var updated = UserModel.Update(id, request.Name, request.Email, request.GraduationYear, request.Role);
+        var updated = _userService.Update(id, request);
         if (updated == null)
         {
             return NotFound(new { error = 404, message = $"User with ID '{id}' was not found." });
@@ -145,28 +77,7 @@ public class ApiUserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Patch(int id, [FromBody] PatchUserRequest request)
     {
-        try
-        {
-            var dbUser = _context.Users.Find(id);
-            if (dbUser != null)
-            {
-                if (!string.IsNullOrWhiteSpace(request.Name)) dbUser.Name = request.Name;
-                if (!string.IsNullOrWhiteSpace(request.Email)) dbUser.Email = request.Email;
-                if (request.GraduationYear.HasValue && request.GraduationYear.Value > 0) dbUser.GraduationYear = request.GraduationYear.Value;
-                if (!string.IsNullOrWhiteSpace(request.Role)) dbUser.Role = request.Role;
-                dbUser.UpdatedAt = DateTime.UtcNow;
-                _context.SaveChanges();
-
-                UserModel.Patch(id, request.Name, request.Email, request.GraduationYear, request.Role);
-                return Ok(dbUser);
-            }
-        }
-        catch
-        {
-            // Fallback
-        }
-
-        var patched = UserModel.Patch(id, request.Name, request.Email, request.GraduationYear, request.Role);
+        var patched = _userService.Patch(id, request);
         if (patched == null)
         {
             return NotFound(new { error = 404, message = $"User with ID '{id}' was not found." });
@@ -181,23 +92,7 @@ public class ApiUserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Delete(int id)
     {
-        try
-        {
-            var dbUser = _context.Users.Find(id);
-            if (dbUser != null)
-            {
-                _context.Users.Remove(dbUser);
-                _context.SaveChanges();
-                UserModel.Delete(id);
-                return Ok(new { status = "success", message = $"User with ID '{id}' was deleted." });
-            }
-        }
-        catch
-        {
-            // Fallback
-        }
-
-        bool deleted = UserModel.Delete(id);
+        var deleted = _userService.Delete(id);
         if (!deleted)
         {
             return NotFound(new { error = 404, message = $"User with ID '{id}' was not found." });

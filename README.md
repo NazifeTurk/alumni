@@ -7,13 +7,17 @@
 
 An enterprise-ready, modular web application engineered to track university graduates, monitor career trajectories, facilitate academic mentorship networks, and coordinate institutional alumni engagement.
 
+> 🗄️ **Database Milestone**: Comprehensive database architecture, ER diagrams, data dictionaries, environment configuration, and "The Forgetting Test" proofs are documented in [**Data Design Documentation (`ddd.md`)**](ddd.md).
+
 ---
 
 ## 📖 Table of Contents
+- [🗄️ Data Design Documentation (ddd.md)](ddd.md)
 - [🎯 Project Overview](#-project-overview)
 - [🏛️ Architectural Design & Layering](#️-architectural-design--layering)
 - [⚖️ Technology Stack & Trade-offs (Defense)](#️-technology-stack--trade-offs-defense)
 - [🚀 Quick Start: The One-Command Rule](#-quick-start-the-one-command-rule)
+- [🧪 The Forgetting Test (Database Persistence)](#-the-forgetting-test-database-persistence-verification)
 - [📡 API Contract & Health Check](#-api-contract--health-check)
 - [📂 Repository Structure](#-repository-structure)
 - [🐳 Containerization & Orchestration](#-containerization--orchestration)

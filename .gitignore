@@ -17,6 +17,7 @@ _ReSharper*/
 .env.local
 .env.*.local
 !.env.example
+!.example.env
 appsettings.Production.json
 
 # Database data

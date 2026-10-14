@@ -9,7 +9,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=${APP_ENV:-Development}
       - ASPNETCORE_URLS=http://+:8000
-      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${DB_NAME:-alumni_db};Username=${DB_USER:-alumni_user};Password=${DB_PASSWORD:-alumni_password}
+      - ConnectionStrings__DefaultConnection=Host=${DB_HOST:-db};Port=${DB_PORT:-5432};Database=${DB_NAME:-alumni_db};Username=${DB_USER:-alumni_user};Password=${DB_PASSWORD:-alumni_password}
     depends_on:
       db:
         condition: service_healthy

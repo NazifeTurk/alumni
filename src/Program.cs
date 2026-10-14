@@ -18,9 +18,13 @@ builder.Services.AddDbContext<AlumniDbContext>(options =>
     options.UseNpgsql(connectionString);
 });
 
-// Register In-Memory Services (Week 03 & Week 04 Fallback Stores)
+// 🛠️ Week 05: Register Database-backed CRUD Services (Item ⑦: Update CRUD interfaces with DB conn)
+builder.Services.AddScoped<IUserService, DbUserService>();
+builder.Services.AddScoped<IAnnouncementService, DbAnnouncementService>();
+
+// Fallback In-Memory stores for development / testing without containers
 builder.Services.AddSingleton<InMemoryUserService>();
-builder.Services.AddSingleton<IAnnouncementService, InMemoryAnnouncementService>();
+builder.Services.AddSingleton<InMemoryAnnouncementService>();
 
 // 📖 Week 03 Task 7: Swagger / OpenAPI Configuration
 builder.Services.AddEndpointsApiExplorer();
@@ -41,14 +45,15 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-// Automatically ensure PostgreSQL tables exist when database is ready
+// 🗄️ Item ⑤ & ⑥: Automatically verify PostgreSQL schema and execute Factory Seeders
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AlumniDbContext>();
     try
     {
         db.Database.EnsureCreated();
-        Console.WriteLine("[Database] PostgreSQL connection established and tables verified.");
+        DatabaseSeeder.Seed(db);
+        Console.WriteLine("[Database] PostgreSQL connection established, tables verified, and seed completed.");
     }
     catch (Exception ex)
     {

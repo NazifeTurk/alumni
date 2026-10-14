@@ -3,7 +3,7 @@ using Alumni.Models;
 
 namespace Alumni.Services;
 
-public class InMemoryUserService
+public class InMemoryUserService : IUserService
 {
     private readonly ConcurrentDictionary<int, User> _users = new();
     private int _nextId = 42; // Start around 42 as in the professor's slide
