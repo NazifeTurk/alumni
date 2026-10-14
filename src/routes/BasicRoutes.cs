@@ -82,106 +82,220 @@ public static class BasicRoutes
     {
         return """
         <!DOCTYPE html>
-        <html lang="en">
+        <html lang="tr">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Alumni Tracking System - Week 02</title>
+            <title>İstanbul Üniversitesi Mezun Takip Sistemi</title>
             <style>
                 :root {
-                    --primary: #4f46e5;
-                    --primary-hover: #4338ca;
                     --bg: #0f172a;
                     --card-bg: #1e293b;
+                    --border: #334155;
                     --text: #f8fafc;
                     --text-muted: #94a3b8;
+                    --primary: #4f46e5;
+                    --primary-hover: #4338ca;
                     --accent: #10b981;
-                    --border: #334155;
+                    --accent-blue: #38bdf8;
                 }
                 * { box-sizing: border-box; margin: 0; padding: 0; }
                 body {
-                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
                     background-color: var(--bg);
                     color: var(--text);
                     line-height: 1.6;
-                    padding: 2rem;
+                    padding: 2rem 1rem;
                 }
-                .container { max-width: 900px; margin: 0 auto; }
+                .container { max-width: 1040px; margin: 0 auto; }
                 header {
                     border-bottom: 1px solid var(--border);
                     padding-bottom: 1.5rem;
-                    margin-bottom: 2rem;
+                    margin-bottom: 2.5rem;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
+                    flex-wrap: wrap;
+                    gap: 1rem;
                 }
-                h1 { font-size: 1.8rem; font-weight: 700; color: #fff; }
-                .badge {
-                    display: inline-block;
-                    background-color: rgba(16, 185, 129, 0.2);
+                .logo-area { display: flex; align-items: center; gap: 0.75rem; }
+                .logo-icon { font-size: 2rem; }
+                h1 { font-size: 1.5rem; font-weight: 700; color: #fff; line-height: 1.2; }
+                .logo-sub { color: var(--text-muted); font-size: 0.85rem; }
+                nav { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+                nav a {
+                    color: var(--text-muted);
+                    text-decoration: none;
+                    font-weight: 500;
+                    font-size: 0.95rem;
+                    transition: color 0.2s;
+                }
+                nav a:hover, nav a.active { color: #fff; }
+                nav a.btn-nav {
+                    background: rgba(16, 185, 129, 0.15);
+                    color: #34d399;
+                    border: 1px solid rgba(16, 185, 129, 0.3);
+                    padding: 0.4rem 0.9rem;
+                    border-radius: 6px;
+                    font-weight: 600;
+                }
+                nav a.btn-nav:hover { background: rgba(16, 185, 129, 0.25); color: #fff; }
+
+                /* Hero Section */
+                .hero {
+                    background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(16, 185, 129, 0.15));
+                    border: 1px solid var(--border);
+                    border-radius: 16px;
+                    padding: 3rem 2.5rem;
+                    margin-bottom: 2.5rem;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                }
+                .badge-live {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    background-color: rgba(16, 185, 129, 0.15);
                     color: var(--accent);
-                    padding: 0.3rem 0.8rem;
+                    padding: 0.35rem 0.9rem;
                     border-radius: 9999px;
                     font-size: 0.85rem;
                     font-weight: 600;
                     border: 1px solid rgba(16, 185, 129, 0.3);
+                    margin-bottom: 1.25rem;
                 }
-                nav a {
-                    color: var(--text-muted);
-                    text-decoration: none;
-                    margin-left: 1.5rem;
-                    font-weight: 500;
-                    transition: color 0.2s;
+                .pulse-dot {
+                    width: 8px;
+                    height: 8px;
+                    background-color: #10b981;
+                    border-radius: 50%;
+                    box-shadow: 0 0 8px #10b981;
                 }
-                nav a:hover, nav a.active { color: #fff; }
-                .hero {
-                    background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(16, 185, 129, 0.1));
-                    border: 1px solid var(--border);
-                    border-radius: 12px;
-                    padding: 2rem;
-                    margin-bottom: 2rem;
-                }
-                .hero h2 { margin-bottom: 0.75rem; font-size: 1.5rem; }
-                .hero p { color: var(--text-muted); font-size: 1.05rem; }
-                .card {
-                    background-color: var(--card-bg);
-                    border: 1px solid var(--border);
-                    border-radius: 12px;
-                    padding: 1.5rem;
-                    margin-bottom: 1.5rem;
-                }
-                .card h3 {
-                    font-size: 1.2rem;
-                    margin-bottom: 1rem;
-                    color: #fff;
-                    display: flex;
+                .hero h2 { font-size: 2.1rem; font-weight: 800; line-height: 1.25; margin-bottom: 1rem; color: #fff; }
+                .hero p { color: #cbd5e1; font-size: 1.15rem; max-width: 800px; margin-bottom: 1.75rem; }
+                .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+                .btn {
+                    display: inline-flex;
                     align-items: center;
                     gap: 0.5rem;
+                    padding: 0.75rem 1.4rem;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    text-decoration: none;
+                    transition: transform 0.15s, background 0.2s;
                 }
+                .btn-primary { background: var(--primary); color: #fff; }
+                .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+                .btn-secondary { background: var(--card-bg); color: var(--text); border: 1px solid var(--border); }
+                .btn-secondary:hover { background: #334155; transform: translateY(-1px); }
+
+                /* Stats Bar */
+                .stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 1rem;
+                    margin-bottom: 2.5rem;
+                }
+                .stat-box {
+                    background: var(--card-bg);
+                    border: 1px solid var(--border);
+                    border-radius: 12px;
+                    padding: 1.25rem;
+                    text-align: center;
+                }
+                .stat-value { font-size: 1.8rem; font-weight: 800; color: var(--accent-blue); margin-bottom: 0.25rem; }
+                .stat-label { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
+
+                /* Pillars (3 Cards) */
+                .section-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.25rem; color: #fff; }
+                .pillars-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                    gap: 1.5rem;
+                    margin-bottom: 2.5rem;
+                }
+                .pillar-card {
+                    background: var(--card-bg);
+                    border: 1px solid var(--border);
+                    border-radius: 14px;
+                    padding: 1.75rem;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    transition: transform 0.2s, border-color 0.2s;
+                }
+                .pillar-card:hover { transform: translateY(-3px); border-color: var(--primary); }
+                .pillar-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+                .pillar-card h3 { font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 0.75rem; }
+                .pillar-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.25rem; line-height: 1.5; }
+                .pillar-link { color: var(--accent-blue); font-weight: 600; text-decoration: none; font-size: 0.95rem; }
+                .pillar-link:hover { text-decoration: underline; }
+
+                /* Announcements Showcase */
+                .showcase {
+                    background: var(--card-bg);
+                    border: 1px solid var(--border);
+                    border-radius: 14px;
+                    padding: 1.75rem;
+                    margin-bottom: 2.5rem;
+                }
+                .showcase-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+                .news-item {
+                    border-top: 1px solid var(--border);
+                    padding: 1rem 0;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 1rem;
+                }
+                .news-title { font-weight: 600; color: #fff; }
+                .news-meta { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem; }
+                .category-badge {
+                    display: inline-block;
+                    padding: 0.2rem 0.6rem;
+                    border-radius: 9999px;
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                }
+                .cat-reunion { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+                .cat-mentorship { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+
+                /* Lab / Grading details panel */
+                details.grading-panel {
+                    background: rgba(15, 23, 42, 0.6);
+                    border: 1px dashed var(--border);
+                    border-radius: 12px;
+                    padding: 1.25rem;
+                    margin-top: 2rem;
+                }
+                details.grading-panel summary {
+                    font-weight: 700;
+                    color: var(--accent-blue);
+                    cursor: pointer;
+                    font-size: 1.05rem;
+                    outline: none;
+                }
+                .grading-content { margin-top: 1.25rem; }
                 table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
                 th, td {
                     text-align: left;
-                    padding: 0.75rem 1rem;
+                    padding: 0.65rem 0.85rem;
                     border-bottom: 1px solid var(--border);
-                    font-size: 0.95rem;
+                    font-size: 0.9rem;
                 }
-                th { color: var(--text-muted); font-weight: 600; background: rgba(0,0,0,0.15); }
+                th { color: var(--text-muted); font-weight: 600; background: rgba(0,0,0,0.2); }
                 .method {
                     display: inline-block;
                     padding: 0.2rem 0.5rem;
                     border-radius: 4px;
                     font-family: monospace;
-                    font-size: 0.85rem;
+                    font-size: 0.8rem;
                     font-weight: 700;
                 }
                 .method-get { background: rgba(16, 185, 129, 0.2); color: #34d399; }
-                .method-post { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
-                a.endpoint {
-                    color: #818cf8;
-                    text-decoration: none;
-                    font-family: monospace;
-                }
-                a.endpoint:hover { text-decoration: underline; color: #a5b4fc; }
+                a.endpoint { color: #818cf8; text-decoration: none; font-family: monospace; }
+                a.endpoint:hover { text-decoration: underline; }
+
                 footer {
                     margin-top: 3rem;
                     border-top: 1px solid var(--border);
@@ -195,112 +309,181 @@ public static class BasicRoutes
         <body>
             <div class="container">
                 <header>
-                    <div>
-                        <h1>Alumni Tracking System</h1>
-                        <p style="color: var(--text-muted); font-size: 0.9rem;">Week 02 — Routing &amp; The Doors of the System</p>
+                    <div class="logo-area">
+                        <span class="logo-icon">🎓</span>
+                        <div>
+                            <h1>İstanbul Üniversitesi</h1>
+                            <p class="logo-sub">Alumni Tracking &amp; Career Network Portal</p>
+                        </div>
                     </div>
                     <nav>
-                        <a href="/" class="active">Home</a>
-                        <a href="/about">About</a>
-                        <a href="/api/users">Users API</a>
-                        <a href="/api/swagger" style="color: #34d399; font-weight: 700;">Swagger UI ⚡</a>
+                        <a href="/" class="active">Ana Sayfa</a>
+                        <a href="/users">Mezunlar</a>
+                        <a href="/announcements">Duyurular</a>
+                        <a href="/about">Hakkında</a>
+                        <a href="/api/swagger" class="btn-nav">Swagger API ⚡</a>
                     </nav>
                 </header>
 
                 <div class="hero">
-                    <span class="badge">Status: OK • System Live</span>
-                    <h2 style="margin-top: 1rem;">Welcome to Alumni Tracking System</h2>
-                    <p>Week 02 implements foundational URL anatomy, parameterized routing, HTTP method resolution, and status code mechanics.</p>
+                    <div class="badge-live">
+                        <span class="pulse-dot"></span>
+                        PostgreSQL 16 Engine • Entity Framework Core • Docker Stack Live
+                    </div>
+                    <h2>Mezunlarımızla Bağlantıda Kalın, Geleceği Birlikte Şekillendirin</h2>
+                    <p>
+                        İstanbul Üniversitesi mezunları ve öğrencileri arasında güçlü bir köprü: 
+                        Profesyonel ağınızı genişletin, sektörde tecrübeli mezunlardan mentorluk alın ve kariyer fırsatlarını yakalayın.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="/users" class="btn btn-primary">👥 Mezunlar Ağını Keşfet</a>
+                        <a href="/announcements" class="btn btn-secondary">📢 Duyurular ve Etkinlikler</a>
+                        <a href="/api/swagger" class="btn btn-secondary">⚡ API Test Paneli</a>
+                    </div>
                 </div>
 
-                <div class="card">
-                    <h3>🚪 Whiteboard Assigned Endpoints (Click to Test)</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Method</th>
-                                <th>Route</th>
-                                <th>Task Description</th>
-                                <th>Sample Link</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="method method-get">GET</span></td>
-                                <td><code>/</code> or <code>/ok</code></td>
-                                <td>Health &amp; Inception Status</td>
-                                <td><a class="endpoint" href="/ok">/ok</a></td>
-                            </tr>
-                            <tr>
-                                <td><span class="method method-get">GET</span></td>
-                                <td><code>/hello</code></td>
-                                <td>Static Greeting</td>
-                                <td><a class="endpoint" href="/hello">/hello</a></td>
-                            </tr>
-                            <tr>
-                                <td><span class="method method-get">GET</span></td>
-                                <td><code>/hello/{name}</code></td>
-                                <td>Parameterized Path Greeting</td>
-                                <td><a class="endpoint" href="/hello/emre">/hello/emre</a></td>
-                            </tr>
-                            <tr>
-                                <td><span class="method method-get">GET</span></td>
-                                <td><code>/sum/{n1}/{n2}</code></td>
-                                <td>Mathematical Summation</td>
-                                <td><a class="endpoint" href="/sum/15/27">/sum/15/27</a></td>
-                            </tr>
-                            <tr>
-                                <td><span class="method method-get">GET</span></td>
-                                <td><code>/home</code></td>
-                                <td>Temporary Main Landing Page</td>
-                                <td><a class="endpoint" href="/home">/home</a></td>
-                            </tr>
-                            <tr>
-                                <td><span class="method method-get">GET</span></td>
-                                <td><code>/about</code></td>
-                                <td>Temporary About Page</td>
-                                <td><a class="endpoint" href="/about">/about</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">IU</div>
+                        <div class="stat-label">Köklü Üniversite Mirası</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">PostgreSQL 16</div>
+                        <div class="stat-label">Kalıcı Veritabanı</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">MVC + API</div>
+                        <div class="stat-label">Çift Katmanlı Mimari</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">Docker</div>
+                        <div class="stat-label">Tek Komutla Canlı</div>
+                    </div>
                 </div>
 
-                <div class="card">
-                    <h3>🏛️ Resource Routing Table (Slide Section D)</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Method</th>
-                                <th>Route</th>
-                                <th>Purpose</th>
-                                <th>Sample Link</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="method method-get">GET</span></td>
-                                <td><code>/api/alumni</code></td>
-                                <td>List Alumni Resources</td>
-                                <td><a class="endpoint" href="/api/alumni">/api/alumni</a></td>
-                            </tr>
-                            <tr>
-                                <td><span class="method method-get">GET</span></td>
-                                <td><code>/api/alumni/{id}</code></td>
-                                <td>Dynamic Wildcard: Alumnus #42</td>
-                                <td><a class="endpoint" href="/api/alumni/42">/api/alumni/42</a></td>
-                            </tr>
-                            <tr>
-                                <td><span class="method method-get">GET</span></td>
-                                <td><code>/api/alumni/{id}/jobs</code></td>
-                                <td>Nested Wildcard Route: Jobs</td>
-                                <td><a class="endpoint" href="/api/alumni/42/jobs">/api/alumni/42/jobs</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <h3 class="section-title">🌟 Temel Platform Modülleri</h3>
+                <div class="pillars-grid">
+                    <div class="pillar-card">
+                        <div>
+                            <div class="pillar-icon">🤝</div>
+                            <h3>Networking &amp; Profesyonel Topluluk</h3>
+                            <p>
+                                Fakülte, bölüm ve mezuniyet yılına göre mezunları filtreleyin. Mezunlar arası doğrudan bağlantılar kurun, sektör deneyimlerini paylaşın ve profesyonel çevrenizi büyütün.
+                            </p>
+                        </div>
+                        <a href="/users" class="pillar-link">Mezun Rehberini Görüntüle &rarr;</a>
+                    </div>
+
+                    <div class="pillar-card">
+                        <div>
+                            <div class="pillar-icon">🎯</div>
+                            <h3>Mentorship &amp; Kariyer Danışmanlığı</h3>
+                            <p>
+                                Sektörde deneyim kazanmış kıdemli mezunlarımız, son sınıf öğrencilerine ve yeni mezunlara birebir kariyer rehberliği, mülakat hazırlığı ve teknik mentorluk sağlar.
+                            </p>
+                        </div>
+                        <a href="/announcements" class="pillar-link">Mentorluk Başvurularını İncele &rarr;</a>
+                    </div>
+
+                    <div class="pillar-card">
+                        <div>
+                            <div class="pillar-icon">💼</div>
+                            <h3>Kariyer Havuzu &amp; Şirket Referansları</h3>
+                            <p>
+                                Mezunlarımızın çalıştığı şirketlerdeki açık iş ve staj pozisyonları, şirket içi yönlendirme (referral) imkanları ve üniversitemize özel kariyer etkinlikleri.
+                            </p>
+                        </div>
+                        <a href="/announcements" class="pillar-link">Fırsat Panosuna Git &rarr;</a>
+                    </div>
                 </div>
+
+                <div class="showcase">
+                    <div class="showcase-header">
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff;">📌 Güncel Duyurular ve Etkinlikler</h3>
+                        <a href="/announcements" class="pillar-link" style="font-size: 0.9rem;">Tümünü Gör &rarr;</a>
+                    </div>
+                    <div class="news-item">
+                        <div>
+                            <div class="news-title">2026 Annual Alumni Homecoming Gala</div>
+                            <div class="news-meta">Alumni Association &bull; 1 Mayıs 2026 &bull; Merkez Kampüs</div>
+                        </div>
+                        <span class="category-badge cat-reunion">Reunion</span>
+                    </div>
+                    <div class="news-item">
+                        <div>
+                            <div class="news-title">Tech Mentorship Cohort 2026 Applications Open</div>
+                            <div class="news-meta">Career Center &bull; 10 Mayıs 2026 &bull; Mühendislik Fakültesi</div>
+                        </div>
+                        <span class="category-badge cat-mentorship">Mentorship</span>
+                    </div>
+                </div>
+
+                <!-- Akademik Değerlendirme & Test Paneli (Emre Hoca ve Notlandırma İçin) -->
+                <details class="grading-panel">
+                    <summary>🛠️ Akademik Laboratuvar &amp; Değerlendirme Rotaları (Week 02 &ndash; Week 05)</summary>
+                    <div class="grading-content">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+                            Ders kapsamında (Doç. Dr. Emre Akadal) tahtada atanan temel URL anatomi, parametrik yönlendirme ve API test linkleri:
+                        </p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Method</th>
+                                    <th>Rota</th>
+                                    <th>Açıklama</th>
+                                    <th>Test Linki</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="method method-get">GET</span></td>
+                                    <td><code>/ok</code></td>
+                                    <td>Sağlık ve Başlangıç Durumu</td>
+                                    <td><a class="endpoint" href="/ok">/ok</a></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method method-get">GET</span></td>
+                                    <td><code>/hello</code></td>
+                                    <td>Statik Selamlama</td>
+                                    <td><a class="endpoint" href="/hello">/hello</a></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method method-get">GET</span></td>
+                                    <td><code>/hello/{name}</code></td>
+                                    <td>Parametrik Selamlama</td>
+                                    <td><a class="endpoint" href="/hello/emre">/hello/emre</a></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method method-get">GET</span></td>
+                                    <td><code>/sum/{n1}/{n2}</code></td>
+                                    <td>Matematiksel Toplama &amp; 400 Doğrulama</td>
+                                    <td><a class="endpoint" href="/sum/15/27">/sum/15/27</a></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method method-get">GET</span></td>
+                                    <td><code>/api/users</code></td>
+                                    <td>Kalıcı PostgreSQL Mezun Listesi (JSON)</td>
+                                    <td><a class="endpoint" href="/api/users">/api/users</a></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method method-get">GET</span></td>
+                                    <td><code>/api/announcements</code></td>
+                                    <td>Kalıcı Duyurular Listesi (JSON)</td>
+                                    <td><a class="endpoint" href="/api/announcements">/api/announcements</a></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method method-get">GET</span></td>
+                                    <td><code>/api/swagger</code></td>
+                                    <td>Etkileşimli Swagger API Arayüzü</td>
+                                    <td><a class="endpoint" href="/api/swagger">/api/swagger</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </details>
 
                 <footer>
-                    <p>Istanbul University • Web Programming • Nazife Türk</p>
+                    <p>İstanbul Üniversitesi &bull; Web Programlama &bull; Nazife Türk (nazife.turk@ogr.iu.edu.tr)</p>
                 </footer>
             </div>
         </body>
