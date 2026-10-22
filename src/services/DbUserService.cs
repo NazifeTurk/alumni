@@ -1,5 +1,6 @@
 using Alumni.Data;
 using Alumni.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Alumni.Services;
 
@@ -14,12 +15,17 @@ public class DbUserService : IUserService
 
     public IEnumerable<User> GetAll()
     {
-        return _context.Users.OrderBy(u => u.Id).ToList();
+        return _context.Users
+            .Include(u => u.Jobs)
+            .OrderBy(u => u.Id)
+            .ToList();
     }
 
     public User? GetById(int id)
     {
-        return _context.Users.Find(id);
+        return _context.Users
+            .Include(u => u.Jobs)
+            .FirstOrDefault(u => u.Id == id);
     }
 
     public User Create(CreateUserRequest request)

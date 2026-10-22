@@ -18,9 +18,10 @@ builder.Services.AddDbContext<AlumniDbContext>(options =>
     options.UseNpgsql(connectionString);
 });
 
-// 🛠️ Week 05: Register Database-backed CRUD Services (Item ⑦: Update CRUD interfaces with DB conn)
+// 🛠️ Week 05 & 06: Register Database-backed CRUD Services
 builder.Services.AddScoped<IUserService, DbUserService>();
 builder.Services.AddScoped<IAnnouncementService, DbAnnouncementService>();
+builder.Services.AddScoped<IJobPostingService, DbJobPostingService>();
 
 // Fallback In-Memory stores for development / testing without containers
 builder.Services.AddSingleton<InMemoryUserService>();
@@ -51,13 +52,22 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AlumniDbContext>();
     try
     {
-        db.Database.EnsureCreated();
+        db.Database.Migrate();
         DatabaseSeeder.Seed(db);
-        Console.WriteLine("[Database] PostgreSQL connection established, tables verified, and seed completed.");
+        Console.WriteLine("[Database] PostgreSQL connection established, migrations applied, and seed completed.");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"[Database Notice] PostgreSQL not reachable at startup ({ex.Message}). Will connect when containers are up.");
+        Console.WriteLine($"[Database Notice] Migration notice ({ex.Message}). Trying EnsureCreated...");
+        try
+        {
+            db.Database.EnsureCreated();
+            DatabaseSeeder.Seed(db);
+        }
+        catch (Exception innerEx)
+        {
+            Console.WriteLine($"[Database Notice] PostgreSQL not reachable at startup ({innerEx.Message}). Will connect when containers are up.");
+        }
     }
 }
 

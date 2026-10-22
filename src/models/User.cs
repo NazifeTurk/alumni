@@ -12,7 +12,12 @@ public class User
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
 
-    // In-memory data store embedded inside Model (as requested: "Create Users Model without database connection it include CRUD functions")
+    // Navigation Properties (Week 06: Relational One-to-Many & Many-to-Many)
+    [System.Text.Json.Serialization.JsonPropertyName("jobs")]
+    public ICollection<JobPosting> Jobs { get; set; } = new List<JobPosting>();
+
+    [System.Text.Json.Serialization.JsonIgnore]
+    public ICollection<Application> Applications { get; set; } = new List<Application>();
     private static readonly ConcurrentDictionary<int, User> _store = new();
     private static int _nextId = 42;
 

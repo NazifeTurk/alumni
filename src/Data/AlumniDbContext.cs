@@ -11,6 +11,8 @@ public class AlumniDbContext : DbContext
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Announcement> Announcements => Set<Announcement>();
+    public DbSet<JobPosting> JobPostings => Set<JobPosting>();
+    public DbSet<Application> Applications => Set<Application>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -37,6 +39,48 @@ public class AlumniDbContext : DbContext
             entity.Property(a => a.Category).HasMaxLength(50).HasDefaultValue("General");
             entity.Property(a => a.Author).HasMaxLength(100).HasDefaultValue("Alumni Office");
             entity.Property(a => a.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+        });
+
+        // 💼 Configure JobPostings table (Week 06: One-to-Many: User -> JobPostings)
+        modelBuilder.Entity<JobPosting>(entity =>
+        {
+            entity.ToTable("job_postings");
+            entity.HasKey(j => j.Id);
+            entity.Property(j => j.Title).IsRequired().HasMaxLength(150);
+            entity.Property(j => j.Company).IsRequired().HasMaxLength(100);
+            entity.Property(j => j.Location).HasMaxLength(100).HasDefaultValue("Remote");
+            entity.Property(j => j.Description).IsRequired();
+            entity.Property(j => j.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(j => j.IsActive).HasDefaultValue(true);
+
+            // One User -> Many JobPostings (FK: user_id -> users.id)
+            // Delete rule: Restrict (decided and defended in ddd.md)
+            entity.HasOne(j => j.User)
+                  .WithMany(u => u.Jobs)
+                  .HasForeignKey(j => j.UserId)
+                  .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        // 📝 Configure Applications table (Week 06: Many-to-Many Join Table)
+        modelBuilder.Entity<Application>(entity =>
+        {
+            entity.ToTable("applications");
+            entity.HasKey(a => a.Id);
+            entity.Property(a => a.Status).HasMaxLength(50).HasDefaultValue("applied");
+            entity.Property(a => a.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            // UNIQUE constraint: (user_id, job_posting_id) -> twice: 409
+            entity.HasIndex(a => new { a.UserId, a.JobPostingId }).IsUnique();
+
+            entity.HasOne(a => a.User)
+                  .WithMany(u => u.Applications)
+                  .HasForeignKey(a => a.UserId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(a => a.JobPosting)
+                  .WithMany(j => j.Applications)
+                  .HasForeignKey(a => a.JobPostingId)
+                  .OnDelete(DeleteBehavior.Cascade);
         });
 
         // Seed initial data if tables are freshly created

@@ -24,6 +24,12 @@ public static class UserFactory
     {
         return new List<User>
         {
+            // Week 06 Slide Section A Entities (Ada, Can, Elif)
+            new() { Id = 1, Name = "Ada", Email = "ada@iu.edu.tr", GraduationYear = 2022, Role = "alumni", CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc) },
+            new() { Id = 2, Name = "Can", Email = "can@iu.edu.tr", GraduationYear = 2023, Role = "alumni", CreatedAt = new DateTime(2026, 2, 1, 0, 0, 0, DateTimeKind.Utc) },
+            new() { Id = 3, Name = "Elif", Email = "elif@iu.edu.tr", GraduationYear = 2024, Role = "alumni", CreatedAt = new DateTime(2026, 3, 1, 0, 0, 0, DateTimeKind.Utc) },
+
+            // Baseline Alumni
             new() { Id = 42, Name = "Elif Kaya", Email = "elif.kaya@ogr.iu.edu.tr", GraduationYear = 2024, Role = "alumni", CreatedAt = new DateTime(2026, 1, 15, 0, 0, 0, DateTimeKind.Utc) },
             new() { Id = 43, Name = "Mert Aydın", Email = "mert.aydin@ogr.iu.edu.tr", GraduationYear = 2021, Role = "alumni", CreatedAt = new DateTime(2026, 2, 10, 0, 0, 0, DateTimeKind.Utc) },
             new() { Id = 44, Name = "Zeynep Arslan", Email = "zeynep.arslan@ogr.iu.edu.tr", GraduationYear = 2019, Role = "alumni", CreatedAt = new DateTime(2026, 3, 5, 0, 0, 0, DateTimeKind.Utc) },
