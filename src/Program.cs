@@ -76,12 +76,14 @@ using (var scope = app.Services.CreateScope())
 // ⏱️ Middleware 1: Logging Middleware: Writes "time method route restype duration" to terminal in one line
 app.UseRequestLogging();
 
-// 🛡️ Middleware 2: 404 Guardian Middleware: Intercepts all 404s and returns structured errors with reason
+// 🛡️ Middleware 2: 5xx Guardian Middleware: Catches all unhandled exceptions & 5xx server errors
+app.UseServerErrorGuardian();
+
+// 🛡️ Middleware 3: 404 Guardian Middleware: Intercepts all 404s and returns structured errors with reason
 app.UseNotFoundGuardian();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
@@ -95,6 +97,12 @@ app.UseSwaggerUI(c =>
 
 // Also support root /swagger redirect/view
 app.MapGet("/swagger", () => Results.Redirect("/api/swagger"));
+
+// 🧪 Simulation route for 5xx Guardian verification
+app.MapGet("/api/test/500", () =>
+{
+    throw new InvalidOperationException("Simulation of an internal server exception for 5xx Guardian verification.");
+});
 
 app.UseRouting();
 app.UseAuthorization();

@@ -261,6 +261,27 @@ Implemented in `src/middlewares/NotFoundGuardianMiddleware.cs` and registered wi
   * Non-existent Entity ID $\rightarrow$ Identifies the missing entity type (User, JobPosting, Announcement).
   * Missing Parent in Nested Route $\rightarrow$ Clarifies that the parent author/user does not exist for nested creation.
 
+### F. 5xx Guardian Middleware (`ServerErrorGuardianMiddleware`)
+Implemented in `src/middlewares/ServerErrorGuardianMiddleware.cs` and registered with `app.UseServerErrorGuardian()` in `Program.cs`. It acts as the enterprise crash protector, catching all unhandled exceptions and 5xx errors across the pipeline, guarding sensitive internal credentials and stack traces while returning a structured JSON response with a specific **`reason`** and diagnostic **`traceId`**:
+* **Payload Structure**:
+  ```json
+  {
+    "status": "error",
+    "code": 500,
+    "title": "Internal Server Error",
+    "reason": "An unhandled InvalidOperationException was caught by the 5xx Guardian: Simulation of an internal server exception.",
+    "path": "/api/test/500",
+    "method": "GET",
+    "traceId": "00-8ef9a94bd1cac168ebc47ba3d0c82923-ae62cc700850b95c-00",
+    "timestamp": "2026-11-11T07:36:51.9020373Z",
+    "hint": "The server encountered an internal failure. If the problem persists, share the traceId with the system administrator."
+  }
+  ```
+* **Security & Observability**:
+  * Protects database connection strings, database schemas, and filesystem paths from exposure.
+  * Correlates logs using `traceId` (`Activity.Current?.Id ?? context.TraceIdentifier`).
+  * Collaborates with `RequestLoggingMiddleware` to maintain continuous audit telemetry in the terminal.
+
 ---
 
 ## 🔐 Environment Variables & Secrets Policy (Board Item ④)

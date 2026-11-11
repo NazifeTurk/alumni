@@ -477,6 +477,39 @@
           }
         }
       ]
+    },
+    {
+      "name": "12. 500 Internal Server Error — 5xx Guardian Middleware Interception",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/test/500",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "test", "500"]
+        },
+        "description": "5xx Guardian Middleware test: Catches unhandled server exception and returns structured JSON with reason and traceId."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 500 Internal Server Error\", function () {",
+              "    pm.response.to.have.status(500);",
+              "});",
+              "pm.test(\"Response has structured reason and traceId\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.status).to.eql(\"error\");",
+              "    pm.expect(jsonData.code).to.eql(500);",
+              "    pm.expect(jsonData.reason).to.be.a(\"string\");",
+              "    pm.expect(jsonData.traceId).to.be.a(\"string\");",
+              "});"
+            ]
+          }
+        }
+      ]
     }
   ]
 }
