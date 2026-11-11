@@ -85,6 +85,9 @@ public class NotFoundGuardianMiddleware
                 context.Response.Body = originalBodyStream;
                 await context.Response.WriteAsync(finalJson);
 
+                // 📝 Log 404 error to logs/error.logs
+                Alumni.Services.FileErrorLogger.LogError(404, context.Request.Method, context.Request.Path.Value ?? "/", reason, context.TraceIdentifier);
+
                 _logger.LogWarning("🛡️ [404 Guardian] {Method} {Path} -> Reason: {Reason}",
                     context.Request.Method, context.Request.Path, reason);
             }

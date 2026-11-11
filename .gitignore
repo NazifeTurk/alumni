@@ -2,7 +2,8 @@
 [Bb]in/
 [Oo]bj/
 [Ll]og/
-[Ll]ogs/
+[Ll]ogs/*
+!logs/.gitkeep
 *.user
 *.userosscache
 *.sln.docstates

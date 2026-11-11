@@ -47,6 +47,12 @@ public class RequestLoggingMiddleware
             // Also send to ASP.NET Core ILogger infrastructure
             _logger.LogInformation("{Time} {Method} {Route} {StatusCode} {Duration}",
                 requestTime, method, route, restype, duration);
+
+            // 📝 If response is 4xx client error (400, 409, 415), append to logs/error.logs
+            if (restype >= 400 && restype != 404 && restype < 500)
+            {
+                Alumni.Services.FileErrorLogger.LogError(restype, method, route, $"HTTP {restype} Client Error ({duration})", context.TraceIdentifier);
+            }
         }
     }
 }

@@ -59,6 +59,9 @@ public class ServerErrorGuardianMiddleware
         var traceId = Activity.Current?.Id ?? context.TraceIdentifier;
         var reason = Determine5xxReason(ex, statusCode);
 
+        // 📝 Log error to logs/error.logs
+        Alumni.Services.FileErrorLogger.LogError(statusCode, context.Request.Method, context.Request.Path.Value ?? "/", reason, traceId, ex);
+
         var payload = new JsonObject
         {
             ["status"] = "error",

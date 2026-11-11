@@ -282,6 +282,24 @@ Implemented in `src/middlewares/ServerErrorGuardianMiddleware.cs` and registered
   * Correlates logs using `traceId` (`Activity.Current?.Id ?? context.TraceIdentifier`).
   * Collaborates with `RequestLoggingMiddleware` to maintain continuous audit telemetry in the terminal.
 
+### G. Persistent File Error Logging (`Log --> logs/error.logs`)
+All runtime errors (4xx client rejections, 404 missing routes, 5xx server exceptions) are automatically persisted to disk in **`logs/error.logs`** via `src/services/FileErrorLogger.cs`:
+* **File Target**: `logs/error.logs` (volume-mounted into Docker via `./logs:/app/logs`).
+* **Log Entry Pattern**:
+  ```text
+  [YYYY-MM-DD HH:mm:ss] [STATUS] METHOD PATH - Reason: <reason> [TraceId: <traceId>]
+    Exception: <ExceptionType>: <Message>
+    StackTrace: <trace>
+  ```
+* **Real Example from `logs/error.logs`**:
+  ```text
+  [2026-11-11 07:45:39] [500] GET /api/test/500 - Reason: An unhandled InvalidOperationException was caught by the 5xx Guardian: Simulation of an internal server exception for 5xx Guardian verification. [TraceId: 00-73c0be6203fc846d9374e622e4f0ef33-5928fde903bbb4a3-00]
+    Exception: System.InvalidOperationException: Simulation of an internal server exception for 5xx Guardian verification.
+    StackTrace: at Program.<>c.<<Main>$>b__0_4() in /src/src/Program.cs:line 104
+  [2026-11-11 07:45:39] [404] GET /api/users/99999 - Reason: User with ID '99999' was not found. [TraceId: 0HNPVOV3R0Q5D:00000001]
+  [2026-11-11 07:45:39] [400] POST /api/users - Reason: HTTP 400 Client Error (21ms) [TraceId: 0HNPVOV3R0Q5E:00000001]
+  ```
+
 ---
 
 ## 🔐 Environment Variables & Secrets Policy (Board Item ④)
