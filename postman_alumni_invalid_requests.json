@@ -158,6 +158,84 @@
       ]
     },
     {
+      "name": "4b. 400 Bad Request — Title Exceeds 120 Characters (JobPosting Rule)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"This is an excessively long job posting title that definitely exceeds the maximum allowed length of one hundred and twenty characters specified in ddd.md rules!\",\n  \"company\": \"Tech Corp\",\n  \"city\": \"Istanbul\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/users/1/jobs",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "users", "1", "jobs"]
+        },
+        "description": "JobPosting rule in ddd.md: Title max 120 characters."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400 Bad Request\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "pm.test(\"Error mentions max 120 characters limit\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(JSON.stringify(jsonData)).to.include(\"120\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4c. 400 Bad Request — Missing City (JobPosting Rule)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Backend Engineer\",\n  \"company\": \"Tech Corp\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/users/1/jobs",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "users", "1", "jobs"]
+        },
+        "description": "JobPosting rule in ddd.md: City is required."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400 Bad Request\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "pm.test(\"Error mentions City is required\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(JSON.stringify(jsonData)).to.include(\"City\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
       "name": "5. 404 Not Found — Get Non-Existent User ID",
       "request": {
         "method": "GET",

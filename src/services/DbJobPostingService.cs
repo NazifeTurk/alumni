@@ -45,12 +45,17 @@ public class DbJobPostingService : IJobPostingService
             return null; // Will trigger 404 in controller
         }
 
+        var effectiveCity = !string.IsNullOrWhiteSpace(request.EffectiveCity)
+            ? request.EffectiveCity.Trim()
+            : "Istanbul";
+
         var job = new JobPosting
         {
             UserId = userId,
             Title = request.Title.Trim(),
             Company = request.Company.Trim(),
-            Location = !string.IsNullOrWhiteSpace(request.Location) ? request.Location.Trim() : "Remote",
+            City = effectiveCity,
+            Location = effectiveCity,
             Description = !string.IsNullOrWhiteSpace(request.Description) ? request.Description.Trim() : request.Title.Trim(),
             CreatedAt = DateTime.UtcNow,
             IsActive = true
@@ -68,8 +73,12 @@ public class DbJobPostingService : IJobPostingService
 
         job.Title = request.Title.Trim();
         job.Company = request.Company.Trim();
-        job.Location = request.Location.Trim();
-        job.Description = request.Description.Trim();
+        if (!string.IsNullOrWhiteSpace(request.EffectiveCity))
+        {
+            job.City = request.EffectiveCity.Trim();
+            job.Location = request.EffectiveCity.Trim();
+        }
+        job.Description = (request.Description ?? string.Empty).Trim();
         job.IsActive = request.IsActive;
 
         _context.SaveChanges();

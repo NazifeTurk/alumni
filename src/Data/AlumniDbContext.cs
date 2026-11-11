@@ -46,8 +46,9 @@ public class AlumniDbContext : DbContext
         {
             entity.ToTable("job_postings");
             entity.HasKey(j => j.Id);
-            entity.Property(j => j.Title).IsRequired().HasMaxLength(150);
+            entity.Property(j => j.Title).IsRequired().HasMaxLength(120);
             entity.Property(j => j.Company).IsRequired().HasMaxLength(100);
+            entity.Property(j => j.City).IsRequired().HasMaxLength(100);
             entity.Property(j => j.Location).HasMaxLength(100).HasDefaultValue("Remote");
             entity.Property(j => j.Description).IsRequired();
             entity.Property(j => j.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");

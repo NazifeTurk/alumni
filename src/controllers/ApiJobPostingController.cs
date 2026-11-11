@@ -23,9 +23,24 @@ public class ApiJobPostingController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult CreateUserJob(int id, [FromBody] CreateJobPostingRequest request)
     {
-        if (string.IsNullOrWhiteSpace(request.Title) || string.IsNullOrWhiteSpace(request.Company))
+        if (string.IsNullOrWhiteSpace(request.Title))
         {
-            return BadRequest(new { error = 400, message = "Title and Company are required." });
+            return BadRequest(new { error = 400, message = "Title is required." });
+        }
+
+        if (request.Title.Trim().Length > 120)
+        {
+            return BadRequest(new { error = 400, message = "Title cannot exceed 120 characters." });
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Company))
+        {
+            return BadRequest(new { error = 400, message = "Company is required." });
+        }
+
+        if (string.IsNullOrWhiteSpace(request.EffectiveCity))
+        {
+            return BadRequest(new { error = 400, message = "City is required." });
         }
 
         var created = _jobService.CreateForUser(id, request);
