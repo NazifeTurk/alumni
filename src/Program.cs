@@ -1,4 +1,5 @@
 using Alumni.Data;
+using Alumni.Middlewares;
 using Alumni.Routes;
 using Alumni.Services;
 using Microsoft.EntityFrameworkCore;
@@ -72,6 +73,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline
+// ⏱️ Logging Middleware: Writes "time method route restype duration" to terminal in one line
+app.UseRequestLogging();
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

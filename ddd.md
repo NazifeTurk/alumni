@@ -231,6 +231,17 @@ Manages candidate applications submitted by alumni and students for job postings
 * If candidate has already applied to this posting $\rightarrow$ **`409 Conflict`** (`{"error": 409, "message": "User has already applied to this job posting"}`).
 * On success $\rightarrow$ **`201 Created`**.
 
+### D. Custom Logging Middleware (`RequestLoggingMiddleware`)
+Implemented in `src/middlewares/RequestLoggingMiddleware.cs` and injected at the entry of the HTTP pipeline in `Program.cs`. It benchmarks and prints every incoming request to the terminal stdout in a clean single line:
+* **Log Pattern**: `time method route restype duration`
+* **Real-time Terminal Output Example**:
+  ```text
+  10:20:30 POST /user 201 18ms
+  07:02:00 POST /api/users 201 228ms
+  07:02:06 GET /api/jobs 200 124ms
+  ```
+* **Performance Telemetry**: Uses `System.Diagnostics.Stopwatch` to track elapsed execution time with millisecond precision without degrading throughput.
+
 ---
 
 ## 🔐 Environment Variables & Secrets Policy (Board Item ④)
