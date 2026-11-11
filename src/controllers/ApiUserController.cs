@@ -90,14 +90,22 @@ public class ApiUserController : ControllerBase
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public IActionResult Delete(int id)
     {
-        var deleted = _userService.Delete(id);
-        if (!deleted)
+        try
         {
-            return NotFound(new { error = 404, message = $"User with ID '{id}' was not found." });
-        }
+            var deleted = _userService.Delete(id);
+            if (!deleted)
+            {
+                return NotFound(new { error = 404, message = $"User with ID '{id}' was not found." });
+            }
 
-        return Ok(new { status = "success", message = $"User with ID '{id}' was deleted." });
+            return Ok(new { status = "success", message = $"User with ID '{id}' was deleted." });
+        }
+        catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+        {
+            return Conflict(new { error = 409, message = $"User with ID '{id}' cannot be deleted because they have associated job postings or applications (ON DELETE RESTRICT constraint)." });
+        }
     }
 }

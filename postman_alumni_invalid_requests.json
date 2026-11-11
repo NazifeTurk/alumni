@@ -1,0 +1,404 @@
+{
+  "info": {
+    "_postman_id": "a918e62d-8b01-49cf-8987-a2c3dbf94111",
+    "name": "Alumni API — Invalid Requests Test Suite",
+    "description": "Comprehensive suite of negative / invalid request test cases for Istanbul University Alumni Tracking System (Assoc. Prof. Dr. Emre Akadal - Web Programming). Covers HTTP 400, 404, 409, and 415 error handling.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. 400 Bad Request — Missing Required Field (Name)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"noname@iu.edu.tr\",\n  \"graduationYear\": 2024\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/users",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "users"]
+        },
+        "description": "Attempt to create a user without providing the required 'name' field."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400 Bad Request\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "pm.test(\"Error mentions missing Name\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(JSON.stringify(jsonData)).to.include(\"Name\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. 400 Bad Request — Malformed JSON Syntax",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Broken JSON\",\n  \"email\": \"test@iu.edu.tr\",\n"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/users",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "users"]
+        },
+        "description": "Attempt to send unclosed / malformed JSON payload."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400 Bad Request for malformed JSON\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. 400 Bad Request — Type Mismatch (String for Int)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Ali Veli\",\n  \"email\": \"ali@iu.edu.tr\",\n  \"graduationYear\": \"not-a-valid-year\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/users",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "users"]
+        },
+        "description": "Sending a non-numeric string for the integer field 'graduationYear'."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400 Bad Request for type mismatch\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. 400 Bad Request — Missing Title & Company in Nested Job Route",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"description\": \"Missing both title and company\",\n  \"location\": \"Istanbul\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/users/1/jobs",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "users", "1", "jobs"]
+        },
+        "description": "Nested route POST /api/users/1/jobs with missing Title and Company."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400 Bad Request\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. 404 Not Found — Get Non-Existent User ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/users/99999",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "users", "99999"]
+        },
+        "description": "Querying a user that does not exist in the database."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 404 Not Found\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "pm.test(\"Response has error: 404\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.error).to.eql(404);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. 404 Not Found — Nested Route with Non-Existent User (Slide Sec B)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Cloud Architect\",\n  \"company\": \"Amazon AWS\",\n  \"location\": \"Remote\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/users/99999/jobs",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "users", "99999", "jobs"]
+        },
+        "description": "Classroom Slide Section B: Does user 99999 exist? No -> returns 404 user not found."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 404 Not Found\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "pm.test(\"Message notes user not found\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.message).to.include(\"not found\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. 404 Not Found — Apply to Non-Existent Job Posting",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 1\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/jobs/99999/applications",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "jobs", "99999", "applications"]
+        },
+        "description": "Attempting to submit an application to a job posting ID that does not exist."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 404 Not Found\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. 404 Not Found — Apply with Non-Existent User ID",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 99999\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/jobs/10/applications",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "jobs", "10", "applications"]
+        },
+        "description": "Attempting to apply to Job 10 with a user ID that does not exist in the database."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 404 Not Found\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. 409 Conflict — Duplicate Job Application (Slide Sec A)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 3\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/jobs/10/applications",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "jobs", "10", "applications"]
+        },
+        "description": "Classroom Slide Section A: UNIQUE (user_id, job_posting_id) -> applying twice returns 409 Conflict."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 409 Conflict\", function () {",
+              "    pm.response.to.have.status(409);",
+              "});",
+              "pm.test(\"Conflict message for duplicate application\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.message).to.include(\"already applied\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. 409 Conflict — Delete User with Job Postings (ON DELETE RESTRICT)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/users/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "users", "1"]
+        },
+        "description": "Week 06 Delete Rule: Ada (ID: 1) has active job postings. ON DELETE RESTRICT prevents silent cascading deletion and returns 409 Conflict."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 409 Conflict\", function () {",
+              "    pm.response.to.have.status(409);",
+              "});",
+              "pm.test(\"Message cites RESTRICT constraint\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.message).to.include(\"RESTRICT\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. 415 Unsupported Media Type — Plain Text Payload",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "text/plain"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "This is raw text without JSON headers"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/users",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "users"]
+        },
+        "description": "Sending text/plain payload to an API endpoint expecting application/json."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 415 Unsupported Media Type\", function () {",
+              "    pm.response.to.have.status(415);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
