@@ -73,8 +73,11 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline
-// ⏱️ Logging Middleware: Writes "time method route restype duration" to terminal in one line
+// ⏱️ Middleware 1: Logging Middleware: Writes "time method route restype duration" to terminal in one line
 app.UseRequestLogging();
+
+// 🛡️ Middleware 2: 404 Guardian Middleware: Intercepts all 404s and returns structured errors with reason
+app.UseNotFoundGuardian();
 
 if (!app.Environment.IsDevelopment())
 {

@@ -242,6 +242,25 @@ Implemented in `src/middlewares/RequestLoggingMiddleware.cs` and injected at the
   ```
 * **Performance Telemetry**: Uses `System.Diagnostics.Stopwatch` to track elapsed execution time with millisecond precision without degrading throughput.
 
+### E. 404 Guardian Middleware (`NotFoundGuardianMiddleware`)
+Implemented in `src/middlewares/NotFoundGuardianMiddleware.cs` and registered with `app.UseNotFoundGuardian()` in `Program.cs`. It guards the entire application against raw or unexplained 404 errors by intercepting any 404 response in the pipeline and returning a structured JSON response that explicitly includes a descriptive **`reason`**:
+* **Payload Structure**:
+  ```json
+  {
+    "status": "error",
+    "code": 404,
+    "reason": "User with ID '99999' was not found.",
+    "path": "/api/users/99999",
+    "method": "GET",
+    "timestamp": "2026-11-11T07:31:01.8951959Z",
+    "hint": "Check endpoint syntax, verify resource IDs, or explore available endpoints at /api/swagger."
+  }
+  ```
+* **Domain-Aware Reason Determination**:
+  * Unregistered URL path $\rightarrow$ Explains that the route does not exist for the specified HTTP verb.
+  * Non-existent Entity ID $\rightarrow$ Identifies the missing entity type (User, JobPosting, Announcement).
+  * Missing Parent in Nested Route $\rightarrow$ Clarifies that the parent author/user does not exist for nested creation.
+
 ---
 
 ## 🔐 Environment Variables & Secrets Policy (Board Item ④)
