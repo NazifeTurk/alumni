@@ -31,6 +31,34 @@ public class NotFoundGuardianMiddleware
 
             if (context.Response.StatusCode == StatusCodes.Status404NotFound)
             {
+                var path = context.Request.Path.Value ?? "/";
+
+                // 1. If this is the generic 404 page itself (/404), allow HTML to be returned with 404 status
+                if (path.Equals("/404", StringComparison.OrdinalIgnoreCase))
+                {
+                    Alumni.Services.FileErrorLogger.LogError(404, context.Request.Method, path, "Generic 404 HTML page served", context.TraceIdentifier);
+                    _logger.LogWarning("🛡️ [404 Guardian] Serving generic 404 HTML page for {Method} {Path}",
+                        context.Request.Method, path);
+
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    await memoryStream.CopyToAsync(originalBodyStream);
+                    return;
+                }
+
+                // 2. If this is a non-API web request that resulted in 404, redirect (HTTP 302) to the generic 404 page
+                if (!path.StartsWith("/api/", StringComparison.OrdinalIgnoreCase) &&
+                    !path.StartsWith("/swagger", StringComparison.OrdinalIgnoreCase))
+                {
+                    Alumni.Services.FileErrorLogger.LogError(404, context.Request.Method, path, "Invalid web request redirected to generic 404 page", context.TraceIdentifier);
+                    _logger.LogWarning("🛡️ [404 Guardian] Redirecting invalid web request {Method} {Path} to /404",
+                        context.Request.Method, path);
+
+                    context.Response.Body = originalBodyStream;
+                    context.Response.Redirect($"/404?requestedPath={Uri.EscapeDataString(path)}");
+                    return;
+                }
+
+                // 3. For API routes, generate structured JSON with reason
                 memoryStream.Seek(0, SeekOrigin.Begin);
                 var responseText = await new StreamReader(memoryStream).ReadToEndAsync();
 

@@ -76,6 +76,74 @@ public static class BasicRoutes
 
         // 6. GET /about -> temporary about page (HTML view)
         app.MapGet("/about", () => Results.Content(GetAboutHtmlPage(), "text/html"));
+
+        // 7. GET /404 -> Generic 404 Page (HTML view with HTTP 404 Not Found)
+        app.MapGet("/404", (HttpContext context) =>
+        {
+            var requestedPath = context.Request.Query["requestedPath"].ToString();
+            if (string.IsNullOrWhiteSpace(requestedPath))
+            {
+                requestedPath = context.Request.Path.Value ?? "/";
+            }
+
+            var html = GetGeneric404HtmlPage(requestedPath);
+            return Results.Content(html, "text/html; charset=utf-8", statusCode: StatusCodes.Status404NotFound);
+        });
+    }
+
+    private static string GetGeneric404HtmlPage(string requestedPath)
+    {
+        var possiblePaths = new[]
+        {
+            Path.Combine(Directory.GetCurrentDirectory(), "views", "404.html"),
+            Path.Combine(Directory.GetCurrentDirectory(), "src", "views", "404.html"),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "views", "404.html"),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "src", "views", "404.html")
+        };
+
+        foreach (var path in possiblePaths)
+        {
+            if (File.Exists(path))
+            {
+                try
+                {
+                    var template = File.ReadAllText(path);
+                    return template.Replace("{{REQUESTED_PATH}}", System.Net.WebUtility.HtmlEncode(requestedPath));
+                }
+                catch
+                {
+                    // Fall through to fallback HTML if file read fails
+                }
+            }
+        }
+
+        // Inline fallback if 404.html template cannot be located
+        return """
+        <!DOCTYPE html>
+        <html lang="tr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>404 — Sayfa Bulunamadı</title>
+            <style>
+                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f172a; color: #f8fafc; text-align: center; padding: 4rem 1rem; }
+                .box { max-width: 500px; margin: 0 auto; background: #1e293b; padding: 2rem; border-radius: 12px; border: 1px solid #334155; }
+                h1 { font-size: 3rem; color: #f43f5e; margin-bottom: 0.5rem; }
+                code { background: #0f172a; color: #38bdf8; padding: 0.3rem 0.6rem; border-radius: 6px; }
+                a { display: inline-block; margin-top: 1.5rem; color: #fff; background: #4f46e5; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; }
+            </style>
+        </head>
+        <body>
+            <div class="box">
+                <h1>404</h1>
+                <h2>Sayfa Bulunamadı</h2>
+                <p style="margin: 1rem 0; color: #94a3b8;">Ulaşmaya çalıştığınız adres bulunamadı:</p>
+                <code>{{REQUESTED_PATH}}</code>
+                <div><a href="/">Ana Sayfaya Dön</a></div>
+            </div>
+        </body>
+        </html>
+        """.Replace("{{REQUESTED_PATH}}", System.Net.WebUtility.HtmlEncode(requestedPath));
     }
 
     private static string GetMainHtmlPage()

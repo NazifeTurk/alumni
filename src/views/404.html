@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Sayfa Bulunamadı | İstanbul Üniversitesi Mezun Takip</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --accent-cyan: #38bdf8;
+            --accent-rose: #f43f5e;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Ambient glow background effect */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, rgba(15, 23, 42, 0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 680px;
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .badge-404 {
+            display: inline-block;
+            background: rgba(244, 63, 94, 0.15);
+            color: var(--accent-rose);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 0.35rem 1rem;
+            border-radius: 9999px;
+            margin-bottom: 1.5rem;
+        }
+
+        .glitch-code {
+            font-size: 6rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #f43f5e 0%, #a855f7 50%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+        }
+
+        h1 {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+        }
+
+        p.description {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 1.75rem;
+        }
+
+        .requested-path-box {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 0.85rem 1.25rem;
+            margin-bottom: 2rem;
+            display: inline-block;
+            max-width: 100%;
+            word-break: break-all;
+        }
+
+        .requested-path-box span.label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+
+        .requested-path-box code {
+            color: var(--accent-cyan);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .quick-links {
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-links a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .quick-links a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 2rem;
+            color: #64748b;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="badge-404">🛡️ 404 Guardian Error Handler</div>
+        <div class="glitch-code">404</div>
+        <h1>Aradığınız Sayfa Bulunamadı</h1>
+        <p class="description">
+            Ulaşmaya çalıştığınız sayfa silinmiş, adı değiştirilmiş veya geçersiz bir URL girmiş olabilirsiniz.
+        </p>
+
+        <div class="requested-path-box">
+            <span class="label">Geçersiz İstek (Route):</span>
+            <code>{{REQUESTED_PATH}}</code>
+        </div>
+
+        <div class="actions">
+            <a href="/" class="btn btn-primary">
+                🏠 Ana Sayfaya Dön
+            </a>
+            <a href="/jobs" class="btn btn-secondary">
+                💼 İş İlanları
+            </a>
+            <button onclick="window.history.back()" class="btn btn-secondary">
+                ↩️ Önceki Sayfa
+            </button>
+        </div>
+
+        <div class="quick-links">
+            <a href="/users">Mezunlar Listesi</a>
+            <a href="/announcements">Duyurular &amp; Etkinlikler</a>
+            <a href="/swagger">Swagger API Dokümantasyonu</a>
+        </div>
+    </div>
+
+    <footer>
+        İstanbul Üniversitesi — Mezun Takip Sistemi (Alumni Tracking System) &bull; Doç. Dr. Emre Akadal
+    </footer>
+</body>
+</html>

@@ -300,6 +300,19 @@ All runtime errors (4xx client rejections, 404 missing routes, 5xx server except
   [2026-11-11 07:45:39] [400] POST /api/users - Reason: HTTP 400 Client Error (21ms) [TraceId: 0HNPVOV3R0Q5E:00000001]
   ```
 
+### H. Generic 404 Page & Invalid Request Redirection (`define generic 404 page and redirect invalid request`)
+A dedicated, responsive, university-themed generic 404 page is integrated to handle invalid web traffic gracefully:
+* **HTML View**: `src/views/404.html` containing Istanbul University alumni branding, glowing badge, animated glitch header, navigation links (Home, Jobs, Users, Announcements, Swagger), and dynamic path interpolation (`{{REQUESTED_PATH}}`).
+* **Deployment Packaging**: `src/Alumni.csproj` includes `<Content Include="views/**">` ensuring automatic deployment into `/app/views/` across Docker and production build stages.
+* **Endpoint `GET /404`**: Mapped in `src/routes/BasicRoutes.cs`. Reads `views/404.html`, injects the requested URL path securely with HTML encoding, and responds with `HTTP 404 Not Found` (`text/html; charset=utf-8`).
+* **Invalid Request Redirection**:
+  * Unmapped browser/web requests (e.g. `GET /invalid-page`, `GET /unknown`) hit `app.MapFallback` or `NotFoundGuardianMiddleware` and are redirected via **`HTTP 302 Found`** to `/404?requestedPath=<escaped-path>`.
+  * Following the redirect displays the styled 404 error page while accurately informing the client of `HTTP 404 Not Found`.
+* **Preservation of API JSON Contract**:
+  * API endpoints (`/api/...`) bypass HTML redirection and continue returning structured JSON payloads with `"reason"`, preserving Postman and integration test compatibility.
+* **Auditing & Logging**:
+  * Every invalid request redirect and 404 page render is logged to `logs/error.logs` via `FileErrorLogger` and output in single-line format to the console via `RequestLoggingMiddleware`.
+
 ---
 
 ## 🔐 Environment Variables & Secrets Policy (Board Item ④)

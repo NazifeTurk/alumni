@@ -116,18 +116,29 @@ app.MapUserApiRoutes();
 // 🏛️ Week 04: MVC Controllers (UserController, ApiUserController, AnnouncementController, ApiAnnouncementController)
 app.MapControllers();
 
-// 🚫 Slide Section D & E: ANY /* -> 404 Not Found Fallback Handler
+// 🚫 Slide Section D & E: ANY /* -> 404 Not Found & Invalid Request Fallback Handler
 app.MapFallback((HttpContext context) =>
 {
-    context.Response.StatusCode = StatusCodes.Status404NotFound;
-    return Results.Json(new
+    var path = context.Request.Path.Value ?? "/";
+
+    // API routes return 404 JSON (intercepted and enriched by NotFoundGuardianMiddleware)
+    if (path.StartsWith("/api/", StringComparison.OrdinalIgnoreCase))
     {
-        status = "error",
-        code = 404,
-        message = $"Route '{context.Request.Path}' does not exist on this server.",
-        method = context.Request.Method,
-        hint = "Inspect available endpoints at /api/swagger or visit /home."
-    });
+        context.Response.StatusCode = StatusCodes.Status404NotFound;
+        return Results.Json(new
+        {
+            status = "error",
+            code = 404,
+            message = $"Route '{context.Request.Path}' does not exist on this server.",
+            method = context.Request.Method,
+            hint = "Inspect available endpoints at /api/swagger or visit /home."
+        });
+    }
+
+    // Invalid browser / web requests are logged and redirected (HTTP 302) to the generic 404 page
+    FileErrorLogger.LogError(404, context.Request.Method, path, "Invalid web request redirected to generic 404 page", context.TraceIdentifier);
+    var requestedPath = Uri.EscapeDataString(path);
+    return Results.Redirect($"/404?requestedPath={requestedPath}");
 });
 
 app.Run();
