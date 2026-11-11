@@ -19,6 +19,11 @@ An enterprise-ready, modular web application engineered to track university grad
 - [🚀 Quick Start: The One-Command Rule](#-quick-start-the-one-command-rule)
 - [🧪 The Forgetting Test (Database Persistence)](#-the-forgetting-test-database-persistence-verification)
 - [📡 API Contract & Health Check](#-api-contract--health-check)
+- [💼 Relational Domain & JobPostings (Week 06)](#-relational-domain--jobpostings-week-06)
+- [🛡️ Enterprise Middleware Pipeline & Error Guardians](#️-enterprise-middleware-pipeline--error-guardians)
+- [🚫 Generic 404 Page & Invalid Request Redirection](#-generic-404-page--invalid-request-redirection)
+- [📝 Persistent File Error Logging (logs/error.logs)](#-persistent-file-error-logging-logserrorlogs)
+- [🧪 Postman Invalid Requests Test Suite](#-postman-invalid-requests-test-suite)
 - [📂 Repository Structure](#-repository-structure)
 - [🐳 Containerization & Orchestration](#-containerization--orchestration)
 - [🎓 Coursework Specification](#-coursework-specification)
@@ -298,8 +303,9 @@ To differentiate between human-facing UI and machine-facing data contracts:
 
 ### 2. Controller & Route Mapping
 
+
 | Domain | Controller | Base Route | Response Type | Role |
-| :--- | :--- | :--- | :---: | :--- |
+| :--- | :--- | :--- | :--- | :--- |
 | **Users** | `UserController` | `/users` | HTML View | Human interface: List, Add, Detail, Delete alumni |
 | **Users** | `ApiUserController` | `/api/users` | JSON | Programmatic REST API with full CRUD |
 | **Homework** | `AnnouncementController` | `/announcements` | HTML View | Campus announcements noticeboard & publish form |
@@ -307,38 +313,175 @@ To differentiate between human-facing UI and machine-facing data contracts:
 
 ---
 
+## 💼 Relational Domain & JobPostings (Week 06)
+
+The platform expands into relational multi-entity persistence by modeling **Job Postings** and candidate **Applications** linked to alumni users:
+
+```text
+┌─────────────────────────┐          1:N          ┌─────────────────────────┐
+│          users          │ ─────────────────────►│      job_postings       │
+│  • Id (PK)              │ (Creates Job Posting) │  • Id (PK)              │
+│  • Name, Email          │                       │  • UserId (FK -> users) │
+│  • GraduationYear, Role │                       │  • Title, Company, City │
+└────────────┬────────────┘                       └────────────┬────────────┘
+             │                                                 │
+             │                    N:M Join                     │
+             └──────────────►┌────────────────┐◄───────────────┘
+                             │  applications  │
+                             │  • Id (PK)     │
+                             │  • UserId (FK) │
+                             │  • JobId (FK)  │
+                             └────────────────┘
+```
+
+### 1. Business Logic & Validation Rules
+* **`Title` (Başlık)**: **Required**, maximum **120 characters** (`[Required]`, `[StringLength(120)]`). Payloads with missing titles or titles exceeding 120 characters are rejected with **`HTTP 400 Bad Request`**.
+* **`Company` (Şirket)**: **Required** (`[Required]`, `[StringLength(100)]`). Missing company values return **`HTTP 400 Bad Request`**.
+* **`City` (Şehir)**: **Required** (`[Required]`, `[StringLength(100)]`). Location city (e.g. `'Istanbul'`, `'Ankara'`, `'Remote'`) must be specified; missing values return **`HTTP 400 Bad Request`**.
+
+### 2. Relational Endpoints & Include Pattern
+* **Nested Creation Route (`POST /api/users/{id}/jobs`)**: The creator's identity is dictated strictly by the URL path (`/api/users/1/jobs`). The payload contains only job details. Validates user existence (`404` if non-existent) and inserts relational record (`201 Created`).
+* **Include Pattern (`GET /api/users/{id}`)**: Performs an optimized SQL `LEFT JOIN` on `job_postings`, returning the user entity with an embedded `"jobs"` collection.
+* **Candidate Application (`POST /api/jobs/{id}/applications`)**: Enforces `UNIQUE(user_id, job_posting_id)`. Applying twice to the same job opening triggers **`HTTP 409 Conflict`**.
+* **Referential Integrity (`ON DELETE RESTRICT`)**: Deleting a user with active job postings is blocked by database constraints, returning **`HTTP 409 Conflict`** to prevent cascading data loss.
+
+---
+
+## 🛡️ Enterprise Middleware Pipeline & Error Guardians
+
+A robust three-tier middleware architecture intercepts and standardizes all HTTP traffic passing through the Kestrel web server:
+
+```text
+                           Incoming Request
+                                  │
+                                  ▼
+      ┌────────────────────────────────────────────────────────┐
+      │  ⏱️ Middleware 1: RequestLoggingMiddleware             │
+      │  Single-line stdout: time method route restype duration│
+      │  Example: "10:20:30 POST /user 201 18ms"               │
+      └───────────────────────────┬────────────────────────────┘
+                                  │
+                                  ▼
+      ┌────────────────────────────────────────────────────────┐
+      │  🛡️ Middleware 2: ServerErrorGuardianMiddleware (5xx)  │
+      │  Catches unhandled exceptions, shields secrets/paths,  │
+      │  returns structured JSON with "reason" & "traceId"     │
+      └───────────────────────────┬────────────────────────────┘
+                                  │
+                                  ▼
+      ┌────────────────────────────────────────────────────────┐
+      │  🛡️ Middleware 3: NotFoundGuardianMiddleware (404)    │
+      │  API: Returns structured 404 JSON with domain "reason" │
+      │  Web: Passes /404 HTML view without JSON overwriting   │
+      └───────────────────────────┬────────────────────────────┘
+                                  │
+                                  ▼
+                 [ Routing / Controllers / MapFallback ]
+```
+
+### 1. Request Logging Middleware (`RequestLoggingMiddleware`)
+* **Terminal Format**: Benchmark stdout in a single line: `time method route restype duration` (e.g. `10:20:30 POST /user 201 18ms`).
+* **Precision**: Uses `System.Diagnostics.Stopwatch` for millisecond-level telemetry.
+
+### 2. 404 Guardian Middleware (`NotFoundGuardianMiddleware`)
+* Intercepts HTTP 404 Not Found responses and ensures all API responses contain a clear **`"reason"`** explaining *why* the resource was not found (missing entity ID, unmapped route, or missing parent author).
+
+### 3. 5xx Guardian Middleware (`ServerErrorGuardianMiddleware`)
+* Serves as the enterprise crash protector. Catches all unhandled exceptions, shields internal database connection strings and filesystem paths, and responds with a standardized JSON payload including diagnostic **`traceId`** and **`reason`**.
+* **Simulation Endpoint**: `GET /api/test/500` intentionally throws an exception for verification.
+
+---
+
+## 🚫 Generic 404 Page & Invalid Request Redirection
+
+To handle invalid web traffic gracefully without breaking machine-to-machine API contracts:
+
+* **Custom 404 HTML View (`src/views/404.html`)**: Styled responsive template featuring dark modern aesthetics, glowing university badge, glitch header, and dynamic route interpolation (`{{REQUESTED_PATH}}`).
+* **Endpoint `GET /404`**: Mapped in `BasicRoutes.cs`. Returns `HTTP 404 Not Found` with `Content-Type: text/html; charset=utf-8`.
+* **Automatic Redirection (`HTTP 302 Found`)**: Unmapped browser/web requests (e.g. `GET /some-invalid-page`, `GET /unknown`) are automatically redirected to `/404?requestedPath=<escaped-path>`. Following the redirect renders the branded 404 page.
+* **API JSON Preservation**: Non-web requests (`/api/...`) bypass HTML redirection and continue returning structured JSON with `"reason"`.
+
+---
+
+## 📝 Persistent File Error Logging (`logs/error.logs`)
+
+All client rejections (4xx), missing routes (404), unhandled server exceptions (5xx), and invalid redirects are appended to disk in **`logs/error.logs`** via `src/services/FileErrorLogger.cs`:
+* **Volume Mount**: Mounted via `./logs:/app/logs` in `docker-compose.yml`, guaranteeing log persistence across container rebuilds.
+* **Log Entry Pattern**:
+  ```text
+  [YYYY-MM-DD HH:mm:ss] [STATUS] METHOD PATH - Reason: <reason> [TraceId: <traceId>]
+  ```
+
+---
+
+## 🧪 Postman Invalid Requests Test Suite
+
+The repository includes **`postman_alumni_invalid_requests.json`**, an automated 12-scenario test collection covering edge cases and negative assertions:
+
+| # | Test Scenario | HTTP Method & Route | Expected Status | Key Assertion / Assertion Rule |
+|---|:---|:---|:---:|:---|
+| **1** | Missing Required Field (`Name`) | `POST /api/users` | `400 Bad Request` | Payload must mention missing `Name` |
+| **2** | Malformed JSON Syntax | `POST /api/users` | `400 Bad Request` | Catches syntax errors before model binding |
+| **3** | Type Mismatch (String for Int) | `POST /api/users` | `400 Bad Request` | Invalid `graduationYear` type rejected |
+| **4** | Missing Title & Company | `POST /api/users/1/jobs` | `400 Bad Request` | Nested route requires `Title` and `Company` |
+| **4b**| Title Exceeds 120 Chars | `POST /api/users/1/jobs` | `400 Bad Request` | JobPosting rule: Title max 120 characters |
+| **4c**| Missing City | `POST /api/users/1/jobs` | `400 Bad Request` | JobPosting rule: City is required |
+| **5** | Non-Existent User ID | `GET /api/users/99999` | `404 Not Found` | Guardian JSON with `"reason"` |
+| **6** | Nested Route with Missing User | `POST /api/users/99999/jobs` | `404 Not Found` | Explains parent user not found |
+| **7** | Apply to Non-Existent Job | `POST /api/jobs/99999/applications` | `404 Not Found` | Explains job posting does not exist |
+| **8** | Apply with Non-Existent User | `POST /api/jobs/10/applications` | `404 Not Found` | Explains candidate user does not exist |
+| **9** | Duplicate Job Application | `POST /api/jobs/10/applications` | `409 Conflict` | Enforces `UNIQUE(UserId, JobPostingId)` |
+| **10**| Delete User with Active Jobs | `DELETE /api/users/1` | `409 Conflict` | Enforces `ON DELETE RESTRICT` |
+| **11**| Plain Text to JSON API | `POST /api/users` | `415 Unsupported Media` | Rejects non-JSON `Content-Type` |
+| **12**| 5xx Server Exception Simulation | `GET /api/test/500` | `500 Server Error` | Catches crash, returns `reason` & `traceId` |
+
+---
+
 ## 📂 Repository Structure
 
 ```text
 alumni/
-├── docker-compose.yml              # Container orchestration (Web API + PostgreSQL)
+├── docker-compose.yml              # Container orchestration (Web API + PostgreSQL + Volume mounts)
 ├── Dockerfile                      # Multi-stage .NET SDK build & runtime image
 ├── .env.example                    # Environment configuration template
 ├── .gitignore                      # .NET build artifacts (bin/, obj/, .vs/) & secrets
-├── README.md                       # Architecture, design decisions, and system contract
+├── README.md                       # Master architecture, design decisions, and system contract
+├── ddd.md                          # 🗄️ Formal Data Design Documentation & Persistence Proofs
+├── postman_alumni_invalid_requests.json # 🧪 12-scenario Postman negative testing collection
+├── logs/                           # 📝 Persistent error logging directory (volume-mounted)
+│   └── error.logs                  # Runtime audit log (4xx, 5xx, redirects)
 └── src/                            # ASP.NET Core Web Application
     ├── Alumni.csproj               # .NET 7 Web SDK project file (Swashbuckle Swagger enabled)
-    ├── Program.cs                  # Pipeline bootstrap, Swagger UI & controller mapping
+    ├── Program.cs                  # Pipeline bootstrap, Middlewares & Controller mappings
     ├── appsettings.json            # Configuration settings & database connection strings
-    ├── models/                     # 📦 Model Layer (Domain Entities & Embedded CRUD)
-    │   ├── User.cs                 # User entity with in-memory CRUD methods
-    │   └── Announcement.cs         # (Homework) Announcement entity & DTOs
+    ├── models/                     # 📦 Model Layer (Domain Entities & Data Annotations)
+    │   ├── User.cs                 # User entity with relational navigation properties
+    │   ├── JobPosting.cs           # JobPosting entity (Title max 120, Company, City required)
+    │   ├── Application.cs          # N:M Join entity for candidate applications
+    │   └── Announcement.cs         # Announcement entity & DTOs
     ├── services/                   # ⚙️ Service & Interface Layer
-    │   ├── InMemoryUserService.cs  # In-memory user management
-    │   ├── IAnnouncementService.cs # (Homework) Interface contract to manage announcements
-    │   └── InMemoryAnnouncementService.cs # (Homework) In-memory announcement implementation
+    │   ├── IUserService.cs / DbUserService.cs         # Database-backed user management
+    │   ├── IJobPostingService.cs / DbJobPostingService.cs # Database-backed job postings
+    │   ├── IAnnouncementService.cs / DbAnnouncementService.cs # Announcement management
+    │   └── FileErrorLogger.cs      # Disk logging service writing to logs/error.logs
+    ├── middlewares/                # 🛡️ Enterprise Request Pipeline Bouncers
+    │   ├── RequestLoggingMiddleware.cs     # Single-line console benchmark logging
+    │   ├── NotFoundGuardianMiddleware.cs   # 404 Guardian with reason & HTML passthrough
+    │   └── ServerErrorGuardianMiddleware.cs# 5xx Guardian crash shield with traceId
     ├── Controllers/                # 🎮 Controller Layer (MVC & API)
-    │   ├── UserController.cs       # View Controller -> renders HTML at /users
-    │   ├── ApiUserController.cs    # API Controller -> returns JSON at /api/users
-    │   ├── AnnouncementController.cs # (Homework) View Controller -> HTML at /announcements
-    │   └── ApiAnnouncementController.cs # (Homework) API Controller -> JSON at /api/announcements
-    ├── routes/                     # Modular Routing Handlers (Week 02 & 03)
-    │   ├── BasicRoutes.cs          # Whiteboard routes: /ok, /hello, /sum, /home, /about
+    │   ├── UserController.cs / ApiUserController.cs       # View & API Controllers for Users
+    │   ├── JobPostingController.cs / ApiJobPostingController.cs # View & API for Jobs
+    │   └── AnnouncementController.cs / ApiAnnouncementController.cs # Announcements
+    ├── routes/                     # Modular Routing Handlers (Week 02, 03 & 04)
+    │   ├── BasicRoutes.cs          # Whiteboard routes: /ok, /hello, /sum, /home, /about, /404
     │   ├── UserApiRoutes.cs        # Health check diagnostics (/api/health)
     │   └── AlumniApiRoutes.cs      # Slide D REST resources: /api/alumni
-    ├── Data/                       # (Week 05 & 06) Entity Framework Core DbContext
-    ├── Middlewares/                # (Week 09) Custom HTTP request pipeline bouncers
-    └── Views/                      # (Week 10) Presentation layer components
+    ├── views/                      # 🎨 Static & Generic HTML Views
+    │   └── 404.html                # Branded responsive generic 404 error page
+    └── Data/                       # 🗄️ Relational Persistence & Factory Seeding
+        ├── AlumniDbContext.cs      # Entity Framework Core DbContext
+        ├── DatabaseSeeder.cs       # PostgreSQL seeder & identity sequence reset
+        └── Factories/              # Deterministic model factories (UserFactory, etc.)
 ```
 
 ---

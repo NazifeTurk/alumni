@@ -313,6 +313,26 @@ A dedicated, responsive, university-themed generic 404 page is integrated to han
 * **Auditing & Logging**:
   * Every invalid request redirect and 404 page render is logged to `logs/error.logs` via `FileErrorLogger` and output in single-line format to the console via `RequestLoggingMiddleware`.
 
+### I. Postman Automated Invalid Requests Test Suite (`postman_alumni_invalid_requests.json`)
+The project provides an automated, regression-proof Postman test collection located at **`postman_alumni_invalid_requests.json`** targeting client error handling, domain validation rules, relational foreign key constraints, and server crash protection:
+
+| # | Test Scenario | Method & Endpoint | Payload / Params | Status | Postman Test Assertions |
+|---|:---|:---|:---|:---:|:---|
+| **1** | Missing Required Field | `POST /api/users` | `{"email": "...", "graduationYear": 2024}` | `400` | Verifies `400 Bad Request` and error mentions `Name`. |
+| **2** | Malformed JSON Syntax | `POST /api/users` | `{"name": "Broken", "email": ...` (unclosed) | `400` | Verifies parser catches malformed syntax before binding. |
+| **3** | Type Mismatch | `POST /api/users` | `{"graduationYear": "not-a-number"}` | `400` | Verifies string-for-integer failure is rejected. |
+| **4** | Missing Title & Company | `POST /api/users/1/jobs` | `{"description": "...", "location": "Istanbul"}` | `400` | Verifies nested route rejects payload without Title/Company. |
+| **4b**| Title Exceeds 120 Chars | `POST /api/users/1/jobs` | Title with $>120$ characters | `400` | Verifies JobPosting rule: Title maximum 120 characters. |
+| **4c**| Missing City | `POST /api/users/1/jobs` | `{"title": "...", "company": "..."}` | `400` | Verifies JobPosting rule: City is required. |
+| **5** | Non-Existent User ID | `GET /api/users/99999` | None | `404` | Verifies 404 Guardian JSON with `"reason"`. |
+| **6** | Nested Route with Missing User | `POST /api/users/99999/jobs` | Valid Job Payload | `404` | Explains parent user entity not found in database. |
+| **7** | Apply to Non-Existent Job | `POST /api/jobs/99999/applications` | `{"userId": 1}` | `404` | Explains job posting does not exist. |
+| **8** | Apply with Non-Existent User | `POST /api/jobs/10/applications` | `{"userId": 99999}` | `404` | Explains candidate user does not exist. |
+| **9** | Duplicate Job Application | `POST /api/jobs/10/applications` | `{"userId": 3}` (second time) | `409` | Enforces `UNIQUE(user_id, job_posting_id)`. |
+| **10**| Delete User with Active Jobs | `DELETE /api/users/1` | None | `409` | Enforces `ON DELETE RESTRICT` foreign key integrity. |
+| **11**| Plain Text to JSON Endpoint | `POST /api/users` | `Content-Type: text/plain` | `415` | Rejects payload without `application/json`. |
+| **12**| 5xx Server Exception Interception | `GET /api/test/500` | None | `500` | Verifies 5xx Guardian returns `reason` and `traceId`. |
+
 ---
 
 ## 🔐 Environment Variables & Secrets Policy (Board Item ④)
