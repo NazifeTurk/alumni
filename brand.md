@@ -4,13 +4,18 @@
 > **Instructor**: Assoc. Prof. Dr. Emre Akadal  
 > **Student**: Nazife Türk (`nazife.turk@ogr.iu.edu.tr`)  
 > **Repository**: [https://github.com/NazifeTurk/alumni](https://github.com/NazifeTurk/alumni)  
-> **Reference Links**: ⬅️ [Return to Main Documentation (README.md)](README.md) &bull; 🗄️ [Data Design Documentation (ddd.md)](ddd.md)
+> **Design Benchmarks**:
+> 1. [Refero AngelList Design System](https://styles.refero.design/style/c75603c7-492d-4c26-9744-9acc22fe6225) &bull; *Binary Radii & Zero Shadows*
+> 2. [Refero Cord.com Design System](https://styles.refero.design/style/485ae5fb-8f25-4aa3-a4e4-1deb1590d7d6) &bull; *Midnight Harbor & Light Mist*
+> 3. [Refero Resume.io Design System](https://styles.refero.design/style/41e65213-1c4a-41c4-b715-50427fa8926e) &bull; *Fresh Worksheet Precision*  
+> **VoltAgent Specification**: 📐 [AI Design System Specification (`DESIGN.MD`)](DESIGN.MD)  
+> **Cross-Doc Navigation**: ⬅️ [Return to Main Documentation (README.md)](README.md) &bull; 🗄️ [Data Design Documentation (ddd.md)](ddd.md)
 
 ---
 
 ## 📌 1. Brand Overview & Institutional Philosophy
 
-The **Istanbul University Alumni Tracking System (`alumni`)** bridges over five centuries of academic excellence (established in 1453) with modern, enterprise-grade cloud software engineering.
+The **Istanbul University Alumni Tracking System (`alumni`)** bridges over five centuries of academic excellence (established in 1453) with modern, institutional private-banking-grade software engineering.
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -21,175 +26,211 @@ The **Istanbul University Alumni Tracking System (`alumni`)** bridges over five 
                                     │
        ┌────────────────────────────┼────────────────────────────┐
        ▼                            ▼                            ▼
- 🏛️ 1453 Legacy              🚀 Modern Tech              🤝 Alumni Network
- Academic Heritage,          C# .NET 7, PostgreSQL 16,   Mentorship, Careers,
- Preeminence & Trust         Docker, Clean Architecture   Homecoming & Unity
+ 🏛️ 1453 Legacy              💎 Trustworthy & Minimal    🤝 Alumni Solidarity
+ Academic Heritage,          Atmospheric Light Blue,     Mentorship, Careers,
+ Preeminence & Trust         DM Serif + Jakarta Sans     Homecoming & Unity
 ```
 
 ### Brand Personality & Core Values
-* **Prestigious & Trustworthy**: Reflecting the historic prestige of Istanbul University.
-* **Modern & Accessible**: Responsive, clean dark-mode UI with high contrast and readable typography.
-* **Connected & Collaborative**: Centered around mentorship, referral pipelines, and institutional solidarity.
-* **Engineering Rigor**: Professional software craftsmanship backed by strict architectural design tokens.
+* **Light Blue Intensive & Calming**: An open atmospheric light blue wash (`#eaf4fb`) that instills institutional tranquility, focus, and transparency.
+* **Deeply Trustworthy & Authoritative**: High-contrast abyssal navy typography (`#04263e`) paired with classical monumental serifs (`DM Serif Display`), reminiscent of prestigious financial and academic institutions.
+* **Radical Minimalism**: Zero ornamental drop shadows. Depth and structure are defined exclusively through disciplined tonal stepping and hairline borders.
+* **Architectural Rigor**: Strict binary corner radius system (capsule `9999px` vs card `4px`), eliminating all arbitrary radii.
 
 ---
 
 ## 🎓 2. Logomark, Crest & Visual Identity
 
 ### 2.1 Primary Crest Anatomy
-The primary mark combines the academic graduation cap (mortarboard), open knowledge ledger, and the historic gateway motif:
+The emblem synthesizes the iconic academic graduation mortarboard, Istanbul University's historical gate motif, and modern cloud telemetry:
 
 ```text
        ┌───────────────┐
-       │     🎓        │  ◄── Graduation Cap: Academic Achievement & Milestones
-       │  İSTANBUL     │  ◄── University Title: Deep Academic Authority
-       │  ÜNİVERSİTESİ │  ◄── Institutional Subtitle: Continuity (1453)
+       │     🎓        │  ◄── Academic Cap: Educational Excellence (1453)
+       │  İSTANBUL     │  ◄── University Title: Deep Institutional Authority
+       │  ÜNİVERSİTESİ │  ◄── Historical Foundation: Timeless Heritage
        └───────────────┘
 ```
 
-* **Icon Symbol**: `🎓` (Academic Cap) wrapped in an Indigo-Emerald gradient badge with subtle glassmorphic stroke.
-* **Badge Dimensions**: 44px $\times$ 44px on desktop navigation, 36px on mobile viewports.
-* **Gradient Fill**: `linear-gradient(135deg, #4f46e5 0%, #10b981 100%)`.
-* **Border Token**: `1px solid rgba(255, 255, 255, 0.15)`.
+* **Icon Symbol**: `🎓` (Academic Cap) housed within a pill capsule (`radius: 9999px`) on floating light-blue glass.
+* **Pill Dimensions**: 40px $\times$ 40px circular badge in navigation; 48px $\times$ 48px in hero modules.
+* **Crest Stroke**: `1px solid #bae6fd` on `#ffffff` crisp surface.
+* **Hover Micro-interaction**: Subtle `border-color: #0284c7` transition (150ms ease).
 
 ### 2.2 Clear Space & Safe Margin
-To maintain legibility and visual authority:
-* Keep a minimum margin of **`16px`** around the logomark in all web viewports.
-* Never place high-contrast distracting photographic textures directly behind the primary emblem.
-
-### 2.3 Logo Misuse Rules
-| ❌ Do Not | ✅ Correct Approach |
-| :--- | :--- |
-| Do not stretch or distort the aspect ratio. | Scale proportionally maintaining 1:1 square icon bounds. |
-| Do not change gradient colors to unapproved tones. | Always use the canonical Indigo $\rightarrow$ Emerald palette. |
-| Do not use illegible low-contrast text colors. | Pair only with `--text-main (#f8fafc)` or `--text-muted (#94a3b8)`. |
+To maintain visual authority and readability:
+* Maintain a minimum margin of **`16px`** around the logomark in all screen sizes.
+* Never place cluttered background textures or high-saturation gradients behind the primary mark.
 
 ---
 
-## 🎨 3. Color Palette & Design Tokens
+## 🎨 3. Color Palette & Refero-Inspired Design Tokens
 
-The palette is engineered specifically for deep-mode contrast, eye comfort, and clear visual hierarchy in compliance with **WCAG 2.1 AA** standards:
+The palette is engineered directly from the [Refero Design Benchmark](https://styles.refero.design/style/c75603c7-492d-4c26-9744-9acc22fe6225), optimized for a **Light Blue Intensive, Minimal, and Trustworthy** aesthetic meeting **WCAG 2.1 AAA** contrast standards:
 
 ```text
 ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
-│   IU Midnight    │  │ Academic Indigo  │  │  Imperial Gold   │  │  Emerald Active  │
-│     #0a0f1d      │  │     #4f46e5      │  │     #f59e0b      │  │     #10b981      │
-│  Base Background │  │   Primary Action │  │ Heritage / Bench │  │ PostgreSQL Live  │
+│   Atmosphere Blue│  │   Card Surface   │  │   Abyssal Navy   │  │  Cerulean Action │
+│     #eaf4fb      │  │     #ffffff      │  │     #04263e      │  │     #0284c7      │
+│  Primary Canvas  │  │  Flat Paper Card │  │ High-Contrast Text│ │  Primary Button  │
 └──────────────────┘  └──────────────────┘  └──────────────────┘  └──────────────────┘
 ```
 
-### 3.1 Primary Brand Palette
-| Color Name | Hex Token | RGB | HSL | Semantic Role |
-| :--- | :--- | :--- | :--- | :--- |
-| **IU Midnight Navy** | `#0a0f1d` | `10, 15, 29` | `224°, 49%, 8%` | Primary canvas & body background |
-| **Deep Card Surface** | `#11192d` | `17, 25, 45` | `223°, 45%, 12%` | Bento cards, panels, and module containers |
-| **Surface Card Hover** | `#162039` | `22, 32, 57` | `223°, 44%, 15%` | Interactive hover state for cards |
-| **Academic Indigo** | `#4f46e5` | `79, 70, 229` | `243°, 75%, 59%` | Primary buttons, brand accents, key CTAs |
-| **Indigo Hover** | `#4338ca` | `67, 56, 202` | `245°, 58%, 51%` | Hover and active interaction states |
-| **Imperial Gold** | `#f59e0b` | `245, 158, 11` | `38°, 92%, 50%` | 1453 Heritage, Bench pill, VIP highlights |
-
-### 3.2 Functional & Status Palette
-| Semantic Role | Hex Token | RGB | Purpose / Association |
+### 3.1 Structural & Surface Palette
+| Token Name | Hex Code | RGB | Role / Application |
 | :--- | :--- | :--- | :--- |
-| **Emerald Active** | `#10b981` | `16, 185, 129` | Live database health, successful 200/201 responses, verified alumni |
-| **Sky Cyan** | `#38bdf8` | `56, 189, 248` | REST API routes, Swagger documentation, technical highlights |
-| **Coral Rose** | `#f43f5e` | `244, 63, 94` | 404 Guardian badge, 5xx crash shield, validation rejection notices |
-| **Orchid Purple** | `#a855f7` | `168, 85, 247` | Mentorship programs, annual Homecoming Gala, cultural events |
+| `--color-canvas` | `#eaf4fb` | `234, 244, 251` | Primary atmospheric light blue page background |
+| `--color-canvas-subtle` | `#f2f8fd` | `242, 248, 253` | Secondary page canvas and container backdrop |
+| `--color-surface-card` | `#ffffff` | `255, 255, 255` | Crisp white paper surface for bento cards and modals |
+| `--color-surface-elevated`| `#f0f7fe` | `240, 247, 254` | Inset wells, table headers, and metric container surfaces |
+| `--color-hairline` | `#bae6fd` | `186, 230, 253` | Crisp 1px sky hairline border for cards and dividers |
+| `--color-hairline-subtle`| `#e0f2fe` | `224, 242, 254` | Light internal divider between list rows |
 
-### 3.3 Typography & Surface Contrast
-| Token Name | Hex Token | Opacity / Level | Application |
+### 3.2 High-Contrast Authoritative Typography Tokens
+| Token Name | Hex Code | Contrast on `#ffffff` | Application |
+| :--- | :--- | :---: | :--- |
+| `--color-text-display` | `#04263e` | **15.4:1 (AAA)** | Monumental headlines, statement metrics, page titles |
+| `--color-text-body` | `#1e3a52` | **10.8:1 (AAA)** | Primary readable interface copy and paragraph descriptions |
+| `--color-text-muted` | `#486f8a` | **5.3:1 (AA)** | Secondary helper text, subtitles, datetimes |
+| `--color-text-light` | `#6a92ad` | **3.8:1 (UI)** | Disabled states, footer metadata, copyright stamps |
+
+### 3.3 Semantic Action & Accent Indicators
+| Semantic Role | Hex Code | Background Tint | Meaning & Association |
 | :--- | :--- | :--- | :--- |
-| `--text-main` | `#f8fafc` | 100% | Primary headings, button labels, high-emphasis text |
-| `--text-muted` | `#94a3b8` | 100% | Secondary descriptions, subheadings, metadata |
-| `--text-dim` | `#64748b` | 100% | Footers, disabled states, copyright notices |
-| `--border` | `#23314d` | 100% | Structural borders, card boundaries, table separators |
-| `--border-focus`| `#38bdf8` | 100% | Input focus rings, interactive card focus states |
+| **Cerulean Primary** | `#0284c7` | `#e0f2fe` | Primary action buttons, active tabs, link underlines |
+| **Cerulean Hover** | `#0369a1` | `#bae6fd` | Focused and hovered interactive triggers |
+| **Lavender Dawn** | `#6366f1` | `#e0e7ff` | Mentorship badge, academic networking highlight |
+| **Bio Mint Active** | `#059669` | `#d1fae5` | PostgreSQL live health status, 200 OK responses |
+| **Imperial Gold** | `#b45309` | `#fef3c7` | 1453 Historical Heritage, Academic Bench pill |
+| **Rose Rejection** | `#e11d48` | `#ffe4e6` | 404 Guardian Shield, 5xx Guardian alert |
 
 ---
 
-## 🔤 4. Typography Scale & Hierarchy
+## 📐 4. The Binary Radius & Zero-Shadow Elevation Rules
 
-The visual identity employs **Plus Jakarta Sans** for display and interface text, paired with **JetBrains Mono** for endpoints, status codes, and code snippets:
+The core design philosophy is adapted from the Refero Private Banking and Institutional style guide:
 
 ```text
-Display Heading (H1)  ──► Plus Jakarta Sans 800 (2.85rem / 45px)
-Section Heading (H2)  ──► Plus Jakarta Sans 800 (1.85rem / 30px)
-Card Heading (H3)     ──► Plus Jakarta Sans 700 (1.25rem / 20px)
-Body Lead Paragraph   ──► Plus Jakarta Sans 400 (1.18rem / 19px)
-Interface Body        ──► Plus Jakarta Sans 500 (0.95rem / 15px)
-Monospace Telemetry   ──► JetBrains Mono     500 (0.88rem / 14px)
+┌────────────────────────────────────────────────────────────────────────┐
+│                       THE BINARY RADIUS SYSTEM                         │
+├───────────────────────────────────┬────────────────────────────────────┤
+│         9999px (Capsule)          │            4px (Subtle)            │
+├───────────────────────────────────┼────────────────────────────────────┤
+│ • Navigation Bar Pill Container   │ • Content Cards & Bento Panels     │
+│ • Primary & Secondary Buttons     │ • Telemetry & Code Previews        │
+│ • Category Badges & Filter Chips  │ • Data Tables & Grid Containers    │
+│ • Search Inputs & Text Inputs     │ • Evaluation Bench Modules         │
+│                                   │                                    │
+│ ❌ Strictly Zero Intermediate Radii: No 8px, No 12px, No 16px cards     │
+└───────────────────────────────────┴────────────────────────────────────┘
+```
+
+### 4.1 Strict Zero Drop Shadows
+* **Rule**: `--elevation-none: none !important;`
+* **Philosophy**: Shadows create visual muddiness and false skeuomorphic depth. In this light-blue institutional system, elevation is conveyed strictly through:
+  1. **Tonal Contrast**: Stacking `#ffffff` cards on `#eaf4fb` canvas.
+  2. **Hairline Boundaries**: 1px `#bae6fd` borders defining crisp geometric boundaries.
+  3. **Inset Surfaces**: `#f0f7fe` recessed panels within white cards for secondary metadata.
+
+---
+
+## 🔤 5. Typography Hierarchy & Font Pairing
+
+The design system marries classical academic gravitas with clean digital precision:
+
+```text
+DM Serif Display      ──► Monumental Headlines & Historical Numbers (1453, 50K+)
+Plus Jakarta Sans     ──► High-Legibility Interface Copy, Forms & Buttons
+JetBrains Mono        ──► REST Endpoints, Status Codes, Telemetry & JSON
 ```
 
 ### Typography Scale Matrix
-| Level | Font Family | Weight | Size / Line-Height | Tracking | Usage Context |
+| Level | Font Family | Weight | Size / Line-Height | Letter-Spacing | Usage Context |
 | :--- | :--- | :---: | :--- | :---: | :--- |
-| **H1 Display** | `Plus Jakarta Sans` | 800 | `2.85rem` / `1.15` | `-0.03em` | Hero section main banner headline |
-| **H2 Section** | `Plus Jakarta Sans` | 800 | `1.85rem` / `1.25` | `-0.02em` | Major module headings (Pillars, Feeds) |
-| **H3 Card** | `Plus Jakarta Sans` | 700 | `1.25rem` / `1.35` | `-0.01em` | Pillar cards, showcase container titles |
-| **H4 Subtitle**| `Plus Jakarta Sans` | 700 | `1.05rem` / `1.40` | `0.00em` | Job titles, announcement headers |
-| **Body Lead** | `Plus Jakarta Sans` | 400 | `1.18rem` / `1.65` | `0.00em` | Hero introductory paragraph |
-| **Body Regular**| `Plus Jakarta Sans` | 500 | `0.95rem` / `1.60` | `0.00em` | General paragraph text, descriptions |
-| **Caption/Tag**| `Plus Jakarta Sans` | 700 | `0.75rem` / `1.20` | `+0.05em` | Status pills, category badges, dates |
-| **Monospace** | `JetBrains Mono` | 500 | `0.88rem` / `1.50` | `0.00em` | URL endpoints, JSON keys, cURL snippets |
+| **Monumental Hero**| `DM Serif Display` | 400 | `3.65rem` / `1.10` | `-0.04em` | Main hero title on home page |
+| **Statement Stat** | `DM Serif Display` | 400 | `3.25rem` / `1.05` | `-0.04em` | "By The Numbers" large metric digits |
+| **H2 Section** | `DM Serif Display` | 400 | `2.25rem` / `1.20` | `-0.03em` | Module titles (Pillars, Feeds, Bench) |
+| **H3 Card Title** | `Plus Jakarta Sans` | 700 | `1.15rem` / `1.35` | `-0.01em` | Bento grid cards, job titles |
+| **Body Lead** | `Plus Jakarta Sans` | 400 | `1.15rem` / `1.65` | `0.00em` | Hero introductory deck |
+| **Body Regular** | `Plus Jakarta Sans` | 500 | `0.95rem` / `1.60` | `0.00em` | Interface descriptions, table cells |
+| **Micro Caption** | `Plus Jakarta Sans` | 700 | `0.75rem` / `1.20` | `+0.04em` | Status pills, badge labels (uppercase) |
+| **Code / Route** | `JetBrains Mono` | 600 | `0.85rem` / `1.50` | `0.00em` | Endpoint paths, cURL parameters |
+
+*Note: All numeric interface elements enable OpenType proportional and tabular figures via `font-feature-settings: 'lnum', 'tnum';`.*
 
 ---
 
-## 🧩 5. UI Component Design Tokens
+## 🧩 6. UI Component Patterns
 
-### 5.1 Buttons & Interactive Triggers
+### 6.1 Floating Centered Navigation Pill
+```html
+<header class="nav-wrapper">
+  <div class="nav-pill-container">
+    <div class="nav-brand">...</div>
+    <nav class="nav-links">...</nav>
+    <div class="nav-actions">...</div>
+  </div>
+</header>
+```
+* **Radius**: `9999px`
+* **Surface**: `rgba(255, 255, 255, 0.92)` with `backdrop-filter: blur(20px)`
+* **Border**: `1px solid #bae6fd`
+* **Behavior**: Pinned to viewport top with 16px margin on scroll.
+
+### 6.2 Buttons & Capsule Triggers
 * **Primary CTA (`.btn-primary`)**:
-  * Background: `linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)`
-  * Text: `#ffffff` (Bold 700)
-  * Shadow: `0 4px 16px rgba(79, 70, 229, 0.45)`
-  * Hover: `transform: translateY(-2px)` with expanded shadow `0 6px 22px rgba(79, 70, 229, 0.6)`.
-* **Secondary Surface (`.btn-secondary`)**:
-  * Background: `#11192d`, Border: `1px solid #23314d`, Text: `#f8fafc`.
-* **Status Action (`.btn-outline-emerald`)**:
-  * Background: `rgba(16, 185, 129, 0.1)`, Border: `rgba(16, 185, 129, 0.3)`, Text: `#34d399`.
+  * Background: `#0284c7`, Border: `1px solid #0284c7`, Color: `#ffffff`
+  * Radius: `9999px`
+  * Hover: `#0369a1`
+* **Secondary Action (`.btn-secondary`)**:
+  * Background: `#ffffff`, Border: `1px solid #bae6fd`, Color: `#0284c7`
+  * Radius: `9999px`
+  * Hover: Background `#f0f7fe`, Border `#93c5fd`
+* **Tertiary Ghost (`.btn-ghost`)**:
+  * Background: `transparent`, Color: `#1e3a52`
+  * Hover: Background `rgba(2, 132, 199, 0.08)`
 
-### 5.2 Badges & Status Pills
-* **Live Stack Pill**:
-  * Pulsing emerald dot (`animation: pulse-glow 2s infinite`) + `PostgreSQL 16 • EF Core 7 • Docker Live`.
-* **Lab Evaluation Bench Pill**:
-  * Amber border + gold text (`🧪 Bench: temporary-bench`).
-* **404 Guardian Badge**:
-  * Rose background + coral text (`🛡️ 404 Guardian Error Handler`).
+### 6.3 Bento Content Cards
+* **Surface**: Solid `#ffffff`
+* **Radius**: `4px` (strict minimal standard)
+* **Border**: `1px solid #bae6fd`
+* **Shadow**: `none`
+* **Hover State**: Border shifts subtly to `#38bdf8` with `background: #fcfeff`.
 
-### 5.3 Surface Glassmorphism & Elevation
-* **Navigation Header**:
-  * `backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);`
-  * `background: rgba(10, 15, 29, 0.85);`
-  * `border-bottom: 1px solid #23314d;`
-* **Card Radius**:
-  * Standard: `16px` (`--radius-lg`)
-  * Buttons / Inputs: `12px` (`--radius-md`)
-  * Tags / Pills: `9999px` (Full capsule)
+### 6.4 Academic & Telemetry Badges
+* **Live Database Health**: `#d1fae5` pill + `#059669` text + pulsing mint green indicator.
+* **1453 Heritage**: `#fef3c7` pill + `#b45309` text.
+* **404 Guardian Shield**: `#ffe4e6` pill + `#e11d48` text.
+* **Academic Bench**: `#e0f2fe` pill + `#0284c7` text.
 
 ---
 
-## 📢 6. Voice, Tone & Communication Guidelines
+## 📢 7. Institutional Voice & Tone Guidelines
 
-### 6.1 Voice Attributes
-* **Academic yet Accessible**: Avoid bureaucratic, stiff language while preserving the dignity of Istanbul University.
-* **Empowering & Forward-Looking**: Emphasize career growth, student mentorship, and industry impact.
-* **Transparent & Precise**: In API error responses (404 Guardian, 5xx Guardian), explain exact failure causes with actionable developer hints.
+### 7.1 Tone Principles
+1. **Dignified yet Contemporary**: Honor Istanbul University's status as Turkey's oldest and most prestigious university without bureaucratic dryness.
+2. **Precision & Transparency**: Clearly convey system status, database health, and routing outcomes without vague marketing jargon.
+3. **Inclusive Community Focus**: Inspire alumni to reconnect, mentor undergraduates, and collaborate on professional opportunities.
 
-### 6.2 Standardized Vocabulary Table
-| Preferred Term (TR) | Preferred Term (EN) | Deprecated / Avoid |
+### 7.2 Standard Terminology
+| Turkish (Canonical) | English (Canonical) | Deprecated |
 | :--- | :--- | :--- |
-| **Mezun Takip Sistemi** | Alumni Tracking System | Eski Öğrenci Portalı |
-| **Mezun Rehberi** | Alumni Directory | İsim Listesi |
-| **Kariyer Havuzu & İlan Panosu**| Career & Job Board | İş İlanları Tablosu |
-| **Mentorluk Ağı** | Mentorship Network | Danışmanlık Grubu |
-| **Homecoming Galası** | Annual Homecoming Gala | Mezunlar Yemeği |
-| **Değerlendirme Tezgahı** | Evaluation Bench | Test Sayfası |
+| **Mezun Takip ve Kariyer Ağı** | Alumni Tracking & Career Network | Eski Mezunlar Sitesi |
+| **Mezun Rehberi** | Alumni Directory | Mezun Listesi |
+| **Kariyer Havuzu & İlan Panosu** | Career & Job Board | İlan Sayfası |
+| **Akademik Değerlendirme Tezgahı**| Academic Evaluation Bench | Test Konsolu |
+| **Hata Koruyucu Kalkanı** | Guardian Shield | Error Handler |
 
 ---
 
-## 🔗 7. Cross-Documentation & Anchors
+## 🔗 8. Cross-Documentation & Anchors
 
+* 📐 [AI Design System Specification (`DESIGN.MD`)](DESIGN.MD)
 * 📖 [Master Architecture & System Contract (`README.md`)](README.md)
-* 🗄️ [Data Design Documentation & Persistence Proofs (`ddd.md`)](ddd.md)
-* 🧪 [Postman Automated Test Suite (`postman_alumni_invalid_requests.json`)](postman_alumni_invalid_requests.json)
+* 🗄️ [Data Design Documentation & Schema Proofs (`ddd.md`)](ddd.md)
 * 🌐 [Live Homepage Template (`src/views/home.html`)](src/views/home.html)
-* 🛡️ [Generic 404 Error Page (`src/views/404.html`)](src/views/404.html)
+* 🛡️ [Generic 404 Guardian Error Page (`src/views/404.html`)](src/views/404.html)
+* 🧪 [Postman Automated Test Collection (`postman_alumni_invalid_requests.json`)](postman_alumni_invalid_requests.json)
+* 🎨 [Refero AngelList Style Benchmark](https://styles.refero.design/style/c75603c7-492d-4c26-9744-9acc22fe6225)
+* 🌊 [Refero Cord.com Style Benchmark](https://styles.refero.design/style/485ae5fb-8f25-4aa3-a4e4-1deb1590d7d6)
+* 📄 [Refero Resume.io Style Benchmark](https://styles.refero.design/style/41e65213-1c4a-41c4-b715-50427fa8926e)

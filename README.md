@@ -8,13 +8,15 @@
 An enterprise-ready, modular web application engineered to track university graduates, monitor career trajectories, facilitate academic mentorship networks, and coordinate institutional alumni engagement.
 
 > 🗄️ **Database Milestone**: Comprehensive database architecture, ER diagrams, data dictionaries, environment configuration, and "The Forgetting Test" proofs are documented in [**Data Design Documentation (`ddd.md`)**](ddd.md).  
-> 🎨 **Brand & Visual Identity**: Design tokens, color palettes, logomark specifications, UI component standards, and typography hierarchy are documented in [**Brand Identity Documentation (`brand.md`)**](brand.md).
+> 🎨 **Brand & Visual Identity**: Design tokens, color palettes, logomark specifications, UI component standards, and typography hierarchy are documented in [**Brand Identity Documentation (`brand.md`)**](brand.md).  
+> 📐 **AI Design System Specification**: Plain-text design system conforming to VoltAgent `awesome-design-md` benchmarks (AngelList + Cord.com + Resume.io) is documented in [**Design System Specification (`DESIGN.MD`)**](DESIGN.MD).
 
 ---
 
 ## 📖 Table of Contents
 - [🗄️ Data Design Documentation (ddd.md)](ddd.md)
 - [🎨 Brand Identity & Design System (brand.md)](brand.md)
+- [📐 AI Design System Specification (DESIGN.MD)](DESIGN.MD)
 - [🎯 Project Overview](#-project-overview)
 - [🏛️ Architectural Design & Layering](#️-architectural-design--layering)
 - [⚖️ Technology Stack & Trade-offs (Defense)](#️-technology-stack--trade-offs-defense)
@@ -440,14 +442,15 @@ The repository includes **`postman_alumni_invalid_requests.json`**, an automated
 
 ---
 
-## 🎨 Brand Guidelines & Visual Design ([brand.md](brand.md))
+## 🎨 Brand Guidelines & Visual Design ([brand.md](brand.md) & [DESIGN.MD](DESIGN.MD))
 
-The project's visual identity, design tokens, color palette, and institutional typography guidelines are fully documented in [**`brand.md`**](brand.md):
+The project's visual identity, design tokens, color palette, and institutional typography guidelines are fully documented in [**`brand.md`**](brand.md) and standardized for AI agents in [**`DESIGN.MD`**](DESIGN.MD), benchmarked against [Refero AngelList](https://styles.refero.design/style/c75603c7-492d-4c26-9744-9acc22fe6225), [Refero Cord.com](https://styles.refero.design/style/485ae5fb-8f25-4aa3-a4e4-1deb1590d7d6), and [Refero Resume.io](https://styles.refero.design/style/41e65213-1c4a-41c4-b715-50427fa8926e):
 
-* **Institutional Palette**: IU Midnight Navy (`#0a0f1d`), Academic Indigo (`#4f46e5`), Imperial Gold (`#f59e0b`), Emerald Active (`#10b981`), Sky Cyan (`#38bdf8`), and Coral Rose (`#f43f5e`).
-* **Typography Stack**: `Plus Jakarta Sans` for display and UI body text, `JetBrains Mono` for code snippets, endpoints, and cURL commands.
-* **Component Standards**: Glassmorphic headers (`backdrop-filter: blur(16px)`), Bento Grid layouts, pulsing live status pills, and standardized responsive card radiuses (`16px`).
-* **Detailed Specifications**: Read the complete design system in [**Brand Identity Documentation (`brand.md`)**](brand.md).
+* **Atmospheric Light Blue Palette**: Sea-Fog Canvas (`#eaf4fb`), Card Surface (`#ffffff`), Recessed Inset (`#f0f7fe`), Hairlines (`#bae6fd` / `#e0f2fe`), Abyssal Trust Navy (`#04263e`), Midnight Harbor (`#0b3658`), Signal Blue CTA (`#0284c7`), and Bio Mint (`#059669`).
+* **Binary Radius System**: Strict architectural standard: **`9999px`** (full capsule pill) for buttons, chips, badges, and the floating navigation header; **`4px`** (subtle minimal radius) for bento cards, data tables, and error boxes. Strictly zero intermediate radii.
+* **Strict Zero Drop Shadows**: Depth is engineered exclusively through tonal stepping (`#eaf4fb` → `#ffffff` → `#f0f7fe`) and crisp 1px borders, eliminating visual blur and false skeuomorphism.
+* **Typography Stack**: `DM Serif Display` for monumental headlines and statement metrics with negative tracking (`-0.04em`), paired with `Plus Jakarta Sans` for interface copy with tabular figures (`tnum`), and `JetBrains Mono` for telemetry and endpoints.
+* **Detailed Specifications**: Read [**Brand Identity Documentation (`brand.md`)**](brand.md) and [**AI Design Specification (`DESIGN.MD`)**](DESIGN.MD).
 
 ---
 
@@ -460,8 +463,9 @@ alumni/
 ├── .env.example                    # Environment configuration template
 ├── .gitignore                      # .NET build artifacts (bin/, obj/, .vs/) & secrets
 ├── README.md                       # Master architecture, design decisions, and system contract
-├── ddd.md                          # 🗄️ Formal Data Design Documentation & Persistence Proofs
+├── DESIGN.MD                       # 📐 VoltAgent AI Design System Specification (Refero Benchmarks)
 ├── brand.md                        # 🎨 Brand Identity, Visual Design Tokens & UI Guidelines
+├── ddd.md                          # 🗄️ Formal Data Design Documentation & Persistence Proofs
 ├── postman_alumni_invalid_requests.json # 🧪 12-scenario Postman negative testing collection
 ├── logs/                           # 📝 Persistent error logging directory (volume-mounted)
 │   └── error.logs                  # Runtime audit log (4xx, 5xx, redirects)

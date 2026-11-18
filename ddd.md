@@ -4,7 +4,7 @@
 > **Instructor**: Assoc. Prof. Dr. Emre Akadal  
 > **Student**: Nazife Türk (`nazife.turk@ogr.iu.edu.tr`)  
 > **Repository**: [https://github.com/NazifeTurk/alumni](https://github.com/NazifeTurk/alumni)  
-> **Reference Link**: ⬅️ [Return to Main Documentation (README.md)](README.md)
+> **Reference Links**: ⬅️ [Return to Main Documentation (README.md)](README.md) &bull; 🎨 [Brand Identity (brand.md)](brand.md) &bull; 📐 [AI Design Specification (DESIGN.MD)](DESIGN.MD)
 
 ---
 
@@ -438,4 +438,5 @@ curl -s http://localhost:8000/api/users/48
 ## 🔗 Cross-Documentation Link
 * 📖 [Main Project Documentation (README.md)](README.md)
 * 🎨 [Brand Guidelines & Design System (brand.md)](brand.md)
+* 📐 [AI Design System Specification (DESIGN.MD)](DESIGN.MD)
 * ⚡ [Live Swagger UI](http://localhost:8000/api/swagger)

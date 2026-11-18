@@ -20,8 +20,8 @@ public static class BasicRoutes
                 return Results.Text("ok", "text/plain");
             }
 
-            // Return temporary main page (HTML view)
-            return Results.Content(GetMainHtmlPage(), "text/html");
+            // Return main page (HTML view)
+            return Results.Content(GetMainHtmlPage(), "text/html; charset=utf-8");
         });
 
         // 1 (Dedicated text endpoint). GET /ok -> "ok"
@@ -71,11 +71,15 @@ public static class BasicRoutes
             });
         });
 
-        // 5. GET /home -> temporary one main page (HTML view)
-        app.MapGet("/home", () => Results.Content(GetMainHtmlPage(), "text/html"));
+        // 5. GET /home -> main page (HTML view)
+        app.MapGet("/home", () => Results.Content(GetMainHtmlPage(), "text/html; charset=utf-8"));
+
+        // 5b. GET /bench & /temporary-bench -> lab evaluation workbench
+        app.MapGet("/bench", () => Results.Content(GetMainHtmlPage(), "text/html; charset=utf-8"));
+        app.MapGet("/temporary-bench", () => Results.Content(GetMainHtmlPage(), "text/html; charset=utf-8"));
 
         // 6. GET /about -> temporary about page (HTML view)
-        app.MapGet("/about", () => Results.Content(GetAboutHtmlPage(), "text/html"));
+        app.MapGet("/about", () => Results.Content(GetAboutHtmlPage(), "text/html; charset=utf-8"));
 
         // 7. GET /404 -> Generic 404 Page (HTML view with HTTP 404 Not Found)
         app.MapGet("/404", (HttpContext context) =>
@@ -126,18 +130,19 @@ public static class BasicRoutes
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>404 — Sayfa Bulunamadı</title>
             <style>
-                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f172a; color: #f8fafc; text-align: center; padding: 4rem 1rem; }
-                .box { max-width: 500px; margin: 0 auto; background: #1e293b; padding: 2rem; border-radius: 12px; border: 1px solid #334155; }
-                h1 { font-size: 3rem; color: #f43f5e; margin-bottom: 0.5rem; }
-                code { background: #0f172a; color: #38bdf8; padding: 0.3rem 0.6rem; border-radius: 6px; }
-                a { display: inline-block; margin-top: 1.5rem; color: #fff; background: #4f46e5; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; }
+                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #eaf4fb; color: #1e3a52; text-align: center; padding: 4rem 1rem; }
+                .box { max-width: 500px; margin: 0 auto; background: #ffffff; padding: 2.5rem; border-radius: 4px; border: 1px solid #bae6fd; }
+                h1 { font-size: 3.5rem; color: #04263e; margin-bottom: 0.5rem; }
+                code { background: #f0f7fe; color: #0284c7; padding: 0.4rem 0.8rem; border-radius: 4px; border: 1px solid #bae6fd; font-family: monospace; }
+                a { display: inline-block; margin-top: 1.5rem; color: #fff; background: #0284c7; padding: 0.65rem 1.4rem; border-radius: 9999px; text-decoration: none; font-weight: 600; }
+                a:hover { background: #0369a1; }
             </style>
         </head>
         <body>
             <div class="box">
                 <h1>404</h1>
-                <h2>Sayfa Bulunamadı</h2>
-                <p style="margin: 1rem 0; color: #94a3b8;">Ulaşmaya çalıştığınız adres bulunamadı:</p>
+                <h2 style="color:#04263e;margin-bottom:0.75rem;">Sayfa Bulunamadı</h2>
+                <p style="margin: 1rem 0; color: #486f8a;">Ulaşmaya çalıştığınız adres bulunamadı:</p>
                 <code>{{REQUESTED_PATH}}</code>
                 <div><a href="/">Ana Sayfaya Dön</a></div>
             </div>
@@ -148,6 +153,29 @@ public static class BasicRoutes
 
     private static string GetMainHtmlPage()
     {
+        var possiblePaths = new[]
+        {
+            Path.Combine(Directory.GetCurrentDirectory(), "views", "home.html"),
+            Path.Combine(Directory.GetCurrentDirectory(), "src", "views", "home.html"),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "views", "home.html"),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "src", "views", "home.html")
+        };
+
+        foreach (var path in possiblePaths)
+        {
+            if (File.Exists(path))
+            {
+                try
+                {
+                    return File.ReadAllText(path);
+                }
+                catch
+                {
+                    // Fall through to inline fallback
+                }
+            }
+        }
+
         return """
         <!DOCTYPE html>
         <html lang="tr">

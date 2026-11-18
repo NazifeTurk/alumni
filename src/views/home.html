@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İstanbul Üniversitesi — Mezun Takip &amp; Kariyer Ağı Sistemi</title>
+    <meta name="description" content="İstanbul Üniversitesi Mezun Takip Sistemi: Mezun Rehberi, Kariyer Havuzu, İş İlanları ve Akademik Mentorluk Ağı.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* ─── Light Blue Intensive Refero-Inspired Design Tokens ─── */
+            --color-canvas: #eaf4fb;           /* Primary light-blue atmospheric void */
+            --color-canvas-subtle: #f2f8fd;    /* Slightly lighter tonal step */
+            --color-surface-card: #ffffff;     /* Flat paper card surface */
+            --color-surface-elevated: #f0f7fe; /* Subtle elevated tonal step */
+            --color-hairline: #bae6fd;         /* Crisp 1px light blue structural divider */
+            --color-hairline-subtle: #e0f2fe;  /* Hairline separator */
+
+            /* ─── Typography Colors (High-Contrast Trust Navy) ─── */
+            --color-text-display: #04263e;     /* Abyssal Trust Navy for headlines */
+            --color-text-body: #1e3a52;        /* Deep Steel Blue for readable body copy */
+            --color-text-muted: #486f8a;       /* Muted Steel for captions & metadata */
+            --color-text-light: #6a92ad;       /* Secondary helper copy */
+
+            /* ─── Action & Accent Colors ─── */
+            --color-primary-action: #0284c7;   /* Cerulean Blue primary CTA */
+            --color-primary-hover: #0369a1;    /* Deepened hover blue */
+            --color-lavender-dawn: #6366f1;    /* Single violet accent for warm dawn light */
+            --color-lavender-tint: #e0e7ff;    /* Lavender pill background */
+            --color-bio-mint: #059669;         /* PostgreSQL Live & verified indicator */
+            --color-mint-tint: #d1fae5;        /* Mint pill background */
+            --color-heritage-gold: #b45309;    /* 1453 University Heritage */
+            --color-gold-tint: #fef3c7;        /* Gold pill background */
+
+            /* ─── Font Families ─── */
+            --font-display: 'DM Serif Display', Georgia, serif;
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+
+            /* ─── Binary Radii System (Refero Standard) ─── */
+            --radius-cards: 4px;               /* 4px for all cards (strictly minimal) */
+            --radius-pills: 9999px;            /* 9999px for all buttons, chips, and nav */
+
+            /* ─── Spacing Scale (4px base unit) ─── */
+            --space-4: 4px;
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
+            --space-48: 48px;
+            --space-64: 64px;
+            --space-80: 80px;
+
+            /* ─── Elevation ─── */
+            --elevation-none: none;            /* Zero drop shadows: depth from tonal stepping */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--color-canvas);
+            color: var(--color-text-body);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-feature-settings: 'lnum', 'tnum';
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Full-width container with 1200px constraint */
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-24);
+        }
+
+        /* ─── 1. Centered Floating Navigation Pill (Refero Standard) ─── */
+        header.nav-wrapper {
+            position: sticky;
+            top: var(--space-16);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            padding: 0 var(--space-16);
+            margin-bottom: var(--space-48);
+        }
+
+        .nav-pill-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-24);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--color-hairline);
+            border-radius: var(--radius-pills);
+            padding: var(--space-8) var(--space-12) var(--space-8) var(--space-20);
+            max-width: 1040px;
+            width: 100%;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-12);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .brand-crest-dot {
+            width: 32px;
+            height: 32px;
+            background: var(--color-primary-action);
+            color: #ffffff;
+            border-radius: var(--radius-pills);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .brand-title-group h1 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-text-display);
+            letter-spacing: -0.01em;
+            line-height: 1.1;
+        }
+
+        .brand-title-group span {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        nav.nav-menu {
+            display: flex;
+            align-items: center;
+            gap: var(--space-20);
+        }
+
+        nav.nav-menu a {
+            color: var(--color-text-body);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            transition: color 0.15s ease;
+            position: relative;
+        }
+
+        nav.nav-menu a:hover,
+        nav.nav-menu a.active {
+            color: var(--color-primary-action);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-8);
+        }
+
+        .btn-header-cta {
+            background: var(--color-primary-action);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-pills);
+            padding: 8px 18px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-4);
+            transition: background 0.15s ease;
+        }
+
+        .btn-header-cta:hover {
+            background: var(--color-primary-hover);
+        }
+
+        /* ─── 2. Hero Section: Left-Aligned Editorial Confidence ─── */
+        section.hero-section {
+            padding: var(--space-32) 0 var(--space-64) 0;
+            border-bottom: 1px solid var(--color-hairline);
+            margin-bottom: var(--space-64);
+        }
+
+        .hero-announcement-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-8);
+            background: rgba(255, 255, 255, 0.85);
+            color: var(--color-primary-action);
+            border: 1px solid var(--color-hairline);
+            border-radius: var(--radius-pills);
+            padding: 6px 16px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: var(--space-24);
+            text-decoration: none;
+            transition: border-color 0.15s ease;
+        }
+
+        .hero-announcement-chip:hover {
+            border-color: var(--color-primary-action);
+        }
+
+        .pulse-mint-dot {
+            width: 7px;
+            height: 7px;
+            background-color: var(--color-bio-mint);
+            border-radius: var(--radius-pills);
+        }
+
+        .hero-display-headline {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 400;
+            line-height: 1.08;
+            letter-spacing: -0.04em;
+            color: var(--color-text-display);
+            max-width: 980px;
+            margin-bottom: var(--space-24);
+        }
+
+        .hero-lead-text {
+            font-size: 1.15rem;
+            color: var(--color-text-muted);
+            max-width: 740px;
+            margin-bottom: var(--space-32);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .hero-button-row {
+            display: flex;
+            align-items: center;
+            gap: var(--space-12);
+            flex-wrap: wrap;
+        }
+
+        /* Buttons with 9999px Pill Radius */
+        .btn-pill-primary {
+            background: var(--color-primary-action);
+            color: #ffffff;
+            border: 1px solid transparent;
+            border-radius: var(--radius-pills);
+            padding: 12px 26px;
+            font-size: 0.94rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-8);
+            transition: all 0.15s ease;
+        }
+
+        .btn-pill-primary:hover {
+            background: var(--color-primary-hover);
+        }
+
+        .btn-pill-ghost {
+            background: #ffffff;
+            color: var(--color-primary-action);
+            border: 1px solid var(--color-hairline);
+            border-radius: var(--radius-pills);
+            padding: 12px 24px;
+            font-size: 0.94rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-8);
+            transition: all 0.15s ease;
+        }
+
+        .btn-pill-ghost:hover {
+            border-color: var(--color-primary-action);
+            background: var(--color-surface-elevated);
+        }
+
+        /* ─── 3. Monumental "By The Numbers" Statement Block ─── */
+        section.numbers-section {
+            background: #ffffff;
+            border: 1px solid var(--color-hairline);
+            border-radius: var(--radius-cards);
+            padding: var(--space-48) var(--space-40);
+            margin-bottom: var(--space-64);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--space-32);
+        }
+
+        .number-col {
+            border-left: 2px solid var(--color-hairline);
+            padding-left: var(--space-20);
+        }
+
+        .number-col:first-child {
+            border-left: none;
+            padding-left: 0;
+        }
+
+        .monumental-stat {
+            font-family: var(--font-display);
+            font-size: 2.8rem;
+            font-weight: 400;
+            line-height: 1;
+            letter-spacing: -0.05em;
+            color: var(--color-primary-action);
+            margin-bottom: var(--space-8);
+        }
+
+        .stat-label-headline {
+            font-size: 0.96rem;
+            font-weight: 700;
+            color: var(--color-text-display);
+            margin-bottom: var(--space-4);
+        }
+
+        .stat-caption-detail {
+            font-size: 0.82rem;
+            color: var(--color-text-muted);
+            line-height: 1.45;
+        }
+
+        /* ─── 4. Product Card Grid (4 Columns, 4px Radius) ─── */
+        .section-headline-bar {
+            margin-bottom: var(--space-24);
+        }
+
+        .section-headline-bar h3 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            letter-spacing: -0.03em;
+            color: var(--color-text-display);
+            margin-bottom: var(--space-4);
+        }
+
+        .section-headline-bar p {
+            color: var(--color-text-muted);
+            font-size: 0.94rem;
+        }
+
+        .product-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-16);
+            margin-bottom: var(--space-64);
+        }
+
+        .product-card {
+            background: #ffffff;
+            border: 1px solid var(--color-hairline);
+            border-radius: var(--radius-cards);
+            padding: var(--space-24);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: border-color 0.15s ease;
+        }
+
+        .product-card:hover {
+            border-color: var(--color-primary-action);
+        }
+
+        .card-eyebrow-tag {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--color-primary-action);
+            margin-bottom: var(--space-12);
+            display: inline-block;
+        }
+
+        .product-card h4 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--color-text-display);
+            margin-bottom: var(--space-8);
+            letter-spacing: -0.01em;
+        }
+
+        .product-card p {
+            font-size: 0.88rem;
+            color: var(--color-text-muted);
+            line-height: 1.55;
+            margin-bottom: var(--space-24);
+        }
+
+        .card-arrow-link {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--color-primary-action);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-4);
+            transition: gap 0.15s ease;
+        }
+
+        .card-arrow-link:hover {
+            gap: var(--space-8);
+        }
+
+        /* ─── 5. Dual Feeds: Career Board & University Notices ─── */
+        .dual-feed-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+            gap: var(--space-24);
+            margin-bottom: var(--space-64);
+        }
+
+        @media (max-width: 600px) {
+            .dual-feed-section {
+                grid-template-columns: 1fr;
+            }
+            .hero-display-headline {
+                font-size: 2.5rem;
+            }
+        }
+
+        .feed-container {
+            background: #ffffff;
+            border: 1px solid var(--color-hairline);
+            border-radius: var(--radius-cards);
+            padding: var(--space-24);
+        }
+
+        .feed-header-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: var(--space-16);
+            border-bottom: 1px solid var(--color-hairline-subtle);
+            margin-bottom: var(--space-16);
+        }
+
+        .feed-header-line h4 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--color-text-display);
+            letter-spacing: -0.01em;
+        }
+
+        .feed-header-line a.view-all-text {
+            color: var(--color-primary-action);
+            font-size: 0.84rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .feed-item-stack {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-12);
+        }
+
+        .feed-item-row {
+            background: var(--color-canvas);
+            border: 1px solid var(--color-hairline-subtle);
+            border-radius: var(--radius-cards);
+            padding: var(--space-12) var(--space-16);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--space-16);
+            transition: border-color 0.15s ease, background 0.15s ease;
+        }
+
+        .feed-item-row:hover {
+            border-color: var(--color-hairline);
+            background: #ffffff;
+        }
+
+        .feed-item-details h5 {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--color-text-display);
+            margin-bottom: 2px;
+        }
+
+        .feed-item-details p {
+            font-size: 0.78rem;
+            color: var(--color-text-muted);
+            display: flex;
+            align-items: center;
+            gap: var(--space-8);
+        }
+
+        .pill-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: var(--radius-pills);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .pill-blue { background: #e0f2fe; color: #0284c7; }
+        .pill-mint { background: var(--color-mint-tint); color: var(--color-bio-mint); }
+        .pill-lavender { background: var(--color-lavender-tint); color: var(--color-lavender-dawn); }
+
+        /* ─── 6. Academic Bench Evaluation Table (Emre Akadal Lab) ─── */
+        section.bench-table-section {
+            background: #ffffff;
+            border: 1px solid var(--color-hairline);
+            border-radius: var(--radius-cards);
+            padding: var(--space-32);
+            margin-bottom: var(--space-80);
+        }
+
+        .bench-table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-12);
+            flex-wrap: wrap;
+            gap: var(--space-8);
+        }
+
+        .bench-table-header h4 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            color: var(--color-text-display);
+            letter-spacing: -0.02em;
+        }
+
+        .bench-pill-label {
+            background: var(--color-canvas);
+            color: var(--color-primary-action);
+            border: 1px solid var(--color-hairline);
+            padding: 4px 12px;
+            border-radius: var(--radius-pills);
+            font-size: 0.75rem;
+            font-weight: 700;
+            font-family: var(--font-mono);
+        }
+
+        .bench-table-desc {
+            font-size: 0.88rem;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-20);
+        }
+
+        .table-responsive-wrapper {
+            overflow-x: auto;
+        }
+
+        table.minimal-bench-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        table.minimal-bench-table th,
+        table.minimal-bench-table td {
+            text-align: left;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--color-hairline-subtle);
+        }
+
+        table.minimal-bench-table th {
+            color: var(--color-text-muted);
+            font-weight: 700;
+            background: var(--color-canvas);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .method-chip {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: var(--radius-cards);
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .method-chip-get { background: #e0f2fe; color: #0284c7; }
+        .method-chip-post { background: var(--color-mint-tint); color: var(--color-bio-mint); }
+
+        a.endpoint-code-link {
+            color: var(--color-primary-action);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-weight: 600;
+        }
+
+        a.endpoint-code-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ─── 7. Minimal Institutional Footer ─── */
+        footer.site-footer {
+            border-top: 1px solid var(--color-hairline);
+            padding: var(--space-32) 0;
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        .footer-flex-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-16);
+        }
+
+        .footer-nav-links {
+            display: flex;
+            gap: var(--space-20);
+            flex-wrap: wrap;
+        }
+
+        .footer-nav-links a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            font-size: 0.84rem;
+            font-weight: 600;
+            transition: color 0.15s ease;
+        }
+
+        .footer-nav-links a:hover {
+            color: var(--color-primary-action);
+        }
+    </style>
+</head>
+<body>
+    <!-- Centered Floating Navigation Pill (9999px Radius) -->
+    <header class="nav-wrapper">
+        <div class="nav-pill-container">
+            <a href="/" class="nav-brand">
+                <div class="brand-crest-dot">🎓</div>
+                <div class="brand-title-group">
+                    <h1>İstanbul Üniversitesi</h1>
+                    <span>Mezun Takip Sistemi</span>
+                </div>
+            </a>
+
+            <nav class="nav-menu">
+                <a href="/" class="active">Ana Sayfa</a>
+                <a href="/users">Mezunlar</a>
+                <a href="/jobs">Kariyer &amp; İlanlar</a>
+                <a href="/announcements">Duyurular</a>
+                <a href="/about">Hakkında</a>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="/swagger" class="btn-header-cta">
+                    <span>⚡</span> Swagger API
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-container">
+        <!-- Hero Section: Left-Aligned Editorial Confidence -->
+        <section class="hero-section">
+            <a href="/api/swagger" class="hero-announcement-chip">
+                <span class="pulse-mint-dot"></span>
+                <span>PostgreSQL 16 &bull; ASP.NET Core &bull; Docker Stack Aktif</span>
+                <span>&rarr;</span>
+            </a>
+
+            <h2 class="hero-display-headline">
+                Köklü Bir Geçmiş, Güvenilir Bir Gelecek.<br>
+                Mezunlarımızla Tek Bir Çatı Altında.
+            </h2>
+
+            <p class="lead-text">
+                İstanbul Üniversitesi mezunları ve öğrencileri arasında güvenilir profesyonel köprü: 
+                Mezun rehberini inceleyin, kariyer fırsatlarını yakalayın ve yeni nesil öğrencilere mentorluk sağlayın.
+            </p>
+
+            <div class="hero-button-row">
+                <a href="/users" class="btn-pill-primary">
+                    <span>👥</span> Mezun Rehberini İncele
+                </a>
+                <a href="/jobs" class="btn-pill-ghost">
+                    <span>💼</span> Kariyer &amp; İş Panosu
+                </a>
+                <a href="/announcements" class="btn-pill-ghost">
+                    <span>📢</span> Etkinlikler &amp; Duyurular
+                </a>
+            </div>
+        </section>
+
+        <!-- Monumental "By The Numbers" Statement Block -->
+        <section class="numbers-section">
+            <div class="number-col">
+                <div class="monumental-stat">1453</div>
+                <div class="stat-label-headline">Tarihi Akademik Miras</div>
+                <div class="stat-caption-detail">Türkiye'nin ilk ve en köklü üniversite kültürü.</div>
+            </div>
+
+            <div class="number-col">
+                <div class="monumental-stat">50K+</div>
+                <div class="stat-label-headline">Kayıtlı Mezun Profili</div>
+                <div class="stat-caption-detail">Mühendislik, İktisat, Hukuk, Tıp ve tüm fakülteler.</div>
+            </div>
+
+            <div class="number-col">
+                <div class="monumental-stat">100%</div>
+                <div class="stat-label-headline">Kalıcı PostgreSQL 16</div>
+                <div class="stat-caption-detail">The Forgetting Test onaylı &bull; ACID veri güvencesi.</div>
+            </div>
+
+            <div class="number-col">
+                <div class="monumental-stat">3-Tier</div>
+                <div class="stat-label-headline">Enterprise Middleware</div>
+                <div class="stat-caption-detail">Request Logging, 404 Guardian &bull; 5xx Crash Shield.</div>
+            </div>
+        </section>
+
+        <!-- Product Card Grid: 4-Column Minimal Bento (4px Radius) -->
+        <div class="section-headline-bar">
+            <h3>Platformun Temel Yapı Taşları</h3>
+            <p>Mezunlarımız ve öğrencilerimiz için tasarlanmış kurumsal dijital modüller.</p>
+        </div>
+
+        <section class="product-grid-4">
+            <div class="product-card">
+                <div>
+                    <span class="card-eyebrow-tag">Networking</span>
+                    <h4>Mezun Rehberi</h4>
+                    <p>Fakülte, bölüm ve mezuniyet yılına göre mezunları filtreleyin. Doğrudan profesyonel bağlantılar kurun.</p>
+                </div>
+                <a href="/users" class="card-arrow-link">Rehberi Görüntüle &rarr;</a>
+            </div>
+
+            <div class="product-card">
+                <div>
+                    <span class="card-eyebrow-tag">Kariyer &bull; Referral</span>
+                    <h4>Kariyer Havuzu</h4>
+                    <p>Mezunlarımızın çalıştığı şirketlerden açık pozisyonlar ve kurum içi referans imkanlarına erişin.</p>
+                </div>
+                <a href="/jobs" class="card-arrow-link">İlanları İncele &rarr;</a>
+            </div>
+
+            <div class="product-card">
+                <div>
+                    <span class="card-eyebrow-tag">Mentorship</span>
+                    <h4>Mentorluk Ağı</h4>
+                    <p>Kıdemli mezunlarımız son sınıf öğrencilerine ve yeni mezunlara birebir teknik mülakat rehberliği sunar.</p>
+                </div>
+                <a href="/announcements" class="card-arrow-link">Mentorluk Başvurusu &rarr;</a>
+            </div>
+
+            <div class="product-card">
+                <div>
+                    <span class="card-eyebrow-tag">Reunion</span>
+                    <h4>Mezunlar Günü</h4>
+                    <p>Geleneksel Homecoming Galası, kampüs buluşmaları ve akademik seminerlerle bağınızı canlı tutun.</p>
+                </div>
+                <a href="/announcements" class="card-arrow-link">Etkinlik Takvimi &rarr;</a>
+            </div>
+        </section>
+
+        <!-- Dual Feed Showcase -->
+        <section class="dual-feed-section">
+            <!-- Feed 1: Jobs -->
+            <div class="feed-container">
+                <div class="feed-header-line">
+                    <h4>💼 Açık Kariyer Fırsatları</h4>
+                    <a href="/jobs" class="view-all-text">Tümü &rarr;</a>
+                </div>
+                <div class="feed-item-stack">
+                    <div class="feed-item-row">
+                        <div class="feed-item-details">
+                            <h5>Senior Backend Engineer (.NET 8 &bull; Cloud)</h5>
+                            <p>
+                                <span>FinTech Corp</span> &bull; 
+                                <span class="pill-badge pill-blue">İstanbul</span> &bull; 
+                                <span class="pill-badge pill-mint">Tam Zamanlı</span>
+                            </p>
+                        </div>
+                        <a href="/jobs" class="card-arrow-link">İncele</a>
+                    </div>
+
+                    <div class="feed-item-row">
+                        <div class="feed-item-details">
+                            <h5>Cloud Solutions Architect (AWS / Azure)</h5>
+                            <p>
+                                <span>Global Data Insights</span> &bull; 
+                                <span class="pill-badge pill-blue">Ankara (Remote)</span> &bull; 
+                                <span class="pill-badge pill-lavender">Hybrid</span>
+                            </p>
+                        </div>
+                        <a href="/jobs" class="card-arrow-link">İncele</a>
+                    </div>
+
+                    <div class="feed-item-row">
+                        <div class="feed-item-details">
+                            <h5>Data Science &amp; AI Research Intern</h5>
+                            <p>
+                                <span>IU Teknokent Labs</span> &bull; 
+                                <span class="pill-badge pill-blue">İstanbul</span> &bull; 
+                                <span class="pill-badge pill-mint">Staj</span>
+                            </p>
+                        </div>
+                        <a href="/jobs" class="card-arrow-link">İncele</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feed 2: Announcements -->
+            <div class="feed-container">
+                <div class="feed-header-line">
+                    <h4>📌 Üniversite Duyuruları &amp; Etkinlikler</h4>
+                    <a href="/announcements" class="view-all-text">Tümü &rarr;</a>
+                </div>
+                <div class="feed-item-stack">
+                    <div class="feed-item-row">
+                        <div class="feed-item-details">
+                            <h5>2026 Annual Alumni Homecoming Gala</h5>
+                            <p>
+                                <span>Mezunlar Ofisi</span> &bull; 
+                                <span>1 Mayıs 2026</span> &bull; 
+                                <span class="pill-badge pill-lavender">Reunion</span>
+                            </p>
+                        </div>
+                        <a href="/announcements" class="card-arrow-link">Detay</a>
+                    </div>
+
+                    <div class="feed-item-row">
+                        <div class="feed-item-details">
+                            <h5>Tech Mentorship Cohort 2026 Başvuruları Açıldı</h5>
+                            <p>
+                                <span>Kariyer Merkezi</span> &bull; 
+                                <span>10 Mayıs 2026</span> &bull; 
+                                <span class="pill-badge pill-mint">Mentorship</span>
+                            </p>
+                        </div>
+                        <a href="/announcements" class="card-arrow-link">Detay</a>
+                    </div>
+
+                    <div class="feed-item-row">
+                        <div class="feed-item-details">
+                            <h5>Mühendislik Fakültesi Kariyer Zirvesi '26</h5>
+                            <p>
+                                <span>Avcılar Yerleşkesi</span> &bull; 
+                                <span>24 Mayıs 2026</span> &bull; 
+                                <span class="pill-badge pill-blue">Konferans</span>
+                            </p>
+                        </div>
+                        <a href="/announcements" class="card-arrow-link">Detay</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Academic Lab / Evaluation Bench Panel -->
+        <section class="bench-table-section">
+            <div class="bench-table-header">
+                <h4>Akademik Laboratuvar &amp; Değerlendirme Tezgahı</h4>
+                <span class="bench-pill-label">Doç. Dr. Emre Akadal &bull; Web Programlama</span>
+            </div>
+            <p class="bench-table-desc">
+                Ders kapsamında tahtada atanan URL anatomisi, Minimal API, MVC Controller, 
+                PostgreSQL kalıcı ilişkisel veritabanı ve Error Guardian test bağlantıları:
+            </p>
+            <div class="table-responsive-wrapper">
+                <table class="minimal-bench-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Uç Nokta (Route)</th>
+                            <th>Kategori / Amaç</th>
+                            <th>Beklenen Yanıt &amp; Test Linki</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="method-chip method-chip-get">GET</span></td>
+                            <td><a class="endpoint-code-link" href="/ok">/ok</a></td>
+                            <td>Sağlık ve Başlangıç</td>
+                            <td><code>200 OK</code>: "ok" (text/plain)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-chip method-chip-get">GET</span></td>
+                            <td><a class="endpoint-code-link" href="/hello">/hello</a></td>
+                            <td>Statik Selamlama</td>
+                            <td><code>200 OK</code>: "Hello, World!"</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-chip method-chip-get">GET</span></td>
+                            <td><a class="endpoint-code-link" href="/hello/emre">/hello/{name}</a></td>
+                            <td>Dinamik Parametre</td>
+                            <td><code>200 OK</code>: "Hello, emre!"</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-chip method-chip-get">GET</span></td>
+                            <td><a class="endpoint-code-link" href="/sum/15/27">/sum/15/27</a></td>
+                            <td>Matematiksel Toplama</td>
+                            <td><code>200 OK</code>: 15 + 27 = 42</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-chip method-chip-get">GET</span></td>
+                            <td><a class="endpoint-code-link" href="/api/users">/api/users</a></td>
+                            <td>PostgreSQL Kalıcı Mezunlar</td>
+                            <td><code>200 OK</code>: JSON Mezun Dizisi</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-chip method-chip-get">GET</span></td>
+                            <td><a class="endpoint-code-link" href="/api/jobs">/api/jobs</a></td>
+                            <td>İlişkisel İş İlanları</td>
+                            <td><code>200 OK</code>: JSON İlan Dizisi</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-chip method-chip-get">GET</span></td>
+                            <td><a class="endpoint-code-link" href="/api/swagger">/api/swagger</a></td>
+                            <td>OpenAPI Swagger UI</td>
+                            <td>Etkileşimli Swagger Konsolu</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-chip method-chip-get">GET</span></td>
+                            <td><a class="endpoint-code-link" href="/api/test/500">/api/test/500</a></td>
+                            <td>5xx Guardian Hata Yakalama</td>
+                            <td><code>500 Server Error</code> + traceId</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-chip method-chip-get">GET</span></td>
+                            <td><a class="endpoint-code-link" href="/404">/404</a></td>
+                            <td>Generic 404 Sayfası</td>
+                            <td><code>404 Not Found</code> HTML Görünümü</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-chip method-chip-get">GET</span></td>
+                            <td><a class="endpoint-code-link" href="/some-invalid-sample">/some-invalid-sample</a></td>
+                            <td>Geçersiz İstek Yönlendirme</td>
+                            <td><code>302 Found</code> &rarr; /404 yönlendirmesi</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Minimal Institutional Footer -->
+    <footer class="site-footer">
+        <div class="page-container footer-flex-row">
+            <div>
+                <p><strong>İstanbul Üniversitesi</strong> &bull; Bilgisayar Bilimleri &amp; Web Programlama</p>
+                <p style="margin-top: 2px;">Öğrenci: <strong>Nazife Türk</strong> (<a href="mailto:nazife.turk@ogr.iu.edu.tr" style="color: var(--color-primary-action);">nazife.turk@ogr.iu.edu.tr</a>) &bull; Doç. Dr. Emre Akadal</p>
+            </div>
+            <div class="footer-nav-links">
+                <a href="/">Ana Sayfa</a>
+                <a href="/users">Mezunlar</a>
+                <a href="/jobs">İş İlanları</a>
+                <a href="/announcements">Duyurular</a>
+                <a href="/about">Hakkında</a>
+                <a href="/swagger">Swagger API</a>
+                <a href="https://github.com/NazifeTurk/alumni" target="_blank" rel="noopener">GitHub ↗</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
