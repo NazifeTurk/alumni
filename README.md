@@ -199,7 +199,7 @@ The application implements full RESTful resource semantics, parameterized path e
 | `GET` | `/hello` | Static greeting response | `200 OK` | `curl -s http://localhost:8000/hello` |
 | `GET` | `/hello/{name}` | Dynamic path extraction (e.g. `/hello/emre`) | `200 OK` | `curl -s http://localhost:8000/hello/emre` |
 | `GET` | `/sum/{n1}/{n2}` | Mathematical summation with numerical validation | `200 OK` / `400 Bad Request` | `curl -s http://localhost:8000/sum/15/27` |
-| `GET` | `/home` | Temporary semantic HTML main landing page | `200 OK` | (Open in browser: `http://localhost:8000/home`) |
+| `GET` | `/home`, `/bench` | Designed responsive university homepage & evaluation workbench | `200 OK` | (Open in browser: `http://localhost:8000/bench`) |
 | `GET` | `/about` | Temporary semantic HTML about page | `200 OK` | (Open in browser: `http://localhost:8000/about`) |
 
 #### Parameterized Summation Verification:
@@ -477,7 +477,8 @@ alumni/
     │   ├── UserApiRoutes.cs        # Health check diagnostics (/api/health)
     │   └── AlumniApiRoutes.cs      # Slide D REST resources: /api/alumni
     ├── views/                      # 🎨 Static & Generic HTML Views
-    │   └── 404.html                # Branded responsive generic 404 error page
+    │   ├── 404.html                # Branded responsive generic 404 error page
+    │   └── home.html               # Redesigned modern university homepage & evaluation workbench
     └── Data/                       # 🗄️ Relational Persistence & Factory Seeding
         ├── AlumniDbContext.cs      # Entity Framework Core DbContext
         ├── DatabaseSeeder.cs       # PostgreSQL seeder & identity sequence reset

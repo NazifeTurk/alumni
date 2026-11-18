@@ -20,8 +20,8 @@ public static class BasicRoutes
                 return Results.Text("ok", "text/plain");
             }
 
-            // Return temporary main page (HTML view)
-            return Results.Content(GetMainHtmlPage(), "text/html");
+            // Return main page (HTML view)
+            return Results.Content(GetMainHtmlPage(), "text/html; charset=utf-8");
         });
 
         // 1 (Dedicated text endpoint). GET /ok -> "ok"
@@ -71,11 +71,15 @@ public static class BasicRoutes
             });
         });
 
-        // 5. GET /home -> temporary one main page (HTML view)
-        app.MapGet("/home", () => Results.Content(GetMainHtmlPage(), "text/html"));
+        // 5. GET /home -> main page (HTML view)
+        app.MapGet("/home", () => Results.Content(GetMainHtmlPage(), "text/html; charset=utf-8"));
+
+        // 5b. GET /bench & /temporary-bench -> lab evaluation workbench
+        app.MapGet("/bench", () => Results.Content(GetMainHtmlPage(), "text/html; charset=utf-8"));
+        app.MapGet("/temporary-bench", () => Results.Content(GetMainHtmlPage(), "text/html; charset=utf-8"));
 
         // 6. GET /about -> temporary about page (HTML view)
-        app.MapGet("/about", () => Results.Content(GetAboutHtmlPage(), "text/html"));
+        app.MapGet("/about", () => Results.Content(GetAboutHtmlPage(), "text/html; charset=utf-8"));
 
         // 7. GET /404 -> Generic 404 Page (HTML view with HTTP 404 Not Found)
         app.MapGet("/404", (HttpContext context) =>
@@ -148,6 +152,29 @@ public static class BasicRoutes
 
     private static string GetMainHtmlPage()
     {
+        var possiblePaths = new[]
+        {
+            Path.Combine(Directory.GetCurrentDirectory(), "views", "home.html"),
+            Path.Combine(Directory.GetCurrentDirectory(), "src", "views", "home.html"),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "views", "home.html"),
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "src", "views", "home.html")
+        };
+
+        foreach (var path in possiblePaths)
+        {
+            if (File.Exists(path))
+            {
+                try
+                {
+                    return File.ReadAllText(path);
+                }
+                catch
+                {
+                    // Fall through to fallback
+                }
+            }
+        }
+
         return """
         <!DOCTYPE html>
         <html lang="tr">
