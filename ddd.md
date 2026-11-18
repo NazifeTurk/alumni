@@ -437,4 +437,5 @@ curl -s http://localhost:8000/api/users/48
 
 ## 🔗 Cross-Documentation Link
 * 📖 [Main Project Documentation (README.md)](README.md)
+* 🎨 [Brand Guidelines & Design System (brand.md)](brand.md)
 * ⚡ [Live Swagger UI](http://localhost:8000/api/swagger)
