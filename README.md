@@ -8,15 +8,15 @@
 An enterprise-ready, modular web application engineered to track university graduates, monitor career trajectories, facilitate academic mentorship networks, and coordinate institutional alumni engagement.
 
 > 🗄️ **Database Milestone**: Comprehensive database architecture, ER diagrams, data dictionaries, environment configuration, and "The Forgetting Test" proofs are documented in [**Data Design Documentation (`ddd.md`)**](ddd.md).  
-> 🎨 **Brand & Visual Identity**: Design tokens, color palettes, logomark specifications, UI component standards, and typography hierarchy are documented in [**Brand Identity Documentation (`brand.md`)**](brand.md).  
-> 📐 **AI Design System Specification**: Plain-text design system conforming to VoltAgent `awesome-design-md` benchmarks (AngelList + Cord.com + Resume.io) is documented in [**Design System Specification (`DESIGN.MD`)**](DESIGN.MD).
+> 🎨 **Brand & Visual Identity**: Design tokens, color palettes, logomark specifications, UI component standards, and typography hierarchy are documented in [**Brand Identity Documentation (`brand.md`)**](brand.md) &bull; ⚓ *[Jump to Summary Anchor](#brand-md)*.  
+> 📐 **AI Design System Specification**: Plain-text design system conforming to VoltAgent `awesome-design-md` benchmarks (AngelList + Cord.com + Resume.io) is documented in [**Design System Specification (`DESIGN.MD` / `design.md`)**](DESIGN.MD) &bull; ⚓ *[Jump to Summary Anchor](#design-md)*.
 
 ---
 
 ## 📖 Table of Contents
 - [🗄️ Data Design Documentation (ddd.md)](ddd.md)
 - [🎨 Brand Identity & Design System (brand.md)](brand.md)
-- [📐 AI Design System Specification (DESIGN.MD)](DESIGN.MD)
+- [📐 AI Design System Specification (DESIGN.MD / design.md)](DESIGN.MD)
 - [🎯 Project Overview](#-project-overview)
 - [🏛️ Architectural Design & Layering](#️-architectural-design--layering)
 - [⚖️ Technology Stack & Trade-offs (Defense)](#️-technology-stack--trade-offs-defense)
@@ -28,7 +28,8 @@ An enterprise-ready, modular web application engineered to track university grad
 - [🚫 Generic 404 Page & Invalid Request Redirection](#-generic-404-page--invalid-request-redirection)
 - [📝 Persistent File Error Logging (logs/error.logs)](#-persistent-file-error-logging-logserrorlogs)
 - [🧪 Postman Invalid Requests Test Suite](#-postman-invalid-requests-test-suite)
-- [🎨 Brand Guidelines & Visual Design](#-brand-guidelines--visual-design-brandmd)
+- [🎨 Brand Guidelines & Identity (brand.md)](#brand-md)
+- [📐 AI Design System Specification (DESIGN.MD)](#design-md)
 - [📂 Repository Structure](#-repository-structure)
 - [🐳 Containerization & Orchestration](#-containerization--orchestration)
 - [🎓 Coursework Specification](#-coursework-specification)
@@ -442,15 +443,32 @@ The repository includes **`postman_alumni_invalid_requests.json`**, an automated
 
 ---
 
-## 🎨 Brand Guidelines & Visual Design ([brand.md](brand.md) & [DESIGN.MD](DESIGN.MD))
+<a id="brand-md"></a>
+<a id="brand"></a>
+<a id="brand-guidelines"></a>
+## 🎨 Brand Guidelines & Visual Identity ([brand.md](brand.md))
 
-The project's visual identity, design tokens, color palette, and institutional typography guidelines are fully documented in [**`brand.md`**](brand.md) and standardized for AI agents in [**`DESIGN.MD`**](DESIGN.MD), benchmarked against [Refero AngelList](https://styles.refero.design/style/c75603c7-492d-4c26-9744-9acc22fe6225), [Refero Cord.com](https://styles.refero.design/style/485ae5fb-8f25-4aa3-a4e4-1deb1590d7d6), and [Refero Resume.io](https://styles.refero.design/style/41e65213-1c4a-41c4-b715-50427fa8926e):
+The project's visual identity, 1453 historical heritage, crest anatomy, color tokens, and institutional typography guidelines are fully documented in [**`brand.md`**](brand.md):
 
-* **Atmospheric Light Blue Palette**: Sea-Fog Canvas (`#eaf4fb`), Card Surface (`#ffffff`), Recessed Inset (`#f0f7fe`), Hairlines (`#bae6fd` / `#e0f2fe`), Abyssal Trust Navy (`#04263e`), Midnight Harbor (`#0b3658`), Signal Blue CTA (`#0284c7`), and Bio Mint (`#059669`).
+* **Institutional Light Blue Palette**: Sea-Fog Canvas (`#eaf4fb`), Abyssal Trust Navy (`#04263e`), Midnight Harbor (`#0b3658`), Signal Blue CTA (`#0284c7`), and Bio Mint (`#059669`).
+* **Crest & Emblem**: 🎓 Mortarboard symbol with dual-ring hairline border (`1px solid #bae6fd`) and 40px capsule housing.
+* **Component Standards**: Floating centered nav pill (`9999px` capsule, `backdrop-filter: blur(20px)`), bento cards (`4px` radius), and zero drop shadows (`box-shadow: none`).
+* 🔗 **Read Full Brand Guide**: [**Brand Identity Documentation (`brand.md`)**](brand.md) &bull; ⬅️ [Return to Table of Contents](#-table-of-contents)
+
+---
+
+<a id="design-md"></a>
+<a id="design"></a>
+<a id="design-specification"></a>
+## 📐 AI Design System Specification ([DESIGN.MD](DESIGN.MD))
+
+The machine-readable, agent-executable plain-text design system conforming to **VoltAgent `awesome-design-md`** (reverse-engineered from [Refero AngelList](https://styles.refero.design/style/c75603c7-492d-4c26-9744-9acc22fe6225), [Refero Cord.com](https://styles.refero.design/style/485ae5fb-8f25-4aa3-a4e4-1deb1590d7d6), and [Refero Resume.io](https://styles.refero.design/style/41e65213-1c4a-41c4-b715-50427fa8926e)) is codified in [**`DESIGN.MD`**](DESIGN.MD) (also accessible as `design.md`):
+
 * **Binary Radius System**: Strict architectural standard: **`9999px`** (full capsule pill) for buttons, chips, badges, and the floating navigation header; **`4px`** (subtle minimal radius) for bento cards, data tables, and error boxes. Strictly zero intermediate radii.
-* **Strict Zero Drop Shadows**: Depth is engineered exclusively through tonal stepping (`#eaf4fb` → `#ffffff` → `#f0f7fe`) and crisp 1px borders, eliminating visual blur and false skeuomorphism.
+* **Strict Zero Drop Shadows**: `box-shadow: none !important;`. Depth is engineered exclusively through tonal stepping (`#eaf4fb` → `#ffffff` → `#f0f7fe`) and crisp 1px borders, eliminating visual blur and false skeuomorphism.
 * **Typography Stack**: `DM Serif Display` for monumental headlines and statement metrics with negative tracking (`-0.04em`), paired with `Plus Jakarta Sans` for interface copy with tabular figures (`tnum`), and `JetBrains Mono` for telemetry and endpoints.
-* **Detailed Specifications**: Read [**Brand Identity Documentation (`brand.md`)**](brand.md) and [**AI Design Specification (`DESIGN.MD`)**](DESIGN.MD).
+* **Tailwind CSS v4 & AI Guardrails**: Standardized tokens ready for AI coding agents generating frontend views.
+* 🔗 **Read Full AI Specification**: [**AI Design Specification (`DESIGN.MD`)**](DESIGN.MD) &bull; ⬅️ [Return to Table of Contents](#-table-of-contents)
 
 ---
 
