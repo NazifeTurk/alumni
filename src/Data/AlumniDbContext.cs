@@ -25,7 +25,10 @@ public class AlumniDbContext : DbContext
             entity.HasKey(u => u.Id);
             entity.Property(u => u.Name).IsRequired().HasMaxLength(150);
             entity.Property(u => u.Email).IsRequired().HasMaxLength(150);
+            entity.HasIndex(u => u.Email).IsUnique();
             entity.Property(u => u.Role).HasMaxLength(50).HasDefaultValue("alumni");
+            entity.Property(u => u.PasswordHash).HasMaxLength(256).HasDefaultValue("");
+            entity.Property(u => u.Department).HasMaxLength(150).HasDefaultValue("");
             entity.Property(u => u.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
@@ -86,10 +89,11 @@ public class AlumniDbContext : DbContext
 
         // Seed initial data if tables are freshly created
         modelBuilder.Entity<User>().HasData(
-            new User { Id = 42, Name = "Elif Kaya", Email = "elif.kaya@ogr.iu.edu.tr", GraduationYear = 2024, Role = "alumni", CreatedAt = new DateTime(2026, 1, 15, 0, 0, 0, DateTimeKind.Utc) },
-            new User { Id = 43, Name = "Mert Aydın", Email = "mert.aydin@ogr.iu.edu.tr", GraduationYear = 2021, Role = "alumni", CreatedAt = new DateTime(2026, 2, 10, 0, 0, 0, DateTimeKind.Utc) },
-            new User { Id = 44, Name = "Zeynep Arslan", Email = "zeynep.arslan@ogr.iu.edu.tr", GraduationYear = 2019, Role = "alumni", CreatedAt = new DateTime(2026, 3, 5, 0, 0, 0, DateTimeKind.Utc) },
-            new User { Id = 45, Name = "Can Öztürk", Email = "can.ozturk@ogr.iu.edu.tr", GraduationYear = 2023, Role = "alumni", CreatedAt = new DateTime(2026, 4, 1, 0, 0, 0, DateTimeKind.Utc) }
+            new User { Id = 1,  Name = "Antigravity Admin",  Email = "admin@iu.edu.tr",              GraduationYear = 2020, Role = "admin",   Department = "Sistem Yönetimi",         PasswordHash = "$2a$11$placeholder_will_be_set_by_seeder", CreatedAt = new DateTime(2026, 1, 1,  0, 0, 0, DateTimeKind.Utc) },
+            new User { Id = 42, Name = "Elif Kaya",          Email = "elif.kaya@ogr.iu.edu.tr",      GraduationYear = 2024, Role = "alumni",  Department = "Bilgisayar Mühendisliği", PasswordHash = "$2a$11$placeholder_will_be_set_by_seeder", CreatedAt = new DateTime(2026, 1, 15, 0, 0, 0, DateTimeKind.Utc) },
+            new User { Id = 43, Name = "Mert Aydın",         Email = "mert.aydin@ogr.iu.edu.tr",     GraduationYear = 2021, Role = "alumni",  Department = "İşletme",                 PasswordHash = "$2a$11$placeholder_will_be_set_by_seeder", CreatedAt = new DateTime(2026, 2, 10, 0, 0, 0, DateTimeKind.Utc) },
+            new User { Id = 44, Name = "Zeynep Arslan",      Email = "zeynep.arslan@ogr.iu.edu.tr",  GraduationYear = 2019, Role = "alumni",  Department = "Hukuk",                   PasswordHash = "$2a$11$placeholder_will_be_set_by_seeder", CreatedAt = new DateTime(2026, 3, 5,  0, 0, 0, DateTimeKind.Utc) },
+            new User { Id = 45, Name = "Can Öztürk",         Email = "can.ozturk@ogr.iu.edu.tr",     GraduationYear = 2023, Role = "alumni",  Department = "Psikoloji",               PasswordHash = "$2a$11$placeholder_will_be_set_by_seeder", CreatedAt = new DateTime(2026, 4, 1,  0, 0, 0, DateTimeKind.Utc) }
         );
 
         modelBuilder.Entity<Announcement>().HasData(

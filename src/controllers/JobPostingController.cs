@@ -81,6 +81,26 @@ public class JobPostingController : Controller
     // --- HTML View Renderers ---
     private string RenderJobListView(IEnumerable<JobPosting> jobs)
     {
+        var userName = HttpContext?.Session?.GetString("UserName");
+        var userRole = HttpContext?.Session?.GetString("UserRole") ?? "";
+        bool loggedIn = !string.IsNullOrEmpty(userName);
+
+        var adminLink = userRole == "admin"
+            ? """<a href="/admin" style="color:var(--primary);font-weight:700;">🛡️ Admin</a>"""
+            : "";
+        var profileLink = loggedIn
+            ? """<a href="/profile">Profilim</a>"""
+            : "";
+        var authActions = loggedIn
+            ? $"""
+               <a href="/profile" style="color:var(--primary);font-weight:600;">👤 {System.Net.WebUtility.HtmlEncode(userName)}</a>
+               <a href="/auth/logout" class="btn btn-secondary" style="padding:0.25rem 0.65rem;font-size:0.75rem;">Çıkış</a>
+               """
+            : """
+              <a href="/auth/login">Giriş</a>
+              <a href="/auth/register" class="btn btn-primary" style="padding:0.25rem 0.65rem;font-size:0.75rem;">Kayıt Ol</a>
+              """;
+
         var cards = string.Join("\n", jobs.Select(j => $"""
             <div class="job-card">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
@@ -110,7 +130,7 @@ public class JobPostingController : Controller
             <title>İş ve Staj İlanları — İstanbul Üniversitesi Mezun Takip</title>
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
             <style>
                 :root {
                     --bg: #FAF9F6;
@@ -125,7 +145,7 @@ public class JobPostingController : Controller
                 }
                 * { box-sizing: border-box; margin: 0; padding: 0; }
                 body {
-                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    font-family: 'Inter', sans-serif;
                     background-color: var(--bg);
                     background-image: url('/assets/iu-gate-silhouette.svg');
                     background-repeat: no-repeat;
@@ -150,7 +170,7 @@ public class JobPostingController : Controller
                 }
                 .header-brand { display: flex; align-items: center; gap: 0.85rem; }
                 .header-brand img { width: 44px; height: 44px; object-fit: contain; }
-                h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.9rem; font-weight: 400; color: var(--primary); letter-spacing: -0.02em; }
+                h1 { font-family: 'Inter', sans-serif; font-size: 1.9rem; font-weight: 400; color: var(--primary); letter-spacing: -0.02em; }
                 nav { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
                 nav a {
                     color: var(--text-muted);
@@ -221,6 +241,9 @@ public class JobPostingController : Controller
                             <a href="/users">Mezunlar</a>
                             <a href="/announcements">Duyurular</a>
                             <a href="/jobs" class="active">İlanlar</a>
+                            {profileLink}
+                            {adminLink}
+                            {authActions}
                         </nav>
                     </div>
                 </header>

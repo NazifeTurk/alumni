@@ -7,7 +7,7 @@
     <meta name="description" content="İstanbul Üniversitesi Mezun Takip Sistemi: Mezun Rehberi, Kariyer Havuzu, İş İlanları ve Akademik Mentorluk Ağı.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             /* ─── Warm Alabaster (#FAF9F6) & Deep Imperial Green (#004225) Design Tokens ─── */
@@ -39,9 +39,9 @@
             --color-rose-tint: #FFE4E6;        /* Rose pill background */
 
             /* ─── Font Families ─── */
-            --font-display: 'DM Serif Display', Georgia, serif;
-            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+            --font-display: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
             /* ─── Binary Radii System (Refero Standard) ─── */
             --radius-cards: 4px;               /* 4px for all cards (strictly minimal) */
@@ -853,21 +853,6 @@
 
         <!-- ─── 2. Monumental Hero Section ─── -->
         <section class="hero-section">
-            <div class="hero-pill-badge">
-                <img src="/assets/iu-logo.svg" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg';" alt="IU" class="hero-pill-logo">
-                <div class="pulse-dot"></div>
-                <span class="hero-pill-text">İstanbul Üniversitesi &bull; Nazife Türk &bull; 1453'ten Geleceğe</span>
-            </div>
-
-            <h1 class="hero-headline">
-                Gelenekten Geleceğe<br>
-                <em>Güçlü Mezun Köprüsü</em>
-            </h1>
-
-            <p class="hero-subtitle">
-                Türkiye'nin en köklü akademik çınarı İstanbul Üniversitesi'nin 500 yılı aşkın birikimini, modern bulut mimarisi ve kurumsal kariyer ağıyla geleceğe taşıyoruz.
-            </p>
-
             <div class="hero-actions">
                 <a href="/users" class="btn btn-primary">
                     🎓 Mezun Rehberini İncele
@@ -1192,5 +1177,47 @@
         </div>
     </footer>
 
+    <script>
+        // Dynamic Navigation based on session and user role
+        fetch('/api/auth/me')
+            .then(res => res.json())
+            .then(data => {
+                const navLinks = document.querySelector('.nav-links');
+                const navActions = document.querySelector('.nav-actions');
+                if (!navLinks || !navActions) return;
+
+                if (data.isLoggedIn) {
+                    // Check if already added
+                    if (!document.querySelector('a[href="/profile"]')) {
+                        const profLink = document.createElement('a');
+                        profLink.href = '/profile';
+                        profLink.className = 'nav-link';
+                        profLink.textContent = 'Profilim';
+                        navLinks.appendChild(profLink);
+                    }
+                    if (data.role === 'admin' && !document.querySelector('a[href="/admin"]')) {
+                        const adminLink = document.createElement('a');
+                        adminLink.href = '/admin';
+                        adminLink.className = 'nav-link';
+                        adminLink.style.color = 'var(--color-primary-action)';
+                        adminLink.style.fontWeight = '700';
+                        adminLink.textContent = '🛡️ Admin Panel';
+                        navLinks.appendChild(adminLink);
+                    }
+                    navActions.innerHTML = `
+                        <a href="/swagger" class="btn btn-ghost" style="padding:0.4rem 0.75rem;font-size:0.8rem;">Swagger</a>
+                        <a href="/profile" class="btn btn-ghost" style="padding:0.4rem 0.85rem;font-size:0.8rem;text-decoration:none;" title="Profilimi Görüntüle">👤 ${data.name} <span style="font-size:0.7rem;opacity:0.8;">(${data.role})</span></a>
+                        <a href="/auth/logout" class="btn btn-ghost" style="padding:0.4rem 0.85rem;font-size:0.8rem;">Çıkış</a>
+                    `;
+                } else {
+                    navActions.innerHTML = `
+                        <a href="/swagger" class="btn btn-ghost" style="padding:0.4rem 0.75rem;font-size:0.8rem;">Swagger</a>
+                        <a href="/auth/login" class="btn btn-ghost" style="padding:0.4rem 0.85rem;font-size:0.85rem;">Giriş Yap</a>
+                        <a href="/auth/register" class="btn btn-primary" style="padding:0.4rem 0.95rem;font-size:0.85rem;">Kayıt Ol</a>
+                    `;
+                }
+            })
+            .catch(() => {});
+    </script>
 </body>
 </html>

@@ -24,6 +24,7 @@ An enterprise-ready, modular web application engineered to track university grad
 - [🧪 The Forgetting Test (Database Persistence)](#-the-forgetting-test-database-persistence-verification)
 - [📡 API Contract & Health Check](#-api-contract--health-check)
 - [💼 Relational Domain & JobPostings (Week 06)](#-relational-domain--jobpostings-week-06)
+- [🔐 Authentication, RBAC & Admin Control Panel](#-authentication-rbac--admin-control-panel)
 - [🛡️ Enterprise Middleware Pipeline & Error Guardians](#️-enterprise-middleware-pipeline--error-guardians)
 - [🚫 Generic 404 Page & Invalid Request Redirection](#-generic-404-page--invalid-request-redirection)
 - [📝 Persistent File Error Logging (logs/error.logs)](#-persistent-file-error-logging-logserrorlogs)
@@ -350,6 +351,64 @@ The platform expands into relational multi-entity persistence by modeling **Job 
 * **Include Pattern (`GET /api/users/{id}`)**: Performs an optimized SQL `LEFT JOIN` on `job_postings`, returning the user entity with an embedded `"jobs"` collection.
 * **Candidate Application (`POST /api/jobs/{id}/applications`)**: Enforces `UNIQUE(user_id, job_posting_id)`. Applying twice to the same job opening triggers **`HTTP 409 Conflict`**.
 * **Referential Integrity (`ON DELETE RESTRICT`)**: Deleting a user with active job postings is blocked by database constraints, returning **`HTTP 409 Conflict`** to prevent cascading data loss.
+
+---
+
+## 🔐 Authentication, RBAC & Admin Control Panel
+
+The system features a complete **Session-Based Authentication** engine paired with **Role-Based Access Control (RBAC)**, designed specifically to match the institutional requirements of Istanbul University.
+
+```text
+┌────────────────────────────────────────────────────────────────────────┐
+│                   AUTHENTICATION & RBAC ARCHITECTURE                   │
+├───────────────────────────────────┬────────────────────────────────────┤
+│ 👤 User Authentication            │ 🛡️ Role-Based Access Control (RBAC)│
+│ • Self-Registration (/auth/register) • Admin: Full System Manipulation │
+│ • Login (/auth/login)             │ • Alumni: Job Posts & Directory    │
+│ • Logout (/auth/logout)           │ • Student: Job Applications        │
+│ • Secure SHA256 Salted Passwords  │ • Faculty: Mentorship Announcements│
+├───────────────────────────────────┴────────────────────────────────────┤
+│ 🧭 Dynamic Interface & Navigation                                      │
+│ • Dynamic header navigation pills based on session state and user role │
+│ • Protected Admin Control Panel (/admin) for user and data management  │
+│ • User-Specific Profile & Dashboard (/profile) with self-service update │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### 1. Authentication Endpoints & Flow
+* **Registration (`GET /auth/register` & `POST /auth/register`)**: New users self-register with Name, Email, Department, Graduation Year, and Password. Passwords are hash-digested using SHA-256 with institutional salt (`IU_ALUMNI_SALT_1453`).
+* **Login (`GET /auth/login` & `POST /auth/login`)**: Authenticates credentials against the database. On success, creates a secure, HTTP-only session cookie (`.alumni.session`) containing `UserId`, `UserName`, `UserEmail`, and `UserRole`.
+* **Logout (`GET /auth/logout`)**: Clears the session store and redirects to the public landing page.
+* **Session Interceptor (`AuthSessionMiddleware`)**: Reads session cookies on every request and populates `HttpContext.Items["UserRole"]` and `HttpContext.Items["IsLoggedIn"]` for downstream controllers.
+* **Current User Telemetry (`GET /api/auth/me`)**: Returns JSON metadata about the currently authenticated session for dynamic client-side hydration.
+
+### 2. User Roles & Access Control Matrix (RBAC)
+| Role | Description | Permissions & Privileges |
+| :--- | :--- | :--- |
+| **`admin`** | System Administrator | Full access to `/admin`, can change user roles (`alumni`, `admin`, `student`, `faculty`), delete users, delete announcements, and inspect system-wide analytics. |
+| **`alumni`** | Verified Graduate | Can publish job postings, browse alumni directory, edit personal profile at `/profile`, and apply for openings. |
+| **`student`** | Active Undergraduate | Can browse alumni directory, view announcements, edit profile, and apply to job/internship openings. |
+| **`faculty`** | Academic Staff | Can publish mentorship cohorts, post official faculty announcements, and coordinate student-alumni events. |
+
+### 3. Pre-Seeded Default Accounts
+| Account | Email | Password | Role | Purpose |
+| :--- | :--- | :--- | :--- | :--- |
+| **Antigravity Admin** | `admin@iu.edu.tr` | `admin1453` | `admin` | **Primary System Administrator Account** |
+| **Elif Kaya** | `elif.kaya@ogr.iu.edu.tr` | `alumni123` | `alumni` | Standard Verified Alumni Account |
+| **Mert Aydın** | `mert.aydin@ogr.iu.edu.tr` | `alumni123` | `alumni` | Standard Verified Alumni Account |
+
+### 4. Admin Control Panel (`/admin`)
+* **Access Control**: Strictly restricted to users with `role == "admin"`. Unauthorized requests are redirected to `/auth/login?returnUrl=/admin` or rejected with `403 Forbidden`.
+* **System Metrics**: Real-time stats cards displaying Total Users, Alumni count, Admin count, Announcements count, and Job Postings count.
+* **User Manipulation**:
+  * **Role Mutation (`POST /admin/users/{id}/role`)**: Live role switching via dropdown menu.
+  * **User Deletion (`POST /admin/users/{id}/delete`)**: Deletion of user accounts with self-deletion protection.
+* **Content Management**: Direct deletion of inappropriate announcements and listings.
+
+### 5. User-Specific Dashboard & Profile (`/profile`)
+* **Personal Profile Management**: Self-service editing of Name, Department, Graduation Year, and Password update.
+* **Account Ledger**: Displays unique User ID, system role badge, registration date, and last profile update timestamp.
+* **My Job Openings**: Lists all job postings created by the authenticated alumnus with a direct "+ İlan Ver" CTA.
 
 ---
 

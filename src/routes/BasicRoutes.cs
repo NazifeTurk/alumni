@@ -21,7 +21,30 @@ public static class BasicRoutes
             }
 
             // Return main page (HTML view)
-            return Results.Content(GetMainHtmlPage(), "text/html; charset=utf-8");
+            return Results.Content(GetMainHtmlPage(context), "text/html; charset=utf-8");
+        });
+
+        // 🔐 Current User Session Endpoint (API)
+        app.MapGet("/api/auth/me", (HttpContext context) =>
+        {
+            var userId = context.Session.GetString("UserId");
+            var userName = context.Session.GetString("UserName");
+            var userRole = context.Session.GetString("UserRole");
+            var userEmail = context.Session.GetString("UserEmail");
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Results.Ok(new { isLoggedIn = false });
+            }
+
+            return Results.Ok(new
+            {
+                isLoggedIn = true,
+                id = int.Parse(userId),
+                name = userName,
+                role = userRole,
+                email = userEmail
+            });
         });
 
         // 1 (Dedicated text endpoint). GET /ok -> "ok"
@@ -72,14 +95,14 @@ public static class BasicRoutes
         });
 
         // 5. GET /home -> main page (HTML view)
-        app.MapGet("/home", () => Results.Content(GetMainHtmlPage(), "text/html; charset=utf-8"));
+        app.MapGet("/home", (HttpContext context) => Results.Content(GetMainHtmlPage(context), "text/html; charset=utf-8"));
 
         // 5b. GET /bench & /temporary-bench -> lab evaluation workbench
-        app.MapGet("/bench", () => Results.Content(GetMainHtmlPage(), "text/html; charset=utf-8"));
-        app.MapGet("/temporary-bench", () => Results.Content(GetMainHtmlPage(), "text/html; charset=utf-8"));
+        app.MapGet("/bench", (HttpContext context) => Results.Content(GetMainHtmlPage(context), "text/html; charset=utf-8"));
+        app.MapGet("/temporary-bench", (HttpContext context) => Results.Content(GetMainHtmlPage(context), "text/html; charset=utf-8"));
 
         // 6. GET /about -> temporary about page (HTML view)
-        app.MapGet("/about", () => Results.Content(GetAboutHtmlPage(), "text/html; charset=utf-8"));
+        app.MapGet("/about", (HttpContext context) => Results.Content(GetAboutHtmlPage(context), "text/html; charset=utf-8"));
 
         // 7. GET /404 -> Generic 404 Page (HTML view with HTTP 404 Not Found)
         app.MapGet("/404", (HttpContext context) =>
@@ -198,7 +221,72 @@ public static class BasicRoutes
         """.Replace("{{REQUESTED_PATH}}", System.Net.WebUtility.HtmlEncode(requestedPath));
     }
 
-    private static string GetMainHtmlPage()
+    private static string InjectDynamicNav(string html, HttpContext? context)
+    {
+        var userName = context?.Session.GetString("UserName");
+        var userRole = context?.Session.GetString("UserRole") ?? "";
+        bool loggedIn = !string.IsNullOrEmpty(userName);
+
+        var adminLink = userRole == "admin"
+            ? """<a href="/admin" class="nav-link" style="color:var(--color-primary-action,#004225);font-weight:700;">🛡️ Admin Panel</a>"""
+            : "";
+
+        var profileLink = loggedIn
+            ? """<a href="/profile" class="nav-link">Profilim</a>"""
+            : "";
+
+        var authActions = loggedIn
+            ? $"""
+               <a href="/profile" class="btn btn-ghost" style="padding:0.4rem 0.85rem;font-size:0.8rem;text-decoration:none;" title="Profilimi Görüntüle">👤 {System.Net.WebUtility.HtmlEncode(userName)} <span style="font-size:0.7rem;opacity:0.8;">({userRole})</span></a>
+               <a href="/auth/logout" class="btn btn-ghost" style="padding:0.4rem 0.85rem;font-size:0.8rem;">Çıkış</a>
+               """
+            : """
+              <a href="/auth/login" class="btn btn-ghost" style="padding:0.4rem 0.85rem;font-size:0.85rem;">Giriş Yap</a>
+              <a href="/auth/register" class="btn btn-primary" style="padding:0.4rem 0.95rem;font-size:0.85rem;">Kayıt Ol</a>
+              """;
+
+        // In home.html replace nav items
+        if (html.Contains("<nav class=\"nav-links\">"))
+        {
+            var targetNav = """
+            <nav class="nav-links">
+                <a href="/users" class="nav-link">Mezun Rehberi</a>
+                <a href="/jobs" class="nav-link">Kariyer Havuzu</a>
+                <a href="/announcements" class="nav-link">Duyurular</a>
+                <a href="/bench" class="nav-link active">Akademik Tezgah</a>
+            </nav>
+            """;
+            var replacementNav = $"""
+            <nav class="nav-links">
+                <a href="/users" class="nav-link">Mezun Rehberi</a>
+                <a href="/jobs" class="nav-link">Kariyer Havuzu</a>
+                <a href="/announcements" class="nav-link">Duyurular</a>
+                {profileLink}
+                {adminLink}
+                <a href="/bench" class="nav-link active">Akademik Tezgah</a>
+            </nav>
+            """;
+            html = html.Replace(targetNav, replacementNav);
+
+            var targetActions = """
+            <div class="nav-actions">
+                <a href="/swagger" class="btn btn-ghost">Swagger API</a>
+                <a href="/users" class="btn btn-primary">Mezun Rehberi</a>
+            </div>
+            """;
+            var replacementActions = $"""
+            <div class="nav-actions">
+                <a href="/swagger" class="btn btn-ghost" style="padding:0.4rem 0.75rem;font-size:0.8rem;">Swagger</a>
+                {authActions}
+            </div>
+            """;
+            html = html.Replace(targetActions, replacementActions);
+        }
+
+        return html;
+    }
+
+    private static string GetMainHtmlPage(HttpContext? context = null)
     {
         var possiblePaths = new[]
         {
@@ -214,7 +302,8 @@ public static class BasicRoutes
             {
                 try
                 {
-                    return File.ReadAllText(path);
+                    var content = File.ReadAllText(path);
+                    return InjectDynamicNav(content, context);
                 }
                 catch
                 {
@@ -232,7 +321,7 @@ public static class BasicRoutes
             <title>İstanbul Üniversitesi — Mezun Takip Sistemi</title>
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
             <style>
                 :root {
                     --color-canvas: #FAF9F6;
@@ -253,7 +342,7 @@ public static class BasicRoutes
                 }
                 * { box-sizing: border-box; margin: 0; padding: 0; }
                 body {
-                    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
                     background-color: var(--color-canvas);
                     background-image: url('/assets/iu-gate-silhouette.svg');
                     background-repeat: no-repeat;
@@ -319,7 +408,7 @@ public static class BasicRoutes
                     margin-bottom: 1.25rem;
                 }
                 .hero-card h1 {
-                    font-family: 'DM Serif Display', Georgia, serif;
+                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
                     font-size: 3rem;
                     color: var(--color-text-display);
                     line-height: 1.1;
@@ -357,7 +446,7 @@ public static class BasicRoutes
                     padding: 1.75rem;
                 }
                 .card h3 {
-                    font-family: 'DM Serif Display', Georgia, serif;
+                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
                     font-size: 1.35rem;
                     color: var(--color-text-title);
                     margin-bottom: 0.6rem;
@@ -405,11 +494,7 @@ public static class BasicRoutes
 
                 <div class="hero-card">
                     <span class="badge-pill">Kurumsal Mezun ve Kariyer Ağı &bull; 1453</span>
-                    <h1>Gelenekten Geleceğe Güçlü Köprü</h1>
-                    <p>
-                        İstanbul Üniversitesi mezunlarını, akademisyenlerini ve öğrencilerini bir araya getiren kurumsal kariyer ve mentörlük platformu.
-                    </p>
-                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem;">
                         <a href="/users" class="btn btn-primary">Mezun Rehberini Keşfet</a>
                         <a href="/jobs" class="btn btn-secondary">Kariyer Fırsatları</a>
                     </div>
@@ -442,9 +527,29 @@ public static class BasicRoutes
         """;
     }
 
-    private static string GetAboutHtmlPage()
+    private static string GetAboutHtmlPage(HttpContext? context = null)
     {
-        return """
+        var userName = context?.Session.GetString("UserName");
+        var userRole = context?.Session.GetString("UserRole") ?? "";
+        bool loggedIn = !string.IsNullOrEmpty(userName);
+
+        var adminLink = userRole == "admin"
+            ? """<a href="/admin" style="color:var(--color-primary-action,#004225);font-weight:700;">🛡️ Admin</a>"""
+            : "";
+        var profileLink = loggedIn
+            ? """<a href="/profile">Profilim</a>"""
+            : "";
+        var authLinks = loggedIn
+            ? $"""
+               <a href="/profile" style="color:var(--color-primary-action,#004225);font-weight:600;">👤 {System.Net.WebUtility.HtmlEncode(userName)}</a>
+               <a href="/auth/logout">Çıkış</a>
+               """
+            : """
+              <a href="/auth/login">Giriş</a>
+              <a href="/auth/register" style="color:#fff;background:var(--color-primary-action);padding:0.35rem 0.75rem;border-radius:9999px;">Kayıt Ol</a>
+              """;
+
+        return $$"""
         <!DOCTYPE html>
         <html lang="tr">
         <head>
@@ -453,7 +558,7 @@ public static class BasicRoutes
             <title>Hakkında — İstanbul Üniversitesi Mezun Takip Sistemi</title>
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
             <style>
                 :root {
                     --color-canvas: #FAF9F6;
@@ -475,7 +580,7 @@ public static class BasicRoutes
                 }
                 * { box-sizing: border-box; margin: 0; padding: 0; }
                 body {
-                    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
                     background-color: var(--color-canvas);
                     background-image: url('/assets/iu-gate-silhouette.svg');
                     background-repeat: no-repeat;
@@ -545,7 +650,7 @@ public static class BasicRoutes
                     margin-bottom: 1rem;
                 }
                 .header-card h1 {
-                    font-family: 'DM Serif Display', Georgia, serif;
+                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
                     font-size: 2.4rem;
                     color: var(--color-text-display);
                     line-height: 1.15;
@@ -564,7 +669,7 @@ public static class BasicRoutes
                     margin-bottom: 1.75rem;
                 }
                 .content-card h2 {
-                    font-family: 'DM Serif Display', Georgia, serif;
+                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
                     font-size: 1.5rem;
                     color: var(--color-text-title);
                     margin-bottom: 1rem;
@@ -585,7 +690,7 @@ public static class BasicRoutes
                 }
                 .content-card li { margin-bottom: 0.5rem; }
                 code {
-                    font-family: 'JetBrains Mono', monospace;
+                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
                     background: var(--color-surface-inset);
                     color: var(--color-primary-action);
                     padding: 0.2rem 0.45rem;
@@ -619,7 +724,10 @@ public static class BasicRoutes
                         <a href="/jobs">İş İlanları</a>
                         <a href="/announcements">Duyurular</a>
                         <a href="/about" class="active">Hakkında</a>
+                        {{profileLink}}
+                        {{adminLink}}
                         <a href="/swagger">Swagger</a>
+                        {{authLinks}}
                     </div>
                 </nav>
 

@@ -45,6 +45,26 @@ public class AnnouncementController : Controller
 
     private string RenderAnnouncementListView(IEnumerable<Announcement> announcements)
     {
+        var userName = HttpContext?.Session?.GetString("UserName");
+        var userRole = HttpContext?.Session?.GetString("UserRole") ?? "";
+        bool loggedIn = !string.IsNullOrEmpty(userName);
+
+        var adminLink = userRole == "admin"
+            ? """<a href="/admin" style="color:var(--primary);font-weight:700;">🛡️ Admin</a>"""
+            : "";
+        var profileLink = loggedIn
+            ? """<a href="/profile">Profilim</a>"""
+            : "";
+        var authActions = loggedIn
+            ? $"""
+               <a href="/profile" style="color:var(--primary);font-weight:600;">👤 {System.Net.WebUtility.HtmlEncode(userName)}</a>
+               <a href="/auth/logout" class="btn btn-secondary" style="padding:0.25rem 0.65rem;font-size:0.75rem;border:1px solid var(--border);border-radius:9999px;background:#fff;color:var(--text);text-decoration:none;">Çıkış</a>
+               """
+            : """
+              <a href="/auth/login">Giriş</a>
+              <a href="/auth/register" class="btn btn-primary" style="padding:0.25rem 0.65rem;font-size:0.75rem;border-radius:9999px;text-decoration:none;">Kayıt Ol</a>
+              """;
+
         var cards = string.Join("\n", announcements.Select(a => $"""
             <div class="announcement-item">
                 <div class="announcement-header">
@@ -73,7 +93,7 @@ public class AnnouncementController : Controller
             <title>Duyurular — İstanbul Üniversitesi Mezun Takip</title>
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
             <style>
                 :root {
                     --bg: #FAF9F6;
@@ -89,7 +109,7 @@ public class AnnouncementController : Controller
                 }
                 * { box-sizing: border-box; margin: 0; padding: 0; }
                 body {
-                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    font-family: 'Inter', sans-serif;
                     background-color: var(--bg);
                     background-image: url('/assets/iu-gate-silhouette.svg');
                     background-repeat: no-repeat;
@@ -114,7 +134,7 @@ public class AnnouncementController : Controller
                 }
                 .header-brand { display: flex; align-items: center; gap: 0.85rem; }
                 .header-brand img { width: 44px; height: 44px; object-fit: contain; }
-                h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.9rem; font-weight: 400; color: var(--primary); letter-spacing: -0.02em; }
+                h1 { font-family: 'Inter', sans-serif; font-size: 1.9rem; font-weight: 400; color: var(--primary); letter-spacing: -0.02em; }
                 nav { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
                 nav a {
                     color: var(--text-muted);
@@ -202,7 +222,10 @@ public class AnnouncementController : Controller
                         <a href="/users">Mezunlar</a>
                         <a href="/jobs">İş İlanları</a>
                         <a href="/announcements" class="active">Duyurular</a>
+                        {profileLink}
+                        {adminLink}
                         <a href="/swagger" style="color: var(--primary); font-weight: 700;">Swagger API</a>
+                        {authActions}
                     </nav>
                 </header>
 
@@ -235,13 +258,12 @@ public class AnnouncementController : Controller
                 </div>
 
                 <div>
-                    <h2 style="font-size: 1.3rem; margin-bottom: 1rem; color: var(--primary); font-family: 'DM Serif Display', Georgia, serif;">Güncel Mezun Duyuruları</h2>
+                    <h2 style="font-size: 1.3rem; margin-bottom: 1rem; color: var(--primary); font-family: 'Inter', sans-serif;">Güncel Mezun Duyuruları</h2>
                     {{cards}}
                 </div>
             </div>
         </body>
         </html>
         """;
-    }
     }
 }

@@ -10,6 +10,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddControllersWithViews();
 
+// 🔐 Session support for auth
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(8);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.Name = ".alumni.session";
+});
+builder.Services.AddHttpContextAccessor();
+
 // 🗄️ Week 05: PostgreSQL Database & Entity Framework Core ORM
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? "Host=db;Port=5432;Database=alumni_db;Username=alumni_user;Password=alumni_password";
@@ -86,6 +97,10 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();
 }
+
+// 🔐 Session & Auth Session Middleware
+app.UseSession();
+app.UseAuthSession();
 
 // 📖 Expose Swagger at both /api/swagger and /swagger
 app.UseSwagger();

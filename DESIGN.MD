@@ -197,15 +197,15 @@ To eliminate arbitrary, chaotic visual decisions across screens, every single UI
 ## 5. Typography Hierarchy & Font Stacks
 
 ```css
---font-display: 'DM Serif Display', Georgia, serif;
---font-sans:    'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
---font-mono:    'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+--font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+--font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+--font-mono:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 ```
 
 ```text
-DM Serif Display      ──► Monumental Headlines & Historical Numbers (1453, 50K+)
-Plus Jakarta Sans     ──► High-Legibility Interface Copy, Forms & Buttons
-JetBrains Mono        ──► REST Endpoints, Status Codes, Telemetry & JSON
+Inter (700/800) ──► Monumental Headlines & Historical Numbers (1453, 50K+)
+Inter (400/600) ──► High-Legibility Interface Copy, Forms & Buttons
+Inter (500)     ──► REST Endpoints, Status Codes, Telemetry & JSON
 ```
 
 *Note: All numeric interface elements enable OpenType proportional and tabular figures via `font-feature-settings: 'lnum', 'tnum';`.*

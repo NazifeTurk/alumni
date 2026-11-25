@@ -8,7 +8,9 @@ public class User
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public int GraduationYear { get; set; }
-    public string Role { get; set; } = "alumni";
+    public string Role { get; set; } = "alumni"; // "alumni" | "admin" | "student" | "faculty"
+    public string PasswordHash { get; set; } = string.Empty;
+    public string Department { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
 

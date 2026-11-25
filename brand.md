@@ -193,24 +193,24 @@ Sade ve modern tasarım disiplini, keyfi yuvarlatmaların ve sahte derinlik yara
 
 ## 🔤 5. Tipografi Sistemi & Hiyerarşi
 
-Tasarım, klasik kurumsal vakar ile modern dijital okunabilirliği dengeler:
+Tasarım, baştan sona tek tip, yüksek okunabilirlikli ve modern **`Inter`** yazı tipi ailesini kullanır:
 
 ```text
-DM Serif Display      ──► Anıtsal Başlıklar & Tarihi Sayılar (1453, 50.000+)
-Plus Jakarta Sans     ──► Modern ve Net Arayüz Metinleri, Formlar, Butonlar
-JetBrains Mono        ──► Rotalar, Durum Kodları, API Uçları, cURL Komutları
+Inter (700/800) ──► Anıtsal Başlıklar & Tarihi Sayılar (1453, 50.000+)
+Inter (400/600) ──► Modern ve Net Arayüz Metinleri, Formlar, Butonlar
+Inter (500)     ──► Rotalar, Durum Kodları, API Uçları, cURL Komutları
 ```
 
 ### Tipografi Hiyerarşi Tablosu
 | Rol | Yazı Tipi | Kalınlık | Boyut / Satır | Harf Aralığı | Kullanım Yeri |
 | :--- | :--- | :---: | :--- | :---: | :--- |
-| **Hero Başlık** | `DM Serif Display` | 400 | `3.25rem` / `1.1` | `-0.03em` | Sayfa ana karşılama manşeti |
-| **Bölüm Başlığı** | `DM Serif Display` | 400 | `2.00rem` / `1.2` | `-0.02em` | Modül ve blok başlıkları |
-| **Kart Başlığı** | `DM Serif Display` | 400 | `1.30rem` / `1.3` | `-0.01em` | Bento kart başlıkları |
-| **Arayüz / Form**| `Plus Jakarta Sans` | 600 | `0.92rem` / `1.5` | `0.00em` | Butonlar, menüler, etiketler |
-| **Gövde Metni** | `Plus Jakarta Sans` | 400/500 | `0.95rem` / `1.6` | `0.00em` | Açıklama paragrafları |
-| **Mikro Etiket** | `Plus Jakarta Sans` | 700 | `0.75rem` / `1.2` | `+0.05em` | Büyük harf durum rozetleri |
-| **Teknik Kod** | `JetBrains Mono` | 500 | `0.85rem` / `1.5` | `0.00em` | Rota adresleri, cURL, JSON |
+| **Hero Başlık** | `Inter` | 700 | `3.25rem` / `1.1` | `-0.03em` | Sayfa ana karşılama manşeti |
+| **Bölüm Başlığı** | `Inter` | 700 | `2.00rem` / `1.2` | `-0.02em` | Modül ve blok başlıkları |
+| **Kart Başlığı** | `Inter` | 600 | `1.30rem` / `1.3` | `-0.01em` | Bento kart başlıkları |
+| **Arayüz / Form**| `Inter` | 600 | `0.92rem` / `1.5` | `0.00em` | Butonlar, menüler, etiketler |
+| **Gövde Metni** | `Inter` | 400/500 | `0.95rem` / `1.6` | `0.00em` | Açıklama paragrafları |
+| **Mikro Etiket** | `Inter` | 700 | `0.75rem` / `1.2` | `+0.05em` | Büyük harf durum rozetleri |
+| **Teknik Kod** | `Inter` | 500 | `0.85rem` / `1.5` | `0.00em` | Rota adresleri, cURL, JSON |
 
 ---
 

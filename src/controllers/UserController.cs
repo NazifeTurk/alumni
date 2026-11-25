@@ -67,6 +67,26 @@ public class UserController : Controller
     // --- HTML View Renderers (Presentation Layer for UserController) ---
     private string RenderUserListView(IEnumerable<UserModel> users)
     {
+        var userName = HttpContext?.Session?.GetString("UserName");
+        var userRole = HttpContext?.Session?.GetString("UserRole") ?? "";
+        bool loggedIn = !string.IsNullOrEmpty(userName);
+
+        var adminLink = userRole == "admin"
+            ? """<a href="/admin" style="color:var(--primary);font-weight:700;">🛡️ Admin</a>"""
+            : "";
+        var profileLink = loggedIn
+            ? """<a href="/profile">Profilim</a>"""
+            : "";
+        var authActions = loggedIn
+            ? $"""
+               <a href="/profile" style="color:var(--primary);font-weight:600;">👤 {System.Net.WebUtility.HtmlEncode(userName)}</a>
+               <a href="/auth/logout" class="btn btn-secondary" style="padding:0.25rem 0.65rem;font-size:0.75rem;">Çıkış</a>
+               """
+            : """
+              <a href="/auth/login">Giriş</a>
+              <a href="/auth/register" class="btn btn-primary" style="padding:0.25rem 0.65rem;font-size:0.75rem;">Kayıt Ol</a>
+              """;
+
         var rows = string.Join("\n", users.Select(u => $"""
             <tr>
                 <td><strong>#{u.Id}</strong></td>
@@ -94,7 +114,7 @@ public class UserController : Controller
             <title>Mezun Rehberi (Users) — İstanbul Üniversitesi</title>
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
             <style>
                 :root {
                     --bg: #FAF9F6;
@@ -111,7 +131,7 @@ public class UserController : Controller
                 }
                 * { box-sizing: border-box; margin: 0; padding: 0; }
                 body {
-                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    font-family: 'Inter', sans-serif;
                     background-color: var(--bg);
                     background-image: url('/assets/iu-gate-silhouette.svg');
                     background-repeat: no-repeat;
@@ -136,7 +156,7 @@ public class UserController : Controller
                 }
                 .header-brand { display: flex; align-items: center; gap: 0.85rem; }
                 .header-brand img { width: 44px; height: 44px; object-fit: contain; }
-                h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: 2rem; font-weight: 400; color: var(--primary); letter-spacing: -0.02em; }
+                h1 { font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 400; color: var(--primary); letter-spacing: -0.02em; }
                 nav { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
                 nav a {
                     color: var(--text-muted);
@@ -246,7 +266,10 @@ public class UserController : Controller
                         <a href="/users" class="active">Mezunlar</a>
                         <a href="/jobs">İş İlanları</a>
                         <a href="/announcements">Duyurular</a>
+                        {profileLink}
+                        {adminLink}
                         <a href="/swagger" style="color: var(--primary); font-weight: 700;">Swagger API</a>
+                        {authActions}
                     </nav>
                 </header>
 
