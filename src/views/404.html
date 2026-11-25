@@ -9,24 +9,28 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* ─── Light Blue Intensive Refero Design Tokens ─── */
-            --color-canvas: #eaf4fb;
-            --color-surface-card: #ffffff;
-            --color-surface-inset: #f0f7fe;
-            --color-hairline: #bae6fd;
-            --color-hairline-subtle: #e0f2fe;
+            /* ─── Warm Alabaster (#FAF9F6) & Deep Imperial Green (#004225) Tokens ─── */
+            --color-canvas: #FAF9F6;
+            --color-surface-card: #FFFFFF;
+            --color-surface-inset: #F5F4EE;
+            --color-hairline: #E2DFD6;
+            --color-hairline-subtle: #EBE8E0;
 
             /* Typography */
-            --color-text-display: #04263e;
-            --color-text-body: #1e3a52;
-            --color-text-muted: #486f8a;
-            --color-text-light: #6a92ad;
+            --color-text-display: #004225;
+            --color-text-navy: #0F2A1D;
+            --color-text-body: #1C2920;
+            --color-text-muted: #55685C;
+            --color-text-light: #7E9084;
 
             /* Actions & Accents */
-            --color-primary-action: #0284c7;
-            --color-primary-hover: #0369a1;
-            --color-rose-rejection: #e11d48;
-            --color-rose-tint: #ffe4e6;
+            --color-primary-action: #004225;
+            --color-primary-hover: #065A35;
+            --color-primary-tint: #E8F0EB;
+            --color-primary-border: #C8DBCF;
+
+            --color-rose-rejection: #BE123C;
+            --color-rose-tint: #FFE4E6;
 
             /* Binary Radius System (Refero Standard) */
             --radius-cards: 4px;
@@ -45,6 +49,10 @@
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--color-canvas);
+            background-image: url('/assets/iu-gate-silhouette.svg');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: 1100px auto;
             color: var(--color-text-body);
             min-height: 100vh;
             display: flex;
@@ -67,20 +75,34 @@
             box-shadow: var(--elevation-none);
         }
 
+        .logo-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-header img {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+        }
+
         .badge-guardian {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             background: var(--color-rose-tint);
             color: var(--color-rose-rejection);
-            border: 1px solid #fecdd3;
+            border: 1px solid #FECDD3;
             font-size: 0.78rem;
             font-weight: 700;
             letter-spacing: 0.04em;
             text-transform: uppercase;
             padding: 0.35rem 1rem;
             border-radius: var(--radius-pills);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
 
         .code-404 {
@@ -97,7 +119,7 @@
             font-family: 'DM Serif Display', Georgia, serif;
             font-size: 2rem;
             font-weight: 400;
-            color: var(--color-text-display);
+            color: var(--color-text-navy);
             margin-bottom: 0.85rem;
             letter-spacing: -0.02em;
         }
@@ -163,7 +185,7 @@
 
         .btn-primary {
             background: var(--color-primary-action);
-            color: #ffffff;
+            color: #FFFFFF;
             border-color: var(--color-primary-action);
         }
 
@@ -173,14 +195,14 @@
         }
 
         .btn-secondary {
-            background: var(--color-surface-inset);
-            color: var(--color-text-display);
+            background: var(--color-surface-card);
+            color: var(--color-primary-action);
             border-color: var(--color-hairline);
         }
 
         .btn-secondary:hover {
-            background: #e2f0fc;
-            border-color: #93c5fd;
+            background: var(--color-primary-tint);
+            border-color: var(--color-primary-border);
         }
 
         .quick-links {
@@ -215,6 +237,9 @@
 </head>
 <body>
     <div class="card-404">
+        <div class="logo-header">
+            <img src="/assets/iu-logo.svg" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg';" alt="İstanbul Üniversitesi Logo">
+        </div>
         <div class="badge-guardian">🛡️ 404 Guardian Error Shield</div>
         <div class="code-404">404</div>
         <h1>Aradığınız Sayfa Bulunamadı</h1>
@@ -229,13 +254,13 @@
 
         <div class="actions">
             <a href="/" class="btn btn-primary">
-                Ana Sayfaya Dön
+                🏠 Ana Sayfaya Dön
             </a>
             <a href="/jobs" class="btn btn-secondary">
-                İş İlanları
+                💼 İş İlanları
             </a>
             <button onclick="window.history.back()" class="btn btn-secondary">
-                Geri Dön
+                ↩️ Geri Dön
             </button>
         </div>
 
@@ -248,7 +273,7 @@
     </div>
 
     <footer>
-        İstanbul Üniversitesi &bull; Mezun Takip Sistemi &bull; Doç. Dr. Emre Akadal
+        İstanbul Üniversitesi &bull; Mezun Takip Sistemi &bull; Nazife Türk
     </footer>
 </body>
 </html>

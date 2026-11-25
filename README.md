@@ -203,7 +203,7 @@ The application implements full RESTful resource semantics, parameterized path e
 | :---: | :--- | :--- | :---: | :--- |
 | `GET` | `/` or `/ok` | System health confirmation ("ok") or interactive web dashboard | `200 OK` | `curl -s http://localhost:8000/ok` |
 | `GET` | `/hello` | Static greeting response | `200 OK` | `curl -s http://localhost:8000/hello` |
-| `GET` | `/hello/{name}` | Dynamic path extraction (e.g. `/hello/emre`) | `200 OK` | `curl -s http://localhost:8000/hello/emre` |
+| `GET` | `/hello/{name}` | Dynamic path extraction (e.g. `/hello/nazife`) | `200 OK` | `curl -s http://localhost:8000/hello/nazife` |
 | `GET` | `/sum/{n1}/{n2}` | Mathematical summation with numerical validation | `200 OK` / `400 Bad Request` | `curl -s http://localhost:8000/sum/15/27` |
 | `GET` | `/home` | Temporary semantic HTML main landing page | `200 OK` | (Open in browser: `http://localhost:8000/home`) |
 | `GET` | `/about` | Temporary semantic HTML about page | `200 OK` | (Open in browser: `http://localhost:8000/about`) |
@@ -448,11 +448,11 @@ The repository includes **`postman_alumni_invalid_requests.json`**, an automated
 <a id="brand-guidelines"></a>
 ## 🎨 Brand Guidelines & Visual Identity ([brand.md](brand.md))
 
-The project's visual identity, 1453 historical heritage, crest anatomy, color tokens, and institutional typography guidelines are fully documented in [**`brand.md`**](brand.md):
+The project's visual identity, 1453 historical heritage, official Istanbul University logo, color tokens, and institutional typography guidelines are fully documented in [**`brand.md`**](brand.md):
 
-* **Institutional Light Blue Palette**: Sea-Fog Canvas (`#eaf4fb`), Abyssal Trust Navy (`#04263e`), Midnight Harbor (`#0b3658`), Signal Blue CTA (`#0284c7`), and Bio Mint (`#059669`).
-* **Crest & Emblem**: 🎓 Mortarboard symbol with dual-ring hairline border (`1px solid #bae6fd`) and 40px capsule housing.
-* **Component Standards**: Floating centered nav pill (`9999px` capsule, `backdrop-filter: blur(20px)`), bento cards (`4px` radius), and zero drop shadows (`box-shadow: none`).
+* **Institutional Palette**: Warm Alabaster Canvas (`#FAF9F6`), Deep Imperial Forest Green (`#004225`), Abyssal Ink (`#0F2A1D`), Stone Hairlines (`#E2DFD6`), and Soft Forest Tint (`#E8F0EB`).
+* **Official Istanbul University Logo**: Vector SVG served at `GET /assets/iu-logo.svg` with Wikimedia Commons resilience fallback, displayed across navigation, badges, and footers.
+* **Component Standards**: Floating centered nav pill (`9999px` capsule, `backdrop-filter: blur(20px)`), bento cards (`4px` radius), and zero drop shadows (`box-shadow: none !important;`).
 * 🔗 **Read Full Brand Guide**: [**Brand Identity Documentation (`brand.md`)**](brand.md) &bull; ⬅️ [Return to Table of Contents](#-table-of-contents)
 
 ---
@@ -465,7 +465,7 @@ The project's visual identity, 1453 historical heritage, crest anatomy, color to
 The machine-readable, agent-executable plain-text design system conforming to **VoltAgent `awesome-design-md`** (reverse-engineered from [Refero AngelList](https://styles.refero.design/style/c75603c7-492d-4c26-9744-9acc22fe6225), [Refero Cord.com](https://styles.refero.design/style/485ae5fb-8f25-4aa3-a4e4-1deb1590d7d6), and [Refero Resume.io](https://styles.refero.design/style/41e65213-1c4a-41c4-b715-50427fa8926e)) is codified in [**`DESIGN.MD`**](DESIGN.MD) (also accessible as `design.md`):
 
 * **Binary Radius System**: Strict architectural standard: **`9999px`** (full capsule pill) for buttons, chips, badges, and the floating navigation header; **`4px`** (subtle minimal radius) for bento cards, data tables, and error boxes. Strictly zero intermediate radii.
-* **Strict Zero Drop Shadows**: `box-shadow: none !important;`. Depth is engineered exclusively through tonal stepping (`#eaf4fb` → `#ffffff` → `#f0f7fe`) and crisp 1px borders, eliminating visual blur and false skeuomorphism.
+* **Strict Zero Drop Shadows**: `box-shadow: none !important;`. Depth is engineered exclusively through tonal stepping (`#FAF9F6` → `#FFFFFF` → `#F5F4EE`) and crisp 1px borders, eliminating visual blur and false skeuomorphism.
 * **Typography Stack**: `DM Serif Display` for monumental headlines and statement metrics with negative tracking (`-0.04em`), paired with `Plus Jakarta Sans` for interface copy with tabular figures (`tnum`), and `JetBrains Mono` for telemetry and endpoints.
 * **Tailwind CSS v4 & AI Guardrails**: Standardized tokens ready for AI coding agents generating frontend views.
 * 🔗 **Read Full AI Specification**: [**AI Design Specification (`DESIGN.MD`)**](DESIGN.MD) &bull; ⬅️ [Return to Table of Contents](#-table-of-contents)

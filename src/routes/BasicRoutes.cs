@@ -30,7 +30,7 @@ public static class BasicRoutes
         // 2. GET /hello -> "Hello, World!"
         app.MapGet("/hello", () => Results.Text("Hello, World!", "text/plain"));
 
-        // 3. GET /hello/{name} -> "Hello, {name}!" (e.g., /hello/emre -> "Hello, Emre!")
+        // 3. GET /hello/{name} -> "Hello, {name}!" (e.g., /hello/nazife -> "Hello, Nazife!")
         app.MapGet("/hello/{name}", (string name) =>
         {
             // Capitalize first letter for clean formatting if desired, while preserving exact name
@@ -93,6 +93,50 @@ public static class BasicRoutes
             var html = GetGeneric404HtmlPage(requestedPath);
             return Results.Content(html, "text/html; charset=utf-8", statusCode: StatusCodes.Status404NotFound);
         });
+
+        // 8. GET /assets/iu-logo.svg -> Serves official Istanbul University logo
+        app.MapGet("/assets/iu-logo.svg", () =>
+        {
+            var possiblePaths = new[]
+            {
+                Path.Combine(Directory.GetCurrentDirectory(), "views", "assets", "iu-logo.svg"),
+                Path.Combine(Directory.GetCurrentDirectory(), "src", "views", "assets", "iu-logo.svg"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "views", "assets", "iu-logo.svg"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "src", "views", "assets", "iu-logo.svg")
+            };
+
+            foreach (var path in possiblePaths)
+            {
+                if (File.Exists(path))
+                {
+                    return Results.File(path, "image/svg+xml");
+                }
+            }
+
+            return Results.Redirect("https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg");
+        });
+
+        // 9. GET /assets/iu-gate-silhouette.svg -> Serves Istanbul University gate silhouette
+        app.MapGet("/assets/iu-gate-silhouette.svg", () =>
+        {
+            var possiblePaths = new[]
+            {
+                Path.Combine(Directory.GetCurrentDirectory(), "views", "assets", "iu-gate-silhouette.svg"),
+                Path.Combine(Directory.GetCurrentDirectory(), "src", "views", "assets", "iu-gate-silhouette.svg"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "views", "assets", "iu-gate-silhouette.svg"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "src", "views", "assets", "iu-gate-silhouette.svg")
+            };
+
+            foreach (var path in possiblePaths)
+            {
+                if (File.Exists(path))
+                {
+                    return Results.File(path, "image/svg+xml");
+                }
+            }
+
+            return Results.NotFound();
+        });
     }
 
     private static string GetGeneric404HtmlPage(string requestedPath)
@@ -130,21 +174,24 @@ public static class BasicRoutes
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>404 — Sayfa Bulunamadı</title>
             <style>
-                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #eaf4fb; color: #1e3a52; text-align: center; padding: 4rem 1rem; }
-                .box { max-width: 500px; margin: 0 auto; background: #ffffff; padding: 2.5rem; border-radius: 4px; border: 1px solid #bae6fd; }
-                h1 { font-size: 3.5rem; color: #04263e; margin-bottom: 0.5rem; }
-                code { background: #f0f7fe; color: #0284c7; padding: 0.4rem 0.8rem; border-radius: 4px; border: 1px solid #bae6fd; font-family: monospace; }
-                a { display: inline-block; margin-top: 1.5rem; color: #fff; background: #0284c7; padding: 0.65rem 1.4rem; border-radius: 9999px; text-decoration: none; font-weight: 600; }
-                a:hover { background: #0369a1; }
+                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #FAF9F6; color: #1C2920; text-align: center; padding: 4rem 1rem; }
+                .box { max-width: 500px; margin: 0 auto; background: #FFFFFF; padding: 2.5rem; border-radius: 4px; border: 1px solid #E2DFD6; }
+                .logo { width: 44px; height: 44px; margin-bottom: 1rem; }
+                h1 { font-size: 3.5rem; color: #004225; margin-bottom: 0.5rem; font-family: Georgia, serif; }
+                code { background: #F5F4EE; color: #004225; padding: 0.4rem 0.8rem; border-radius: 4px; border: 1px solid #E2DFD6; font-family: monospace; }
+                a { display: inline-block; margin-top: 1.5rem; color: #fff; background: #004225; padding: 0.65rem 1.4rem; border-radius: 9999px; text-decoration: none; font-weight: 600; }
+                a:hover { background: #065A35; }
             </style>
         </head>
         <body>
             <div class="box">
+                <img src="/assets/iu-logo.svg" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg';" class="logo" alt="IU">
                 <h1>404</h1>
-                <h2 style="color:#04263e;margin-bottom:0.75rem;">Sayfa Bulunamadı</h2>
-                <p style="margin: 1rem 0; color: #486f8a;">Ulaşmaya çalıştığınız adres bulunamadı:</p>
+                <h2 style="color:#0F2A1D;margin-bottom:0.75rem;">Sayfa Bulunamadı</h2>
+                <p style="margin: 1rem 0; color: #55685C;">Ulaşmaya çalıştığınız adres bulunamadı:</p>
                 <code>{{REQUESTED_PATH}}</code>
                 <div><a href="/">Ana Sayfaya Dön</a></div>
+                <p style="margin-top: 1.5rem; font-size: 0.8rem; color: #7E9084;">İstanbul Üniversitesi &bull; Nazife Türk</p>
             </div>
         </body>
         </html>
@@ -182,404 +229,212 @@ public static class BasicRoutes
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>İstanbul Üniversitesi Mezun Takip Sistemi</title>
+            <title>İstanbul Üniversitesi — Mezun Takip Sistemi</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
             <style>
                 :root {
-                    --bg: #0f172a;
-                    --card-bg: #1e293b;
-                    --border: #334155;
-                    --text: #f8fafc;
-                    --text-muted: #94a3b8;
-                    --primary: #4f46e5;
-                    --primary-hover: #4338ca;
-                    --accent: #10b981;
-                    --accent-blue: #38bdf8;
+                    --color-canvas: #FAF9F6;
+                    --color-surface-card: #FFFFFF;
+                    --color-surface-inset: #F5F4EE;
+                    --color-hairline: #E2DFD6;
+                    --color-primary-action: #004225;
+                    --color-primary-hover: #065A35;
+                    --color-pill-tint: #E8F0EB;
+                    --color-pill-border: #C8DBCF;
+                    --color-text-display: #004225;
+                    --color-text-title: #0F2A1D;
+                    --color-text-body: #1C2920;
+                    --color-text-muted: #55685C;
+                    --color-text-light: #7E9084;
+                    --radius-pills: 9999px;
+                    --radius-cards: 4px;
                 }
                 * { box-sizing: border-box; margin: 0; padding: 0; }
                 body {
-                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-                    background-color: var(--bg);
-                    color: var(--text);
+                    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                    background-color: var(--color-canvas);
+                    background-image: url('/assets/iu-gate-silhouette.svg');
+                    background-repeat: no-repeat;
+                    background-position: center 30px;
+                    background-size: 1100px auto;
+                    background-attachment: fixed;
+                    color: var(--color-text-body);
                     line-height: 1.6;
-                    padding: 2rem 1rem;
+                    padding: 2.5rem 1.5rem;
                 }
                 .container { max-width: 1040px; margin: 0 auto; }
-                header {
-                    border-bottom: 1px solid var(--border);
-                    padding-bottom: 1.5rem;
-                    margin-bottom: 2.5rem;
+                .nav-pill {
                     display: flex;
-                    justify-content: space-between;
                     align-items: center;
-                    flex-wrap: wrap;
-                    gap: 1rem;
-                }
-                .logo-area { display: flex; align-items: center; gap: 0.75rem; }
-                .logo-icon { font-size: 2rem; }
-                h1 { font-size: 1.5rem; font-weight: 700; color: #fff; line-height: 1.2; }
-                .logo-sub { color: var(--text-muted); font-size: 0.85rem; }
-                nav { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
-                nav a {
-                    color: var(--text-muted);
-                    text-decoration: none;
-                    font-weight: 500;
-                    font-size: 0.95rem;
-                    transition: color 0.2s;
-                }
-                nav a:hover, nav a.active { color: #fff; }
-                nav a.btn-nav {
-                    background: rgba(16, 185, 129, 0.15);
-                    color: #34d399;
-                    border: 1px solid rgba(16, 185, 129, 0.3);
-                    padding: 0.4rem 0.9rem;
-                    border-radius: 6px;
-                    font-weight: 600;
-                }
-                nav a.btn-nav:hover { background: rgba(16, 185, 129, 0.25); color: #fff; }
-
-                /* Hero Section */
-                .hero {
-                    background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(16, 185, 129, 0.15));
-                    border: 1px solid var(--border);
-                    border-radius: 16px;
-                    padding: 3rem 2.5rem;
+                    justify-content: space-between;
+                    background: rgba(255, 255, 255, 0.94);
+                    backdrop-filter: blur(20px);
+                    border: 1px solid var(--color-hairline);
+                    border-radius: var(--radius-pills);
+                    padding: 0.6rem 1.4rem;
                     margin-bottom: 2.5rem;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
                 }
-                .badge-live {
+                .nav-brand {
                     display: inline-flex;
                     align-items: center;
-                    gap: 0.5rem;
-                    background-color: rgba(16, 185, 129, 0.15);
-                    color: var(--accent);
-                    padding: 0.35rem 0.9rem;
-                    border-radius: 9999px;
-                    font-size: 0.85rem;
+                    gap: 0.75rem;
+                    text-decoration: none;
+                    color: var(--color-text-title);
+                    font-weight: 700;
+                }
+                .nav-logo { width: 32px; height: 32px; }
+                .nav-logo img { width: 100%; height: 100%; object-fit: contain; }
+                .nav-links { display: flex; align-items: center; gap: 0.5rem; }
+                .nav-links a {
+                    color: var(--color-text-muted);
+                    text-decoration: none;
+                    font-size: 0.88rem;
+                    font-weight: 500;
+                    padding: 0.4rem 0.9rem;
+                    border-radius: var(--radius-pills);
+                }
+                .nav-links a:hover { color: var(--color-primary-action); background: var(--color-pill-tint); }
+                .nav-links a.active { color: #fff; background: var(--color-primary-action); font-weight: 600; }
+                .hero-card {
+                    background: var(--color-surface-card);
+                    border: 1px solid var(--color-hairline);
+                    border-radius: var(--radius-cards);
+                    padding: 3rem 2.5rem;
+                    margin-bottom: 2rem;
+                }
+                .badge-pill {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.45rem;
+                    background: var(--color-pill-tint);
+                    color: var(--color-primary-action);
+                    border: 1px solid var(--color-pill-border);
+                    padding: 0.35rem 0.85rem;
+                    border-radius: var(--radius-pills);
+                    font-size: 0.75rem;
                     font-weight: 600;
-                    border: 1px solid rgba(16, 185, 129, 0.3);
+                    text-transform: uppercase;
                     margin-bottom: 1.25rem;
                 }
-                .pulse-dot {
-                    width: 8px;
-                    height: 8px;
-                    background-color: #10b981;
-                    border-radius: 50%;
-                    box-shadow: 0 0 8px #10b981;
+                .hero-card h1 {
+                    font-family: 'DM Serif Display', Georgia, serif;
+                    font-size: 3rem;
+                    color: var(--color-text-display);
+                    line-height: 1.1;
+                    margin-bottom: 1rem;
+                    letter-spacing: -0.03em;
                 }
-                .hero h2 { font-size: 2.1rem; font-weight: 800; line-height: 1.25; margin-bottom: 1rem; color: #fff; }
-                .hero p { color: #cbd5e1; font-size: 1.15rem; max-width: 800px; margin-bottom: 1.75rem; }
-                .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+                .hero-card p {
+                    color: var(--color-text-muted);
+                    font-size: 1.15rem;
+                    max-width: 780px;
+                    margin-bottom: 1.75rem;
+                }
                 .btn {
                     display: inline-flex;
                     align-items: center;
                     gap: 0.5rem;
-                    padding: 0.75rem 1.4rem;
-                    border-radius: 8px;
+                    padding: 0.7rem 1.4rem;
+                    border-radius: var(--radius-pills);
                     font-weight: 600;
+                    font-size: 0.92rem;
                     text-decoration: none;
-                    transition: transform 0.15s, background 0.2s;
                 }
-                .btn-primary { background: var(--primary); color: #fff; }
-                .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
-                .btn-secondary { background: var(--card-bg); color: var(--text); border: 1px solid var(--border); }
-                .btn-secondary:hover { background: #334155; transform: translateY(-1px); }
-
-                /* Stats Bar */
-                .stats-grid {
+                .btn-primary { background: var(--color-primary-action); color: #fff; }
+                .btn-secondary { background: var(--color-surface-card); color: var(--color-text-title); border: 1px solid var(--color-hairline); }
+                .grid {
                     display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                    gap: 1rem;
-                    margin-bottom: 2.5rem;
-                }
-                .stat-box {
-                    background: var(--card-bg);
-                    border: 1px solid var(--border);
-                    border-radius: 12px;
-                    padding: 1.25rem;
-                    text-align: center;
-                }
-                .stat-value { font-size: 1.8rem; font-weight: 800; color: var(--accent-blue); margin-bottom: 0.25rem; }
-                .stat-label { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
-
-                /* Pillars (3 Cards) */
-                .section-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.25rem; color: #fff; }
-                .pillars-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
                     gap: 1.5rem;
                     margin-bottom: 2.5rem;
                 }
-                .pillar-card {
-                    background: var(--card-bg);
-                    border: 1px solid var(--border);
-                    border-radius: 14px;
+                .card {
+                    background: var(--color-surface-card);
+                    border: 1px solid var(--color-hairline);
+                    border-radius: var(--radius-cards);
                     padding: 1.75rem;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                    transition: transform 0.2s, border-color 0.2s;
                 }
-                .pillar-card:hover { transform: translateY(-3px); border-color: var(--primary); }
-                .pillar-icon { font-size: 2.2rem; margin-bottom: 1rem; }
-                .pillar-card h3 { font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 0.75rem; }
-                .pillar-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.25rem; line-height: 1.5; }
-                .pillar-link { color: var(--accent-blue); font-weight: 600; text-decoration: none; font-size: 0.95rem; }
-                .pillar-link:hover { text-decoration: underline; }
-
-                /* Announcements Showcase */
-                .showcase {
-                    background: var(--card-bg);
-                    border: 1px solid var(--border);
-                    border-radius: 14px;
-                    padding: 1.75rem;
-                    margin-bottom: 2.5rem;
+                .card h3 {
+                    font-family: 'DM Serif Display', Georgia, serif;
+                    font-size: 1.35rem;
+                    color: var(--color-text-title);
+                    margin-bottom: 0.6rem;
                 }
-                .showcase-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
-                .news-item {
-                    border-top: 1px solid var(--border);
-                    padding: 1rem 0;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    gap: 1rem;
+                .card p {
+                    color: var(--color-text-muted);
+                    font-size: 0.92rem;
+                    line-height: 1.6;
+                    margin-bottom: 1rem;
                 }
-                .news-title { font-weight: 600; color: #fff; }
-                .news-meta { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem; }
-                .category-badge {
-                    display: inline-block;
-                    padding: 0.2rem 0.6rem;
-                    border-radius: 9999px;
-                    font-size: 0.75rem;
-                    font-weight: 700;
-                    text-transform: uppercase;
+                .card a {
+                    color: var(--color-primary-action);
+                    text-decoration: none;
+                    font-weight: 600;
+                    font-size: 0.88rem;
                 }
-                .cat-reunion { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
-                .cat-mentorship { background: rgba(16, 185, 129, 0.2); color: #34d399; }
-
-                /* Lab / Grading details panel */
-                details.grading-panel {
-                    background: rgba(15, 23, 42, 0.6);
-                    border: 1px dashed var(--border);
-                    border-radius: 12px;
-                    padding: 1.25rem;
-                    margin-top: 2rem;
-                }
-                details.grading-panel summary {
-                    font-weight: 700;
-                    color: var(--accent-blue);
-                    cursor: pointer;
-                    font-size: 1.05rem;
-                    outline: none;
-                }
-                .grading-content { margin-top: 1.25rem; }
-                table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-                th, td {
-                    text-align: left;
-                    padding: 0.65rem 0.85rem;
-                    border-bottom: 1px solid var(--border);
-                    font-size: 0.9rem;
-                }
-                th { color: var(--text-muted); font-weight: 600; background: rgba(0,0,0,0.2); }
-                .method {
-                    display: inline-block;
-                    padding: 0.2rem 0.5rem;
-                    border-radius: 4px;
-                    font-family: monospace;
-                    font-size: 0.8rem;
-                    font-weight: 700;
-                }
-                .method-get { background: rgba(16, 185, 129, 0.2); color: #34d399; }
-                a.endpoint { color: #818cf8; text-decoration: none; font-family: monospace; }
-                a.endpoint:hover { text-decoration: underline; }
-
                 footer {
-                    margin-top: 3rem;
-                    border-top: 1px solid var(--border);
-                    padding-top: 1.5rem;
                     text-align: center;
-                    color: var(--text-muted);
-                    font-size: 0.9rem;
+                    padding-top: 2rem;
+                    border-top: 1px solid var(--color-hairline);
+                    color: var(--color-text-light);
+                    font-size: 0.85rem;
                 }
+                footer a { color: var(--color-primary-action); text-decoration: none; font-weight: 600; }
             </style>
         </head>
         <body>
             <div class="container">
-                <header>
-                    <div class="logo-area">
-                        <span class="logo-icon">🎓</span>
-                        <div>
-                            <h1>İstanbul Üniversitesi</h1>
-                            <p class="logo-sub">Alumni Tracking &amp; Career Network Portal</p>
+                <nav class="nav-pill">
+                    <a href="/" class="nav-brand">
+                        <div class="nav-logo">
+                            <img src="/assets/iu-logo.svg" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg';" alt="İstanbul Üniversitesi">
                         </div>
-                    </div>
-                    <nav>
+                        <span>İstanbul Üniversitesi</span>
+                    </a>
+                    <div class="nav-links">
                         <a href="/" class="active">Ana Sayfa</a>
                         <a href="/users">Mezunlar</a>
+                        <a href="/jobs">İş İlanları</a>
                         <a href="/announcements">Duyurular</a>
                         <a href="/about">Hakkında</a>
-                        <a href="/api/swagger" class="btn-nav">Swagger API ⚡</a>
-                    </nav>
-                </header>
-
-                <div class="hero">
-                    <div class="badge-live">
-                        <span class="pulse-dot"></span>
-                        PostgreSQL 16 Engine • Entity Framework Core • Docker Stack Live
+                        <a href="/swagger">Swagger</a>
                     </div>
-                    <h2>Mezunlarımızla Bağlantıda Kalın, Geleceği Birlikte Şekillendirin</h2>
+                </nav>
+
+                <div class="hero-card">
+                    <span class="badge-pill">Kurumsal Mezun ve Kariyer Ağı &bull; 1453</span>
+                    <h1>Gelenekten Geleceğe Güçlü Köprü</h1>
                     <p>
-                        İstanbul Üniversitesi mezunları ve öğrencileri arasında güçlü bir köprü: 
-                        Profesyonel ağınızı genişletin, sektörde tecrübeli mezunlardan mentorluk alın ve kariyer fırsatlarını yakalayın.
+                        İstanbul Üniversitesi mezunlarını, akademisyenlerini ve öğrencilerini bir araya getiren kurumsal kariyer ve mentörlük platformu.
                     </p>
-                    <div class="hero-actions">
-                        <a href="/users" class="btn btn-primary">👥 Mezunlar Ağını Keşfet</a>
-                        <a href="/announcements" class="btn btn-secondary">📢 Duyurular ve Etkinlikler</a>
-                        <a href="/api/swagger" class="btn btn-secondary">⚡ API Test Paneli</a>
+                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                        <a href="/users" class="btn btn-primary">Mezun Rehberini Keşfet</a>
+                        <a href="/jobs" class="btn btn-secondary">Kariyer Fırsatları</a>
                     </div>
                 </div>
 
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <div class="stat-value">IU</div>
-                        <div class="stat-label">Köklü Üniversite Mirası</div>
+                <div class="grid">
+                    <div class="card">
+                        <h3>🎓 Mezun Rehberi</h3>
+                        <p>Kayıtlı mezunlarımızın profillerini inceleyin, fakülte ve bölüm bazlı arama yapın, iletişim kurun.</p>
+                        <a href="/users">Rehbere Git &rarr;</a>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-value">PostgreSQL 16</div>
-                        <div class="stat-label">Kalıcı Veritabanı</div>
+                    <div class="card">
+                        <h3>💼 Kariyer Panosu</h3>
+                        <p>Mezunlarımızın çalıştığı öncü kurumlardan iş ve staj ilanlarını takip edin, doğrudan başvurun.</p>
+                        <a href="/jobs">İlanları Görüntüle &rarr;</a>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-value">MVC + API</div>
-                        <div class="stat-label">Çift Katmanlı Mimari</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value">Docker</div>
-                        <div class="stat-label">Tek Komutla Canlı</div>
-                    </div>
-                </div>
-
-                <h3 class="section-title">🌟 Temel Platform Modülleri</h3>
-                <div class="pillars-grid">
-                    <div class="pillar-card">
-                        <div>
-                            <div class="pillar-icon">🤝</div>
-                            <h3>Networking &amp; Profesyonel Topluluk</h3>
-                            <p>
-                                Fakülte, bölüm ve mezuniyet yılına göre mezunları filtreleyin. Mezunlar arası doğrudan bağlantılar kurun, sektör deneyimlerini paylaşın ve profesyonel çevrenizi büyütün.
-                            </p>
-                        </div>
-                        <a href="/users" class="pillar-link">Mezun Rehberini Görüntüle &rarr;</a>
-                    </div>
-
-                    <div class="pillar-card">
-                        <div>
-                            <div class="pillar-icon">🎯</div>
-                            <h3>Mentorship &amp; Kariyer Danışmanlığı</h3>
-                            <p>
-                                Sektörde deneyim kazanmış kıdemli mezunlarımız, son sınıf öğrencilerine ve yeni mezunlara birebir kariyer rehberliği, mülakat hazırlığı ve teknik mentorluk sağlar.
-                            </p>
-                        </div>
-                        <a href="/announcements" class="pillar-link">Mentorluk Başvurularını İncele &rarr;</a>
-                    </div>
-
-                    <div class="pillar-card">
-                        <div>
-                            <div class="pillar-icon">💼</div>
-                            <h3>Kariyer Havuzu &amp; Şirket Referansları</h3>
-                            <p>
-                                Mezunlarımızın çalıştığı şirketlerdeki açık iş ve staj pozisyonları, şirket içi yönlendirme (referral) imkanları ve üniversitemize özel kariyer etkinlikleri.
-                            </p>
-                        </div>
-                        <a href="/announcements" class="pillar-link">Fırsat Panosuna Git &rarr;</a>
+                    <div class="card">
+                        <h3>📢 Duyuru &amp; Etkinlikler</h3>
+                        <p>Mezun buluşmaları, homecoming günleri ve akademik etkinliklerden ilk siz haberdar olun.</p>
+                        <a href="/announcements">Duyuruları İncele &rarr;</a>
                     </div>
                 </div>
-
-                <div class="showcase">
-                    <div class="showcase-header">
-                        <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff;">📌 Güncel Duyurular ve Etkinlikler</h3>
-                        <a href="/announcements" class="pillar-link" style="font-size: 0.9rem;">Tümünü Gör &rarr;</a>
-                    </div>
-                    <div class="news-item">
-                        <div>
-                            <div class="news-title">2026 Annual Alumni Homecoming Gala</div>
-                            <div class="news-meta">Alumni Association &bull; 1 Mayıs 2026 &bull; Merkez Kampüs</div>
-                        </div>
-                        <span class="category-badge cat-reunion">Reunion</span>
-                    </div>
-                    <div class="news-item">
-                        <div>
-                            <div class="news-title">Tech Mentorship Cohort 2026 Applications Open</div>
-                            <div class="news-meta">Career Center &bull; 10 Mayıs 2026 &bull; Mühendislik Fakültesi</div>
-                        </div>
-                        <span class="category-badge cat-mentorship">Mentorship</span>
-                    </div>
-                </div>
-
-                <!-- Akademik Değerlendirme & Test Paneli (Emre Hoca ve Notlandırma İçin) -->
-                <details class="grading-panel">
-                    <summary>🛠️ Akademik Laboratuvar &amp; Değerlendirme Rotaları (Week 02 &ndash; Week 05)</summary>
-                    <div class="grading-content">
-                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
-                            Ders kapsamında (Doç. Dr. Emre Akadal) tahtada atanan temel URL anatomi, parametrik yönlendirme ve API test linkleri:
-                        </p>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Method</th>
-                                    <th>Rota</th>
-                                    <th>Açıklama</th>
-                                    <th>Test Linki</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="method method-get">GET</span></td>
-                                    <td><code>/ok</code></td>
-                                    <td>Sağlık ve Başlangıç Durumu</td>
-                                    <td><a class="endpoint" href="/ok">/ok</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="method method-get">GET</span></td>
-                                    <td><code>/hello</code></td>
-                                    <td>Statik Selamlama</td>
-                                    <td><a class="endpoint" href="/hello">/hello</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="method method-get">GET</span></td>
-                                    <td><code>/hello/{name}</code></td>
-                                    <td>Parametrik Selamlama</td>
-                                    <td><a class="endpoint" href="/hello/emre">/hello/emre</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="method method-get">GET</span></td>
-                                    <td><code>/sum/{n1}/{n2}</code></td>
-                                    <td>Matematiksel Toplama &amp; 400 Doğrulama</td>
-                                    <td><a class="endpoint" href="/sum/15/27">/sum/15/27</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="method method-get">GET</span></td>
-                                    <td><code>/api/users</code></td>
-                                    <td>Kalıcı PostgreSQL Mezun Listesi (JSON)</td>
-                                    <td><a class="endpoint" href="/api/users">/api/users</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="method method-get">GET</span></td>
-                                    <td><code>/api/announcements</code></td>
-                                    <td>Kalıcı Duyurular Listesi (JSON)</td>
-                                    <td><a class="endpoint" href="/api/announcements">/api/announcements</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="method method-get">GET</span></td>
-                                    <td><code>/api/swagger</code></td>
-                                    <td>Etkileşimli Swagger API Arayüzü</td>
-                                    <td><a class="endpoint" href="/api/swagger">/api/swagger</a></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </details>
 
                 <footer>
-                    <p>İstanbul Üniversitesi &bull; Web Programlama &bull; Nazife Türk (nazife.turk@ogr.iu.edu.tr)</p>
+                    <p>&copy; 1453 &ndash; 2026 İstanbul Üniversitesi &bull; Sistem Mimarı: <strong>Nazife Türk</strong> (<a href="mailto:nazife.turk@ogr.iu.edu.tr">nazife.turk@ogr.iu.edu.tr</a>)</p>
                 </footer>
             </div>
         </body>
@@ -591,102 +446,217 @@ public static class BasicRoutes
     {
         return """
         <!DOCTYPE html>
-        <html lang="en">
+        <html lang="tr">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>About - Alumni Tracking System</title>
+            <title>Hakkında — İstanbul Üniversitesi Mezun Takip Sistemi</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
             <style>
                 :root {
-                    --primary: #4f46e5;
-                    --bg: #0f172a;
-                    --card-bg: #1e293b;
-                    --text: #f8fafc;
-                    --text-muted: #94a3b8;
-                    --border: #334155;
+                    --color-canvas: #FAF9F6;
+                    --color-surface-card: #FFFFFF;
+                    --color-surface-inset: #F5F4EE;
+                    --color-hairline: #E2DFD6;
+                    --color-hairline-subtle: #EBE8E0;
+                    --color-primary-action: #004225;
+                    --color-primary-hover: #065A35;
+                    --color-pill-tint: #E8F0EB;
+                    --color-pill-border: #C8DBCF;
+                    --color-text-display: #004225;
+                    --color-text-title: #0F2A1D;
+                    --color-text-body: #1C2920;
+                    --color-text-muted: #55685C;
+                    --color-text-light: #7E9084;
+                    --radius-pills: 9999px;
+                    --radius-cards: 4px;
                 }
                 * { box-sizing: border-box; margin: 0; padding: 0; }
                 body {
-                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-                    background-color: var(--bg);
-                    color: var(--text);
+                    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                    background-color: var(--color-canvas);
+                    background-image: url('/assets/iu-gate-silhouette.svg');
+                    background-repeat: no-repeat;
+                    background-position: center 30px;
+                    background-size: 1100px auto;
+                    background-attachment: fixed;
+                    color: var(--color-text-body);
                     line-height: 1.6;
-                    padding: 2rem;
+                    padding: 2.5rem 1.5rem;
+                    -webkit-font-smoothing: antialiased;
                 }
-                .container { max-width: 900px; margin: 0 auto; }
-                header {
-                    border-bottom: 1px solid var(--border);
-                    padding-bottom: 1.5rem;
-                    margin-bottom: 2rem;
+                .container { max-width: 960px; margin: 0 auto; }
+                .nav-pill {
                     display: flex;
-                    justify-content: space-between;
                     align-items: center;
+                    justify-content: space-between;
+                    background: rgba(255, 255, 255, 0.94);
+                    backdrop-filter: blur(20px);
+                    border: 1px solid var(--color-hairline);
+                    border-radius: var(--radius-pills);
+                    padding: 0.6rem 1.4rem;
+                    margin-bottom: 2.5rem;
                 }
-                h1 { font-size: 1.8rem; font-weight: 700; color: #fff; }
-                nav a {
-                    color: var(--text-muted);
+                .nav-brand {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.75rem;
                     text-decoration: none;
-                    margin-left: 1.5rem;
+                    color: var(--color-text-title);
+                    font-weight: 700;
+                }
+                .nav-logo { width: 32px; height: 32px; }
+                .nav-logo img { width: 100%; height: 100%; object-fit: contain; }
+                .nav-links { display: flex; align-items: center; gap: 0.5rem; }
+                .nav-links a {
+                    color: var(--color-text-muted);
+                    text-decoration: none;
+                    font-size: 0.88rem;
                     font-weight: 500;
-                    transition: color 0.2s;
+                    padding: 0.4rem 0.9rem;
+                    border-radius: var(--radius-pills);
+                    transition: all 0.15s ease;
                 }
-                nav a:hover, nav a.active { color: #fff; }
-                .card {
-                    background-color: var(--card-bg);
-                    border: 1px solid var(--border);
-                    border-radius: 12px;
-                    padding: 2rem;
-                    margin-bottom: 1.5rem;
+                .nav-links a:hover { color: var(--color-primary-action); background: var(--color-pill-tint); }
+                .nav-links a.active { color: #fff; background: var(--color-primary-action); font-weight: 600; }
+                
+                .header-card {
+                    background: var(--color-surface-card);
+                    border: 1px solid var(--color-hairline);
+                    border-radius: var(--radius-cards);
+                    padding: 2.5rem;
+                    margin-bottom: 2rem;
                 }
-                h2 { font-size: 1.4rem; margin-bottom: 1rem; color: #fff; }
-                p { color: var(--text-muted); margin-bottom: 1rem; font-size: 1.05rem; }
-                ul { margin-left: 1.5rem; margin-bottom: 1.5rem; color: var(--text-muted); }
-                li { margin-bottom: 0.5rem; }
-                code { background: #0f172a; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; color: #a5b4fc; }
-                footer {
-                    margin-top: 3rem;
-                    border-top: 1px solid var(--border);
-                    padding-top: 1.5rem;
+                .badge-pill {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.45rem;
+                    background: var(--color-pill-tint);
+                    color: var(--color-primary-action);
+                    border: 1px solid var(--color-pill-border);
+                    padding: 0.35rem 0.85rem;
+                    border-radius: var(--radius-pills);
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    margin-bottom: 1rem;
+                }
+                .header-card h1 {
+                    font-family: 'DM Serif Display', Georgia, serif;
+                    font-size: 2.4rem;
+                    color: var(--color-text-display);
+                    line-height: 1.15;
+                    margin-bottom: 0.75rem;
+                }
+                .header-card p {
+                    color: var(--color-text-muted);
+                    font-size: 1.05rem;
+                    max-width: 720px;
+                }
+                .content-card {
+                    background: var(--color-surface-card);
+                    border: 1px solid var(--color-hairline);
+                    border-radius: var(--radius-cards);
+                    padding: 2.25rem;
+                    margin-bottom: 1.75rem;
+                }
+                .content-card h2 {
+                    font-family: 'DM Serif Display', Georgia, serif;
+                    font-size: 1.5rem;
+                    color: var(--color-text-title);
+                    margin-bottom: 1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.6rem;
+                }
+                .content-card p {
+                    color: var(--color-text-body);
+                    font-size: 0.95rem;
+                    margin-bottom: 1rem;
+                    line-height: 1.7;
+                }
+                .content-card ul {
+                    margin-left: 1.5rem;
+                    margin-bottom: 1.25rem;
+                    color: var(--color-text-body);
+                }
+                .content-card li { margin-bottom: 0.5rem; }
+                code {
+                    font-family: 'JetBrains Mono', monospace;
+                    background: var(--color-surface-inset);
+                    color: var(--color-primary-action);
+                    padding: 0.2rem 0.45rem;
+                    border-radius: var(--radius-cards);
+                    border: 1px solid var(--color-hairline-subtle);
+                    font-size: 0.88em;
+                }
+                .footer-box {
                     text-align: center;
-                    color: var(--text-muted);
-                    font-size: 0.9rem;
+                    padding-top: 2rem;
+                    margin-top: 2rem;
+                    border-top: 1px solid var(--color-hairline);
+                    color: var(--color-text-light);
+                    font-size: 0.85rem;
                 }
+                .footer-box a { color: var(--color-primary-action); text-decoration: none; font-weight: 600; }
             </style>
         </head>
         <body>
             <div class="container">
-                <header>
-                    <div>
-                        <h1>Alumni Tracking System</h1>
-                        <p style="color: var(--text-muted); font-size: 0.9rem;">About &amp; Architectural Specifications</p>
+                <nav class="nav-pill">
+                    <a href="/" class="nav-brand">
+                        <div class="nav-logo">
+                            <img src="/assets/iu-logo.svg" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg';" alt="İstanbul Üniversitesi">
+                        </div>
+                        <span>İstanbul Üniversitesi</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="/">Ana Sayfa</a>
+                        <a href="/users">Mezunlar</a>
+                        <a href="/jobs">İş İlanları</a>
+                        <a href="/announcements">Duyurular</a>
+                        <a href="/about" class="active">Hakkında</a>
+                        <a href="/swagger">Swagger</a>
                     </div>
-                    <nav>
-                        <a href="/">Home</a>
-                        <a href="/about" class="active">About</a>
-                        <a href="/api/alumni">Alumni API</a>
-                    </nav>
-                </header>
+                </nav>
 
-                <div class="card">
-                    <h2>📖 About the Project</h2>
-                    <p>The <strong>Alumni Tracking System</strong> is an enterprise-oriented web application designed to track graduates, analyze career milestones, facilitate student-alumni mentorship networks, and organize university events.</p>
-                    
-                    <h2>🚪 Week 02: Routing Fundamentals</h2>
-                    <p>In Week 02, the application demonstrates the core mechanics of HTTP routing as outlined in the lecture:</p>
-                    <ul>
-                        <li><strong>URL Anatomy:</strong> Scheme, Host, Port (443/8000), Path (<code>/api/alumni/42</code>), Query Parameters (<code>?sort=year</code>), and Fragment identifiers.</li>
-                        <li><strong>Generations of the Web:</strong> Transition from physical file mapping (1995: <code>/list.php</code>) and RPC commands (2005: <code>?action=getAlumni</code>) to modern RESTful resources (Today: <code>GET /api/alumni/42</code>).</li>
-                        <li><strong>HTTP Method Resolution:</strong> Safe vs non-safe, idempotent vs non-idempotent semantics.</li>
-                        <li><strong>Status Spectrum:</strong> Explicit status codes including <code>200 OK</code>, <code>201 Created</code>, <code>400 Bad Request</code>, <code>404 Not Found</code>, and <code>405 Method Not Allowed</code>.</li>
-                    </ul>
-
-                    <h2>💻 Technology Stack</h2>
-                    <p>Constructed using <strong>C# with ASP.NET Core (.NET 7)</strong> and <strong>PostgreSQL 16</strong> inside a reproducible Docker Compose environment.</p>
+                <div class="header-card">
+                    <span class="badge-pill">Kurumsal Mimari &bull; 1453</span>
+                    <h1>Mezun Takip Sistemi Hakkında</h1>
+                    <p>
+                        İstanbul Üniversitesi Bilgisayar Bilimleri bünyesinde geliştirilen kurumsal mezun ilişkileri, kariyer yönlendirme ve akademik ağ platformu.
+                    </p>
                 </div>
 
-                <footer>
-                    <p>Istanbul University • Web Programming • Nazife Türk</p>
-                </footer>
+                <div class="content-card">
+                    <h2>📖 Proje Hakkında ve Misyon</h2>
+                    <p>
+                        <strong>İstanbul Üniversitesi Mezun Takip Sistemi</strong>, köklü geçmişe sahip üniversitemizin mezunları ile aktif öğrencilerini ve akademik kadroyu birbirine bağlayan; kariyer seyrini izleyen ve mentörlük ağını kurumsallaştıran güvenli bir web platformudur.
+                    </p>
+
+                    <h2>🚪 HTTP Yönlendirme ve URL Anatomisi</h2>
+                    <p>
+                        Proje mimarisi temiz REST prensiplerine ve katmanlı mimariye dayanmaktadır:
+                    </p>
+                    <ul>
+                        <li><strong>URL Anatomisi:</strong> Şema (HTTP/HTTPS), Host, Port (8000), Yol (<code>/users/42</code>), Parametreler (<code>?format=json</code>) ve Parçalar.</li>
+                        <li><strong>Modern RESTful Kaynaklar:</strong> Statik dosya eşlemelerinden bağımsız, standart HTTP durum kodları ile çalışan modern API uçları.</li>
+                        <li><strong>Güvenli ve İdempotent İstekler:</strong> <code>GET</code> işlemlerinde güvenli okuma, <code>POST</code> işlemlerinde durum değişikliği ve validasyon.</li>
+                        <li><strong>HTTP Durum Yelpazesi:</strong> <code>200 OK</code>, <code>201 Created</code>, <code>400 Bad Request</code>, <code>404 Not Found</code> ve <code>500 Server Error</code> tam denetimi.</li>
+                    </ul>
+
+                    <h2>💻 Teknoloji Yığını &amp; Altyapı</h2>
+                    <p>
+                        Uygulama <strong>C# ASP.NET Core (.NET 7)</strong> ve <strong>PostgreSQL 16</strong> veritabanı motoru ile geliştirilmiş olup <strong>Docker Compose</strong> üzerinde tek komutla ayağa kaldırılacak şekilde konteynerleştirilmiştir.
+                    </p>
+                </div>
+
+                <div class="footer-box">
+                    <p>&copy; 1453 &ndash; 2026 İstanbul Üniversitesi &bull; Sistem Mimarı: <strong>Nazife Türk</strong> (<a href="mailto:nazife.turk@ogr.iu.edu.tr">nazife.turk@ogr.iu.edu.tr</a>)</p>
+                </div>
             </div>
         </body>
         </html>

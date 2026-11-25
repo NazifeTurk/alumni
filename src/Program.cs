@@ -36,7 +36,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Alumni Tracking System API",
         Version = "v1",
-        Description = "Alumni Tracking System — MVC, PostgreSQL ORM & Persistent CRUD (Assoc. Prof. Dr. Emre Akadal)",
+        Description = "Alumni Tracking System — MVC, PostgreSQL ORM & Persistent CRUD (Nazife Türk)",
         Contact = new OpenApiContact
         {
             Name = "Nazife Türk",

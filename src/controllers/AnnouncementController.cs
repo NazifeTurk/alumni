@@ -50,15 +50,15 @@ public class AnnouncementController : Controller
                 <div class="announcement-header">
                     <div>
                         <span class="badge badge-{a.Category.ToLower()}">{a.Category}</span>
-                        <h3 style="margin-top:0.4rem;color:#fff;">{a.Title}</h3>
+                        <h3 style="margin-top:0.4rem;color:#0F2A1D;font-size:1.15rem;">{a.Title}</h3>
                     </div>
-                    <form method="POST" action="/announcements/{a.Id}/delete" onsubmit="return confirm('Delete this announcement?');" style="margin:0;">
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                    <form method="POST" action="/announcements/{a.Id}/delete" onsubmit="return confirm('Bu duyuruyu silmek istediğinize emin misiniz?');" style="margin:0;">
+                        <button type="submit" class="btn btn-danger">Sil</button>
                     </form>
                 </div>
-                <p style="color:#cbd5e1;margin:0.75rem 0;">{a.Content}</p>
-                <div style="font-size:0.85rem;color:#94a3b8;display:flex;justify-content:space-between;">
-                    <span>By: <strong>{a.Author}</strong></span>
+                <p style="color:#2D4235;margin:0.75rem 0;line-height:1.6;">{a.Content}</p>
+                <div style="font-size:0.82rem;color:#55685C;display:flex;justify-content:space-between;border-top:1px solid #EBE8E0;padding-top:0.6rem;">
+                    <span>Yayınlayan: <strong>{a.Author}</strong></span>
                     <span>{a.CreatedAt:yyyy-MM-dd HH:mm} UTC</span>
                 </div>
             </div>
@@ -66,28 +66,40 @@ public class AnnouncementController : Controller
 
         return $$"""
         <!DOCTYPE html>
-        <html lang="en">
+        <html lang="tr">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Announcements (View Layer) - Week 04</title>
+            <title>Duyurular — İstanbul Üniversitesi Mezun Takip</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
             <style>
                 :root {
-                    --bg: #0f172a;
-                    --card-bg: #1e293b;
-                    --text: #f8fafc;
-                    --text-muted: #94a3b8;
-                    --primary: #4f46e5;
-                    --accent: #10b981;
-                    --border: #334155;
+                    --bg: #FAF9F6;
+                    --card-bg: #FFFFFF;
+                    --text: #1C2920;
+                    --text-muted: #55685C;
+                    --primary: #004225;
+                    --primary-hover: #065A35;
+                    --accent: #059669;
+                    --border: #E2DFD6;
+                    --pill-bg: #E8F0EB;
+                    --pill-border: #C8DBCF;
                 }
                 * { box-sizing: border-box; margin: 0; padding: 0; }
                 body {
-                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                    font-family: 'Plus Jakarta Sans', sans-serif;
                     background-color: var(--bg);
+                    background-image: url('/assets/iu-gate-silhouette.svg');
+                    background-repeat: no-repeat;
+                    background-position: center 30px;
+                    background-size: 1100px auto;
+                    background-attachment: fixed;
                     color: var(--text);
                     line-height: 1.6;
-                    padding: 2rem;
+                    padding: 2rem 1rem;
+                    -webkit-font-smoothing: antialiased;
                 }
                 .container { max-width: 900px; margin: 0 auto; }
                 header {
@@ -97,29 +109,36 @@ public class AnnouncementController : Controller
                     border-bottom: 1px solid var(--border);
                     padding-bottom: 1.5rem;
                     margin-bottom: 2rem;
+                    flex-wrap: wrap;
+                    gap: 1rem;
                 }
-                h1 { font-size: 1.8rem; font-weight: 700; color: #fff; }
+                .header-brand { display: flex; align-items: center; gap: 0.85rem; }
+                .header-brand img { width: 44px; height: 44px; object-fit: contain; }
+                h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.9rem; font-weight: 400; color: var(--primary); letter-spacing: -0.02em; }
+                nav { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
                 nav a {
                     color: var(--text-muted);
                     text-decoration: none;
-                    margin-left: 1.5rem;
-                    font-weight: 500;
-                    transition: color 0.2s;
+                    font-weight: 600;
+                    font-size: 0.9rem;
+                    transition: color 0.15s;
                 }
-                nav a:hover, nav a.active { color: #fff; }
+                nav a:hover, nav a.active { color: var(--primary); }
                 .card {
                     background-color: var(--card-bg);
                     border: 1px solid var(--border);
-                    border-radius: 12px;
-                    padding: 1.5rem;
+                    border-radius: 4px;
+                    padding: 1.75rem;
                     margin-bottom: 2rem;
+                    box-shadow: none;
                 }
                 .announcement-item {
-                    background: #1e293b;
+                    background: #FFFFFF;
                     border: 1px solid var(--border);
-                    border-radius: 10px;
+                    border-radius: 4px;
                     padding: 1.25rem;
                     margin-bottom: 1rem;
+                    box-shadow: none;
                 }
                 .announcement-header {
                     display: flex;
@@ -128,92 +147,101 @@ public class AnnouncementController : Controller
                 }
                 .badge {
                     display: inline-block;
-                    padding: 0.2rem 0.6rem;
+                    padding: 0.2rem 0.65rem;
                     border-radius: 9999px;
                     font-size: 0.75rem;
                     font-weight: 700;
                     text-transform: uppercase;
+                    letter-spacing: 0.04em;
                 }
-                .badge-reunion { background: rgba(79, 70, 229, 0.2); color: #818cf8; }
-                .badge-mentorship { background: rgba(16, 185, 129, 0.2); color: #34d399; }
-                .badge-career { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
-                .badge-general { background: rgba(148, 163, 184, 0.2); color: #94a3b8; }
+                .badge-reunion { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+                .badge-mentorship { background: #E8F0EB; color: #004225; border: 1px solid #C8DBCF; }
+                .badge-career { background: #E0F2FE; color: #0369A1; border: 1px solid #BAE6FD; }
+                .badge-general { background: #F5F4EE; color: #55685C; border: 1px solid #E2DFD6; }
                 .btn {
-                    padding: 0.4rem 0.8rem;
-                    border-radius: 6px;
-                    font-size: 0.85rem;
-                    font-weight: 600;
-                    border: none;
+                    padding: 0.45rem 1rem;
+                    border-radius: 9999px;
+                    font-size: 0.82rem;
+                    font-weight: 700;
+                    border: 1px solid transparent;
                     cursor: pointer;
+                    display: inline-flex;
+                    align-items: center;
                 }
                 .btn-primary { background: var(--primary); color: #fff; }
-                .btn-danger { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-                .btn-danger:hover { background: #ef4444; color: #fff; }
-                .form-group { margin-bottom: 1rem; }
-                label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem; }
+                .btn-primary:hover { background: var(--primary-hover); }
+                .btn-danger { background: #FFE4E6; color: #BE123C; border: 1px solid #FECDD3; }
+                .btn-danger:hover { background: #F43F5E; color: #fff; }
+                .form-group { margin-bottom: 1.25rem; }
+                label { display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.35rem; text-transform: uppercase; }
                 input, textarea, select {
                     width: 100%;
-                    padding: 0.55rem 0.75rem;
-                    border-radius: 6px;
+                    padding: 0.65rem 0.75rem;
+                    border-radius: 4px;
                     border: 1px solid var(--border);
-                    background: #0f172a;
-                    color: #fff;
-                    font-size: 0.9rem;
+                    background: #FFFFFF;
+                    color: var(--text);
+                    font-size: 0.95rem;
                     box-sizing: border-box;
                 }
+                input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary); }
             </style>
         </head>
         <body>
             <div class="container">
                 <header>
-                    <div>
-                        <h1>Alumni Announcements (View Layer)</h1>
-                        <p style="color: var(--text-muted); font-size: 0.9rem;">Week 04 Homework — AnnouncementController serving HTML Views</p>
+                    <div class="header-brand">
+                        <img src="/assets/iu-logo.svg" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg';" alt="IU Logo">
+                        <div>
+                            <h1>Akademik Duyurular</h1>
+                            <p style="color: var(--text-muted); font-size: 0.85rem;">İstanbul Üniversitesi &bull; Nazife Türk &bull; Mezun İletişim Portalı</p>
+                        </div>
                     </div>
                     <nav>
-                        <a href="/">Home</a>
-                        <a href="/users">Users (View)</a>
-                        <a href="/announcements" class="active">Announcements (View)</a>
-                        <a href="/api/announcements">API Announcements (JSON)</a>
-                        <a href="/api/swagger" style="color: #34d399; font-weight: 700;">Swagger ⚡</a>
+                        <a href="/">Ana Sayfa</a>
+                        <a href="/users">Mezunlar</a>
+                        <a href="/jobs">İş İlanları</a>
+                        <a href="/announcements" class="active">Duyurular</a>
+                        <a href="/swagger" style="color: var(--primary); font-weight: 700;">Swagger API</a>
                     </nav>
                 </header>
 
                 <div class="card">
-                    <h3 style="margin-bottom: 1rem; color: #fff;">📢 Publish New Announcement</h3>
+                    <h3 style="margin-bottom: 1.25rem; color: var(--primary); font-size: 1.15rem;">📢 Yeni Mezun Duyurusu Yayınla</h3>
                     <form method="POST" action="/announcements">
                         <div class="form-group">
-                            <label>Title</label>
-                            <input type="text" name="title" placeholder="e.g. Annual Alumni Summit 2026" required>
+                            <label>Duyuru Başlığı</label>
+                            <input type="text" name="title" placeholder="Örn: 2026 Mezunlar Homecoming Buluşması" required>
                         </div>
                         <div class="form-group">
-                            <label>Category</label>
+                            <label>Kategori</label>
                             <select name="category">
-                                <option value="General">General</option>
-                                <option value="Career">Career</option>
-                                <option value="Mentorship">Mentorship</option>
-                                <option value="Reunion">Reunion</option>
+                                <option value="General">Genel</option>
+                                <option value="Career">Kariyer</option>
+                                <option value="Mentorship">Mentorluk</option>
+                                <option value="Reunion">Homecoming &bull; Buluşma</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Content</label>
-                            <textarea name="content" rows="3" placeholder="Provide event details or message..." required></textarea>
+                            <label>İçerik &amp; Detaylar</label>
+                            <textarea name="content" rows="3" placeholder="Etkinlik ayrıntıları, yer ve tarih bilgisi..." required></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Author / Office</label>
-                            <input type="text" name="author" value="Alumni Coordinator">
+                            <label>Yayınlayan Birim / Yetkili</label>
+                            <input type="text" name="author" value="Mezun Koordinatörlüğü">
                         </div>
-                        <button type="submit" class="btn btn-primary" style="padding: 0.6rem 1.4rem;">Publish Announcement</button>
+                        <button type="submit" class="btn btn-primary" style="padding: 0.65rem 1.6rem;">Duyuruyu Yayınla</button>
                     </form>
                 </div>
 
                 <div>
-                    <h2 style="font-size: 1.3rem; margin-bottom: 1rem; color: #fff;">Latest Announcements</h2>
+                    <h2 style="font-size: 1.3rem; margin-bottom: 1rem; color: var(--primary); font-family: 'DM Serif Display', Georgia, serif;">Güncel Mezun Duyuruları</h2>
                     {{cards}}
                 </div>
             </div>
         </body>
         </html>
         """;
+    }
     }
 }

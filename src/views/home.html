@@ -10,29 +10,33 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* ─── Light Blue Intensive Refero-Inspired Design Tokens ─── */
-            --color-canvas: #eaf4fb;           /* Primary light-blue atmospheric void */
-            --color-canvas-subtle: #f2f8fd;    /* Slightly lighter tonal step */
-            --color-surface-card: #ffffff;     /* Flat paper card surface */
-            --color-surface-elevated: #f0f7fe; /* Subtle elevated tonal step */
-            --color-hairline: #bae6fd;         /* Crisp 1px light blue structural divider */
-            --color-hairline-subtle: #e0f2fe;  /* Hairline separator */
+            /* ─── Warm Alabaster (#FAF9F6) & Deep Imperial Green (#004225) Design Tokens ─── */
+            --color-canvas: #FAF9F6;           /* Intensive warm alabaster / ivory base canvas */
+            --color-canvas-subtle: #F3F2EC;    /* Soft warm stone tonal step */
+            --color-surface-card: #FFFFFF;     /* Pure flat paper card surface */
+            --color-surface-elevated: #F5F4EE; /* Inset metrics and code surface */
+            --color-hairline: #E2DFD6;         /* Crisp 1px warm stone structural divider */
+            --color-hairline-subtle: #EBE8E0;  /* Subtle internal separator */
 
-            /* ─── Typography Colors (High-Contrast Trust Navy) ─── */
-            --color-text-display: #04263e;     /* Abyssal Trust Navy for headlines */
-            --color-text-body: #1e3a52;        /* Deep Steel Blue for readable body copy */
-            --color-text-muted: #486f8a;       /* Muted Steel for captions & metadata */
-            --color-text-light: #6a92ad;       /* Secondary helper copy */
+            /* ─── Typography Colors (Deep Forest Green & Inks) ─── */
+            --color-text-display: #004225;     /* Monumental Deep Imperial Green */
+            --color-text-navy: #0F2A1D;        /* Deep Forest Ink for card titles */
+            --color-text-body: #1C2920;        /* Readable dark charcoal for body copy */
+            --color-text-muted: #55685C;       /* Sage Slate for captions & metadata */
+            --color-text-light: #7E9084;       /* Secondary helper copy */
 
             /* ─── Action & Accent Colors ─── */
-            --color-primary-action: #0284c7;   /* Cerulean Blue primary CTA */
-            --color-primary-hover: #0369a1;    /* Deepened hover blue */
-            --color-lavender-dawn: #6366f1;    /* Single violet accent for warm dawn light */
-            --color-lavender-tint: #e0e7ff;    /* Lavender pill background */
-            --color-bio-mint: #059669;         /* PostgreSQL Live & verified indicator */
-            --color-mint-tint: #d1fae5;        /* Mint pill background */
-            --color-heritage-gold: #b45309;    /* 1453 University Heritage */
-            --color-gold-tint: #fef3c7;        /* Gold pill background */
+            --color-primary-action: #004225;   /* Deep Imperial Green primary CTA */
+            --color-primary-hover: #065A35;    /* Vibrant Forest Green hover */
+            --color-primary-tint: #E8F0EB;     /* Soft green pill background */
+            --color-primary-border: #C8DBCF;   /* Border for green pills */
+
+            --color-heritage-gold: #B45309;    /* 1453 University Heritage */
+            --color-gold-tint: #FEF3C7;        /* Gold pill background */
+            --color-bio-mint: #059669;         /* PostgreSQL Live indicator */
+            --color-mint-tint: #D1FAE5;        /* Mint pill background */
+            --color-rose-shield: #BE123C;      /* 404/5xx Guardian alert */
+            --color-rose-tint: #FFE4E6;        /* Rose pill background */
 
             /* ─── Font Families ─── */
             --font-display: 'DM Serif Display', Georgia, serif;
@@ -68,6 +72,11 @@
         body {
             font-family: var(--font-sans);
             background-color: var(--color-canvas);
+            background-image: url('/assets/iu-gate-silhouette.svg');
+            background-repeat: no-repeat;
+            background-position: center 40px;
+            background-size: 1160px auto;
+            background-attachment: fixed;
             color: var(--color-text-body);
             line-height: 1.6;
             min-height: 100vh;
@@ -76,8 +85,27 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Full-width container with 1200px constraint */
+        .bg-gate-watermark {
+            position: fixed;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 1160px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.95;
+        }
+
+        .bg-gate-watermark img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
         .page-container {
+            position: relative;
+            z-index: 1;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 var(--space-24);
@@ -98,15 +126,16 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: var(--space-24);
-            background: rgba(255, 255, 255, 0.92);
+            width: 100%;
+            max-width: 1120px;
+            height: 64px;
+            padding: 0 var(--space-20);
+            background: rgba(250, 249, 246, 0.94);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--color-hairline);
             border-radius: var(--radius-pills);
-            padding: var(--space-8) var(--space-12) var(--space-8) var(--space-20);
-            max-width: 1040px;
-            width: 100%;
+            box-shadow: var(--elevation-none);
         }
 
         .nav-brand {
@@ -117,857 +146,1051 @@
             color: inherit;
         }
 
-        .brand-crest-dot {
-            width: 32px;
-            height: 32px;
-            background: var(--color-primary-action);
-            color: #ffffff;
+        .nav-brand-logo {
+            width: 40px;
+            height: 40px;
             border-radius: var(--radius-pills);
+            background: #FFFFFF;
+            border: 1px solid var(--color-hairline);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1rem;
+            overflow: hidden;
+            flex-shrink: 0;
         }
 
-        .brand-title-group h1 {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--color-text-display);
+        .nav-brand-logo img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .nav-brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+
+        .nav-brand-title {
+            font-size: 0.88rem;
+            font-weight: 800;
             letter-spacing: -0.01em;
-            line-height: 1.1;
-        }
-
-        .brand-title-group span {
-            font-size: 0.72rem;
-            font-weight: 600;
-            color: var(--color-text-muted);
+            color: var(--color-text-display);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
 
-        nav.nav-menu {
+        .nav-brand-sub {
+            font-size: 0.72rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
             display: flex;
             align-items: center;
-            gap: var(--space-20);
+            gap: var(--space-24);
         }
 
-        nav.nav-menu a {
-            color: var(--color-text-body);
-            text-decoration: none;
+        .nav-link {
             font-size: 0.88rem;
             font-weight: 600;
+            color: var(--color-text-body);
+            text-decoration: none;
             transition: color 0.15s ease;
-            position: relative;
         }
 
-        nav.nav-menu a:hover,
-        nav.nav-menu a.active {
+        .nav-link:hover {
+            color: var(--color-primary-action);
+        }
+
+        .nav-link.active {
             color: var(--color-primary-action);
         }
 
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: var(--space-8);
+            gap: var(--space-12);
         }
 
-        .btn-header-cta {
-            background: var(--color-primary-action);
-            color: #ffffff;
-            border: none;
-            border-radius: var(--radius-pills);
-            padding: 8px 18px;
-            font-size: 0.82rem;
-            font-weight: 700;
-            text-decoration: none;
+        /* ─── Buttons (Capsule Radii: 9999px, Zero Shadow) ─── */
+        .btn {
             display: inline-flex;
             align-items: center;
-            gap: var(--space-4);
-            transition: background 0.15s ease;
-        }
-
-        .btn-header-cta:hover {
-            background: var(--color-primary-hover);
-        }
-
-        /* ─── 2. Hero Section: Left-Aligned Editorial Confidence ─── */
-        section.hero-section {
-            padding: var(--space-32) 0 var(--space-64) 0;
-            border-bottom: 1px solid var(--color-hairline);
-            margin-bottom: var(--space-64);
-        }
-
-        .hero-announcement-chip {
-            display: inline-flex;
-            align-items: center;
+            justify-content: center;
             gap: var(--space-8);
-            background: rgba(255, 255, 255, 0.85);
-            color: var(--color-primary-action);
-            border: 1px solid var(--color-hairline);
+            height: 40px;
+            padding: 0 var(--space-20);
             border-radius: var(--radius-pills);
-            padding: 6px 16px;
-            font-size: 0.82rem;
+            font-size: 0.88rem;
             font-weight: 700;
-            margin-bottom: var(--space-24);
             text-decoration: none;
-            transition: border-color 0.15s ease;
+            cursor: pointer;
+            transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+            white-space: nowrap;
+            border: 1px solid transparent;
+            box-shadow: var(--elevation-none);
         }
 
-        .hero-announcement-chip:hover {
+        .btn-primary {
+            background-color: var(--color-primary-action);
+            color: #FFFFFF;
             border-color: var(--color-primary-action);
         }
 
-        .pulse-mint-dot {
-            width: 7px;
-            height: 7px;
-            background-color: var(--color-bio-mint);
-            border-radius: var(--radius-pills);
+        .btn-primary:hover {
+            background-color: var(--color-primary-hover);
+            border-color: var(--color-primary-hover);
         }
 
-        .hero-display-headline {
-            font-family: var(--font-display);
-            font-size: 3.5rem;
-            font-weight: 400;
-            line-height: 1.08;
-            letter-spacing: -0.04em;
-            color: var(--color-text-display);
-            max-width: 980px;
+        .btn-secondary {
+            background-color: #FFFFFF;
+            color: var(--color-primary-action);
+            border-color: var(--color-hairline);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--color-primary-tint);
+            border-color: var(--color-primary-border);
+        }
+
+        .btn-ghost {
+            background-color: transparent;
+            color: var(--color-text-body);
+            border-color: transparent;
+        }
+
+        .btn-ghost:hover {
+            background-color: var(--color-primary-tint);
+            color: var(--color-primary-action);
+        }
+
+        /* ─── 2. Hero Section (Monumental Serif + Alabaster Intensive) ─── */
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: var(--space-32) 0 var(--space-64);
+        }
+
+        .hero-pill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-8);
+            height: 32px;
+            padding: 0 var(--space-16);
+            background-color: var(--color-primary-tint);
+            border: 1px solid var(--color-primary-border);
+            border-radius: var(--radius-pills);
             margin-bottom: var(--space-24);
         }
 
-        .hero-lead-text {
+        .hero-pill-logo {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--color-bio-mint);
+            border-radius: 50%;
+            animation: pulse-ring 2s infinite ease-out;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.9); opacity: 0.9; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.9; }
+        }
+
+        .hero-pill-text {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--color-primary-action);
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: 4.25rem;
+            font-weight: 400;
+            line-height: 1.05;
+            color: var(--color-text-display);
+            letter-spacing: -0.04em;
+            margin-bottom: var(--space-20);
+            max-width: 960px;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            font-family: var(--font-display);
+            color: var(--color-text-display);
+        }
+
+        .hero-subtitle {
             font-size: 1.15rem;
-            color: var(--color-text-muted);
-            max-width: 740px;
-            margin-bottom: var(--space-32);
             line-height: 1.6;
+            color: var(--color-text-muted);
+            max-width: 720px;
+            margin-bottom: var(--space-32);
             font-weight: 500;
         }
 
-        .hero-button-row {
+        .hero-actions {
             display: flex;
             align-items: center;
             gap: var(--space-12);
+            margin-bottom: var(--space-48);
             flex-wrap: wrap;
-        }
-
-        /* Buttons with 9999px Pill Radius */
-        .btn-pill-primary {
-            background: var(--color-primary-action);
-            color: #ffffff;
-            border: 1px solid transparent;
-            border-radius: var(--radius-pills);
-            padding: 12px 26px;
-            font-size: 0.94rem;
-            font-weight: 700;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-8);
-            transition: all 0.15s ease;
-        }
-
-        .btn-pill-primary:hover {
-            background: var(--color-primary-hover);
-        }
-
-        .btn-pill-ghost {
-            background: #ffffff;
-            color: var(--color-primary-action);
-            border: 1px solid var(--color-hairline);
-            border-radius: var(--radius-pills);
-            padding: 12px 24px;
-            font-size: 0.94rem;
-            font-weight: 700;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-8);
-            transition: all 0.15s ease;
-        }
-
-        .btn-pill-ghost:hover {
-            border-color: var(--color-primary-action);
-            background: var(--color-surface-elevated);
+            justify-content: center;
         }
 
         /* ─── 3. Monumental "By The Numbers" Statement Block ─── */
-        section.numbers-section {
-            background: #ffffff;
+        .numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-16);
+            width: 100%;
+            margin-bottom: var(--space-64);
+        }
+
+        .number-card {
+            background-color: var(--color-surface-card);
             border: 1px solid var(--color-hairline);
             border-radius: var(--radius-cards);
-            padding: var(--space-48) var(--space-40);
-            margin-bottom: var(--space-64);
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: var(--space-32);
+            padding: var(--space-24) var(--space-20);
+            text-align: left;
+            box-shadow: var(--elevation-none);
+            transition: border-color 0.15s ease, background-color 0.15s ease;
         }
 
-        .number-col {
-            border-left: 2px solid var(--color-hairline);
-            padding-left: var(--space-20);
+        .number-card:hover {
+            border-color: var(--color-primary-border);
+            background-color: #FEFEFD;
         }
 
-        .number-col:first-child {
-            border-left: none;
-            padding-left: 0;
-        }
-
-        .monumental-stat {
+        .number-digit {
             font-family: var(--font-display);
-            font-size: 2.8rem;
+            font-size: 3.25rem;
             font-weight: 400;
             line-height: 1;
-            letter-spacing: -0.05em;
-            color: var(--color-primary-action);
+            color: var(--color-text-display);
+            letter-spacing: -0.04em;
             margin-bottom: var(--space-8);
         }
 
-        .stat-label-headline {
-            font-size: 0.96rem;
+        .number-label {
+            font-size: 0.88rem;
             font-weight: 700;
-            color: var(--color-text-display);
+            color: var(--color-text-navy);
             margin-bottom: var(--space-4);
         }
 
-        .stat-caption-detail {
-            font-size: 0.82rem;
+        .number-sub {
+            font-size: 0.78rem;
             color: var(--color-text-muted);
-            line-height: 1.45;
+            line-height: 1.4;
         }
 
-        /* ─── 4. Product Card Grid (4 Columns, 4px Radius) ─── */
-        .section-headline-bar {
-            margin-bottom: var(--space-24);
+        /* ─── Section Header ─── */
+        .section-header {
+            margin-bottom: var(--space-32);
+            text-align: left;
         }
 
-        .section-headline-bar h3 {
+        .section-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--color-primary-action);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: var(--space-8);
+        }
+
+        .section-title {
             font-family: var(--font-display);
-            font-size: 2rem;
-            letter-spacing: -0.03em;
+            font-size: 2.25rem;
+            font-weight: 400;
             color: var(--color-text-display);
-            margin-bottom: var(--space-4);
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            margin-bottom: var(--space-8);
         }
 
-        .section-headline-bar p {
+        .section-desc {
+            font-size: 1rem;
             color: var(--color-text-muted);
-            font-size: 0.94rem;
+            max-width: 680px;
         }
 
-        .product-grid-4 {
+        /* ─── 4. Product Pillar Bento Grid (4-column, 4px radius) ─── */
+        .bento-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: var(--space-16);
             margin-bottom: var(--space-64);
         }
 
-        .product-card {
-            background: #ffffff;
+        .bento-card {
+            background-color: var(--color-surface-card);
             border: 1px solid var(--color-hairline);
             border-radius: var(--radius-cards);
             padding: var(--space-24);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: border-color 0.15s ease;
+            min-height: 240px;
+            box-shadow: var(--elevation-none);
+            transition: border-color 0.15s ease, background-color 0.15s ease;
+            text-decoration: none;
+            color: inherit;
         }
 
-        .product-card:hover {
-            border-color: var(--color-primary-action);
+        .bento-card:hover {
+            border-color: var(--color-primary-border);
+            background-color: #FEFEFD;
         }
 
-        .card-eyebrow-tag {
-            font-size: 0.72rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
+        .bento-card-top {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bento-icon-wrapper {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-pills);
+            background-color: var(--color-primary-tint);
+            border: 1px solid var(--color-primary-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: var(--space-16);
             color: var(--color-primary-action);
-            margin-bottom: var(--space-12);
-            display: inline-block;
         }
 
-        .product-card h4 {
+        .bento-card-title {
             font-size: 1.15rem;
             font-weight: 700;
-            color: var(--color-text-display);
-            margin-bottom: var(--space-8);
+            color: var(--color-text-navy);
             letter-spacing: -0.01em;
+            margin-bottom: var(--space-8);
         }
 
-        .product-card p {
+        .bento-card-desc {
             font-size: 0.88rem;
             color: var(--color-text-muted);
-            line-height: 1.55;
-            margin-bottom: var(--space-24);
+            line-height: 1.5;
         }
 
-        .card-arrow-link {
-            font-size: 0.88rem;
+        .bento-card-bottom {
+            margin-top: var(--space-20);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.85rem;
             font-weight: 700;
             color: var(--color-primary-action);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-4);
-            transition: gap 0.15s ease;
         }
 
-        .card-arrow-link:hover {
-            gap: var(--space-8);
+        .arrow-indicator {
+            transition: transform 0.15s ease;
         }
 
-        /* ─── 5. Dual Feeds: Career Board & University Notices ─── */
-        .dual-feed-section {
+        .bento-card:hover .arrow-indicator {
+            transform: translateX(4px);
+        }
+
+        /* ─── 5. Dual Feed Showcase (Jobs & Announcements) ─── */
+        .dual-feed-layout {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: var(--space-24);
             margin-bottom: var(--space-64);
         }
 
-        @media (max-width: 600px) {
-            .dual-feed-section {
-                grid-template-columns: 1fr;
-            }
-            .hero-display-headline {
-                font-size: 2.5rem;
-            }
-        }
-
         .feed-container {
-            background: #ffffff;
+            background-color: var(--color-surface-card);
             border: 1px solid var(--color-hairline);
             border-radius: var(--radius-cards);
             padding: var(--space-24);
+            box-shadow: var(--elevation-none);
         }
 
-        .feed-header-line {
+        .feed-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             padding-bottom: var(--space-16);
             border-bottom: 1px solid var(--color-hairline-subtle);
             margin-bottom: var(--space-16);
         }
 
-        .feed-header-line h4 {
+        .feed-header h3 {
             font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--color-text-display);
-            letter-spacing: -0.01em;
-        }
-
-        .feed-header-line a.view-all-text {
-            color: var(--color-primary-action);
-            font-size: 0.84rem;
             font-weight: 700;
-            text-decoration: none;
+            color: var(--color-text-navy);
+            display: flex;
+            align-items: center;
+            gap: var(--space-8);
         }
 
-        .feed-item-stack {
+        .feed-list {
             display: flex;
             flex-direction: column;
             gap: var(--space-12);
         }
 
-        .feed-item-row {
-            background: var(--color-canvas);
+        .feed-item {
+            padding: var(--space-12) var(--space-16);
+            background-color: var(--color-surface-elevated);
             border: 1px solid var(--color-hairline-subtle);
             border-radius: var(--radius-cards);
-            padding: var(--space-12) var(--space-16);
+            transition: background-color 0.15s ease;
+        }
+
+        .feed-item:hover {
+            background-color: #EFECE4;
+        }
+
+        .feed-item-top {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            gap: var(--space-16);
-            transition: border-color 0.15s ease, background 0.15s ease;
+            margin-bottom: var(--space-4);
         }
 
-        .feed-item-row:hover {
-            border-color: var(--color-hairline);
-            background: #ffffff;
-        }
-
-        .feed-item-details h5 {
-            font-size: 0.92rem;
+        .feed-item-title {
+            font-size: 0.95rem;
             font-weight: 700;
-            color: var(--color-text-display);
-            margin-bottom: 2px;
+            color: var(--color-text-navy);
+            text-decoration: none;
         }
 
-        .feed-item-details p {
-            font-size: 0.78rem;
-            color: var(--color-text-muted);
-            display: flex;
-            align-items: center;
-            gap: var(--space-8);
+        .feed-item-title:hover {
+            color: var(--color-primary-action);
         }
 
-        .pill-badge {
-            display: inline-block;
+        .pill-tag {
+            font-size: 0.72rem;
+            font-weight: 700;
             padding: 2px 8px;
             border-radius: var(--radius-pills);
-            font-size: 0.7rem;
-            font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.04em;
         }
 
-        .pill-blue { background: #e0f2fe; color: #0284c7; }
-        .pill-mint { background: var(--color-mint-tint); color: var(--color-bio-mint); }
-        .pill-lavender { background: var(--color-lavender-tint); color: var(--color-lavender-dawn); }
+        .pill-tag-green {
+            background-color: var(--color-primary-tint);
+            color: var(--color-primary-action);
+            border: 1px solid var(--color-primary-border);
+        }
 
-        /* ─── 6. Academic Bench Evaluation Table (Emre Akadal Lab) ─── */
-        section.bench-table-section {
-            background: #ffffff;
+        .pill-tag-gold {
+            background-color: var(--color-gold-tint);
+            color: var(--color-heritage-gold);
+            border: 1px solid #FDE68A;
+        }
+
+        .feed-item-meta {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            display: flex;
+            gap: var(--space-12);
+        }
+
+        /* ─── 6. Academic Bench Evaluation Table (Nazife Türk Lab) ─── */
+        .bench-section {
+            background-color: var(--color-surface-card);
             border: 1px solid var(--color-hairline);
             border-radius: var(--radius-cards);
             padding: var(--space-32);
-            margin-bottom: var(--space-80);
+            margin-bottom: var(--space-64);
+            box-shadow: var(--elevation-none);
         }
 
-        .bench-table-header {
+        .bench-top {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--space-12);
+            justify-content: space-between;
+            margin-bottom: var(--space-20);
             flex-wrap: wrap;
+            gap: var(--space-12);
+        }
+
+        .bench-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-8);
+            padding: 4px 12px;
+            border-radius: var(--radius-pills);
+            background-color: var(--color-primary-tint);
+            border: 1px solid var(--color-primary-border);
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--color-primary-action);
+        }
+
+        .bench-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--color-hairline);
+            border-radius: var(--radius-cards);
+        }
+
+        table.bench-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.88rem;
+        }
+
+        table.bench-table th {
+            background-color: var(--color-surface-elevated);
+            color: var(--color-text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+            padding: var(--space-12) var(--space-16);
+            border-bottom: 1px solid var(--color-hairline);
+        }
+
+        table.bench-table td {
+            padding: var(--space-12) var(--space-16);
+            border-bottom: 1px solid var(--color-hairline-subtle);
+            color: var(--color-text-body);
+        }
+
+        table.bench-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        table.bench-table tr:hover td {
+            background-color: var(--color-surface-elevated);
+        }
+
+        .code-route {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--color-primary-action);
+            background-color: var(--color-primary-tint);
+            padding: 2px 6px;
+            border-radius: var(--radius-cards);
+            border: 1px solid var(--color-primary-border);
+            font-size: 0.82rem;
+            text-decoration: none;
+        }
+
+        .status-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: var(--radius-pills);
+        }
+
+        .status-200 { background: #D1FAE5; color: #065F46; }
+        .status-404 { background: #FFE4E6; color: #9F1239; }
+        .status-302 { background: #FEF3C7; color: #92400E; }
+
+        /* ─── 7. Institutional Footer ─── */
+        footer.page-footer {
+            border-top: 1px solid var(--color-hairline);
+            padding: var(--space-48) 0 var(--space-32);
+            color: var(--color-text-muted);
+            font-size: 0.88rem;
+            background-color: var(--color-canvas);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: var(--space-32);
+            margin-bottom: var(--space-48);
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-12);
+        }
+
+        .footer-brand-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-12);
+        }
+
+        .footer-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-pills);
+            background: #FFFFFF;
+            border: 1px solid var(--color-hairline);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .footer-logo img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+        }
+
+        .footer-brand-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--color-text-display);
+        }
+
+        .footer-brand-desc {
+            font-size: 0.82rem;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+            max-width: 320px;
+        }
+
+        .footer-col h4 {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--color-text-navy);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-16);
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
             gap: var(--space-8);
         }
 
-        .bench-table-header h4 {
-            font-family: var(--font-display);
-            font-size: 1.4rem;
-            color: var(--color-text-display);
-            letter-spacing: -0.02em;
-        }
-
-        .bench-pill-label {
-            background: var(--color-canvas);
-            color: var(--color-primary-action);
-            border: 1px solid var(--color-hairline);
-            padding: 4px 12px;
-            border-radius: var(--radius-pills);
-            font-size: 0.75rem;
-            font-weight: 700;
-            font-family: var(--font-mono);
-        }
-
-        .bench-table-desc {
-            font-size: 0.88rem;
-            color: var(--color-text-muted);
-            margin-bottom: var(--space-20);
-        }
-
-        .table-responsive-wrapper {
-            overflow-x: auto;
-        }
-
-        table.minimal-bench-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }
-
-        table.minimal-bench-table th,
-        table.minimal-bench-table td {
-            text-align: left;
-            padding: 10px 14px;
-            border-bottom: 1px solid var(--color-hairline-subtle);
-        }
-
-        table.minimal-bench-table th {
-            color: var(--color-text-muted);
-            font-weight: 700;
-            background: var(--color-canvas);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .method-chip {
-            display: inline-block;
-            padding: 2px 6px;
-            border-radius: var(--radius-cards);
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
-            font-weight: 700;
-        }
-
-        .method-chip-get { background: #e0f2fe; color: #0284c7; }
-        .method-chip-post { background: var(--color-mint-tint); color: var(--color-bio-mint); }
-
-        a.endpoint-code-link {
-            color: var(--color-primary-action);
-            text-decoration: none;
-            font-family: var(--font-mono);
-            font-weight: 600;
-        }
-
-        a.endpoint-code-link:hover {
-            text-decoration: underline;
-        }
-
-        /* ─── 7. Minimal Institutional Footer ─── */
-        footer.site-footer {
-            border-top: 1px solid var(--color-hairline);
-            padding: var(--space-32) 0;
-            font-size: 0.85rem;
-            color: var(--color-text-muted);
-        }
-
-        .footer-flex-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: var(--space-16);
-        }
-
-        .footer-nav-links {
-            display: flex;
-            gap: var(--space-20);
-            flex-wrap: wrap;
-        }
-
-        .footer-nav-links a {
+        .footer-col a {
             color: var(--color-text-muted);
             text-decoration: none;
-            font-size: 0.84rem;
-            font-weight: 600;
+            font-size: 0.85rem;
             transition: color 0.15s ease;
         }
 
-        .footer-nav-links a:hover {
+        .footer-col a:hover {
             color: var(--color-primary-action);
+        }
+
+        .footer-bottom {
+            padding-top: var(--space-24);
+            border-top: 1px solid var(--color-hairline-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--color-text-light);
+            flex-wrap: wrap;
+            gap: var(--space-12);
+        }
+
+        @media (max-width: 900px) {
+            .numbers-grid { grid-template-columns: repeat(2, 1fr); }
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+            .dual-feed-layout { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .hero-title { font-size: 2.75rem; }
+            .nav-links { display: none; }
+        }
+
+        @media (max-width: 600px) {
+            .numbers-grid { grid-template-columns: 1fr; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- Centered Floating Navigation Pill (9999px Radius) -->
+
+    <!-- ─── Background Watermark: İstanbul Üniversitesi Giriş Kapısı Silüeti ─── -->
+    <div class="bg-gate-watermark" aria-hidden="true">
+        <img src="/assets/iu-gate-silhouette.svg" alt="" onerror="this.style.display='none';">
+    </div>
+
+    <!-- ─── 1. Centered Floating Navigation Pill (9999px) ─── -->
     <header class="nav-wrapper">
         <div class="nav-pill-container">
             <a href="/" class="nav-brand">
-                <div class="brand-crest-dot">🎓</div>
-                <div class="brand-title-group">
-                    <h1>İstanbul Üniversitesi</h1>
-                    <span>Mezun Takip Sistemi</span>
+                <div class="nav-brand-logo">
+                    <img src="/assets/iu-logo.svg" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg';" alt="İstanbul Üniversitesi Logosu">
+                </div>
+                <div class="nav-brand-text">
+                    <span class="nav-brand-title">İSTANBUL ÜNİVERSİTESİ</span>
+                    <span class="nav-brand-sub">Mezun Takip Sistemi &bull; 1453</span>
                 </div>
             </a>
 
-            <nav class="nav-menu">
-                <a href="/" class="active">Ana Sayfa</a>
-                <a href="/users">Mezunlar</a>
-                <a href="/jobs">Kariyer &amp; İlanlar</a>
-                <a href="/announcements">Duyurular</a>
-                <a href="/about">Hakkında</a>
+            <nav class="nav-links">
+                <a href="/users" class="nav-link">Mezun Rehberi</a>
+                <a href="/jobs" class="nav-link">Kariyer Havuzu</a>
+                <a href="/announcements" class="nav-link">Duyurular</a>
+                <a href="/bench" class="nav-link active">Akademik Tezgah</a>
             </nav>
 
             <div class="nav-actions">
-                <a href="/swagger" class="btn-header-cta">
-                    <span>⚡</span> Swagger API
-                </a>
+                <a href="/swagger" class="btn btn-ghost">Swagger API</a>
+                <a href="/users" class="btn btn-primary">Mezun Rehberi</a>
             </div>
         </div>
     </header>
 
-    <main class="page-container">
-        <!-- Hero Section: Left-Aligned Editorial Confidence -->
+    <div class="page-container">
+
+        <!-- ─── 2. Monumental Hero Section ─── -->
         <section class="hero-section">
-            <a href="/api/swagger" class="hero-announcement-chip">
-                <span class="pulse-mint-dot"></span>
-                <span>PostgreSQL 16 &bull; ASP.NET Core &bull; Docker Stack Aktif</span>
-                <span>&rarr;</span>
-            </a>
+            <div class="hero-pill-badge">
+                <img src="/assets/iu-logo.svg" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg';" alt="IU" class="hero-pill-logo">
+                <div class="pulse-dot"></div>
+                <span class="hero-pill-text">İstanbul Üniversitesi &bull; Nazife Türk &bull; 1453'ten Geleceğe</span>
+            </div>
 
-            <h2 class="hero-display-headline">
-                Köklü Bir Geçmiş, Güvenilir Bir Gelecek.<br>
-                Mezunlarımızla Tek Bir Çatı Altında.
-            </h2>
+            <h1 class="hero-headline">
+                Gelenekten Geleceğe<br>
+                <em>Güçlü Mezun Köprüsü</em>
+            </h1>
 
-            <p class="lead-text">
-                İstanbul Üniversitesi mezunları ve öğrencileri arasında güvenilir profesyonel köprü: 
-                Mezun rehberini inceleyin, kariyer fırsatlarını yakalayın ve yeni nesil öğrencilere mentorluk sağlayın.
+            <p class="hero-subtitle">
+                Türkiye'nin en köklü akademik çınarı İstanbul Üniversitesi'nin 500 yılı aşkın birikimini, modern bulut mimarisi ve kurumsal kariyer ağıyla geleceğe taşıyoruz.
             </p>
 
-            <div class="hero-button-row">
-                <a href="/users" class="btn-pill-primary">
-                    <span>👥</span> Mezun Rehberini İncele
+            <div class="hero-actions">
+                <a href="/users" class="btn btn-primary">
+                    🎓 Mezun Rehberini İncele
                 </a>
-                <a href="/jobs" class="btn-pill-ghost">
-                    <span>💼</span> Kariyer &amp; İş Panosu
+                <a href="/jobs" class="btn btn-secondary">
+                    💼 Kariyer &amp; İlan Havuzu
                 </a>
-                <a href="/announcements" class="btn-pill-ghost">
-                    <span>📢</span> Etkinlikler &amp; Duyurular
+                <a href="/bench" class="btn btn-secondary">
+                    🧪 Akademik Tezgah
+                </a>
+            </div>
+
+            <!-- ─── 3. Monumental "By The Numbers" ─── -->
+            <div class="numbers-grid">
+                <div class="number-card">
+                    <div class="number-digit">1453</div>
+                    <div class="number-label">Kuruluş Yılı</div>
+                    <div class="number-sub">Fatih Sultan Mehmet fermanıyla kurulan köklü miras.</div>
+                </div>
+                <div class="number-card">
+                    <div class="number-digit">50K+</div>
+                    <div class="number-label">Kayıtlı Mezun</div>
+                    <div class="number-sub">Dünya çapında aktif profesyonel mezun topluluğu.</div>
+                </div>
+                <div class="number-card">
+                    <div class="number-digit">100%</div>
+                    <div class="number-label">Akademik Doğruluk</div>
+                    <div class="number-sub">Rektörlük ve fakülte sicil veritabanıyla tam entegre.</div>
+                </div>
+                <div class="number-card">
+                    <div class="number-digit">3-Tier</div>
+                    <div class="number-label">Kurumsal Mimari</div>
+                    <div class="number-sub">C# .NET 7, PostgreSQL 16 ve Docker Compose ortamı.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── 4. Product Pillars Grid (Bento Grid) ─── -->
+        <section style="margin-bottom: var(--space-64);">
+            <div class="section-header">
+                <span class="section-tag">Kurumsal Hizmetler</span>
+                <h2 class="section-title">Sistem Bileşenleri &amp; Temel Modüller</h2>
+                <p class="section-desc">Mezunlarımızın kariyer gelişimini destekleyen ve akademik bağları koruyan dört ana hizmet sütunu.</p>
+            </div>
+
+            <div class="bento-grid">
+                <a href="/users" class="bento-card">
+                    <div class="bento-card-top">
+                        <div class="bento-icon-wrapper">👥</div>
+                        <h3 class="bento-card-title">Mezun Rehberi</h3>
+                        <p class="bento-card-desc">Fakülte, bölüm ve mezuniyet yılına göre filtrelenebilir dinamik mezun dizini ve profil kartları.</p>
+                    </div>
+                    <div class="bento-card-bottom">
+                        <span>Rehbere Git</span>
+                        <span class="arrow-indicator">&rarr;</span>
+                    </div>
+                </a>
+
+                <a href="/jobs" class="bento-card">
+                    <div class="bento-card-top">
+                        <div class="bento-icon-wrapper">💼</div>
+                        <h3 class="bento-card-title">Kariyer &amp; İlan Panosu</h3>
+                        <p class="bento-card-desc">Mezunlar arası iş fırsatları, staj imkanları, doğrudan başvuru kanalları ve kariyer yönlendirmeleri.</p>
+                    </div>
+                    <div class="bento-card-bottom">
+                        <span>İlanları İncele</span>
+                        <span class="arrow-indicator">&rarr;</span>
+                    </div>
+                </a>
+
+                <a href="/announcements" class="bento-card">
+                    <div class="bento-card-top">
+                        <div class="bento-icon-wrapper">📢</div>
+                        <h3 class="bento-card-title">Akademik Duyurular</h3>
+                        <p class="bento-card-desc">Rektörlük bültenleri, geleneksel mezunlar buluşması (Homecoming) ve fakülte etkinlikleri.</p>
+                    </div>
+                    <div class="bento-card-bottom">
+                        <span>Duyuruları Gör</span>
+                        <span class="arrow-indicator">&rarr;</span>
+                    </div>
+                </a>
+
+                <a href="/swagger" class="bento-card">
+                    <div class="bento-card-top">
+                        <div class="bento-icon-wrapper">⚡</div>
+                        <h3 class="bento-card-title">Swagger OpenAPI</h3>
+                        <p class="bento-card-desc">PostgreSQL kalıcı depolamalı RESTful API uç noktaları, Swagger şeması ve test arayüzü.</p>
+                    </div>
+                    <div class="bento-card-bottom">
+                        <span>API Konsolu</span>
+                        <span class="arrow-indicator">&rarr;</span>
+                    </div>
                 </a>
             </div>
         </section>
 
-        <!-- Monumental "By The Numbers" Statement Block -->
-        <section class="numbers-section">
-            <div class="number-col">
-                <div class="monumental-stat">1453</div>
-                <div class="stat-label-headline">Tarihi Akademik Miras</div>
-                <div class="stat-caption-detail">Türkiye'nin ilk ve en köklü üniversite kültürü.</div>
-            </div>
-
-            <div class="number-col">
-                <div class="monumental-stat">50K+</div>
-                <div class="stat-label-headline">Kayıtlı Mezun Profili</div>
-                <div class="stat-caption-detail">Mühendislik, İktisat, Hukuk, Tıp ve tüm fakülteler.</div>
-            </div>
-
-            <div class="number-col">
-                <div class="monumental-stat">100%</div>
-                <div class="stat-label-headline">Kalıcı PostgreSQL 16</div>
-                <div class="stat-caption-detail">The Forgetting Test onaylı &bull; ACID veri güvencesi.</div>
-            </div>
-
-            <div class="number-col">
-                <div class="monumental-stat">3-Tier</div>
-                <div class="stat-label-headline">Enterprise Middleware</div>
-                <div class="stat-caption-detail">Request Logging, 404 Guardian &bull; 5xx Crash Shield.</div>
-            </div>
-        </section>
-
-        <!-- Product Card Grid: 4-Column Minimal Bento (4px Radius) -->
-        <div class="section-headline-bar">
-            <h3>Platformun Temel Yapı Taşları</h3>
-            <p>Mezunlarımız ve öğrencilerimiz için tasarlanmış kurumsal dijital modüller.</p>
-        </div>
-
-        <section class="product-grid-4">
-            <div class="product-card">
-                <div>
-                    <span class="card-eyebrow-tag">Networking</span>
-                    <h4>Mezun Rehberi</h4>
-                    <p>Fakülte, bölüm ve mezuniyet yılına göre mezunları filtreleyin. Doğrudan profesyonel bağlantılar kurun.</p>
-                </div>
-                <a href="/users" class="card-arrow-link">Rehberi Görüntüle &rarr;</a>
-            </div>
-
-            <div class="product-card">
-                <div>
-                    <span class="card-eyebrow-tag">Kariyer &bull; Referral</span>
-                    <h4>Kariyer Havuzu</h4>
-                    <p>Mezunlarımızın çalıştığı şirketlerden açık pozisyonlar ve kurum içi referans imkanlarına erişin.</p>
-                </div>
-                <a href="/jobs" class="card-arrow-link">İlanları İncele &rarr;</a>
-            </div>
-
-            <div class="product-card">
-                <div>
-                    <span class="card-eyebrow-tag">Mentorship</span>
-                    <h4>Mentorluk Ağı</h4>
-                    <p>Kıdemli mezunlarımız son sınıf öğrencilerine ve yeni mezunlara birebir teknik mülakat rehberliği sunar.</p>
-                </div>
-                <a href="/announcements" class="card-arrow-link">Mentorluk Başvurusu &rarr;</a>
-            </div>
-
-            <div class="product-card">
-                <div>
-                    <span class="card-eyebrow-tag">Reunion</span>
-                    <h4>Mezunlar Günü</h4>
-                    <p>Geleneksel Homecoming Galası, kampüs buluşmaları ve akademik seminerlerle bağınızı canlı tutun.</p>
-                </div>
-                <a href="/announcements" class="card-arrow-link">Etkinlik Takvimi &rarr;</a>
-            </div>
-        </section>
-
-        <!-- Dual Feed Showcase -->
-        <section class="dual-feed-section">
-            <!-- Feed 1: Jobs -->
+        <!-- ─── 5. Dual Feed: Son İlanlar & Duyurular ─── -->
+        <section class="dual-feed-layout">
             <div class="feed-container">
-                <div class="feed-header-line">
-                    <h4>💼 Açık Kariyer Fırsatları</h4>
-                    <a href="/jobs" class="view-all-text">Tümü &rarr;</a>
+                <div class="feed-header">
+                    <h3><span>💼</span> Aktif İş &amp; Kariyer Fırsatları</h3>
+                    <a href="/jobs" class="btn btn-ghost" style="height: 32px; font-size: 0.8rem;">Tümünü Gör</a>
                 </div>
-                <div class="feed-item-stack">
-                    <div class="feed-item-row">
-                        <div class="feed-item-details">
-                            <h5>Senior Backend Engineer (.NET 8 &bull; Cloud)</h5>
-                            <p>
-                                <span>FinTech Corp</span> &bull; 
-                                <span class="pill-badge pill-blue">İstanbul</span> &bull; 
-                                <span class="pill-badge pill-mint">Tam Zamanlı</span>
-                            </p>
+                <div class="feed-list">
+                    <div class="feed-item">
+                        <div class="feed-item-top">
+                            <a href="/jobs" class="feed-item-title">Kıdemli Bulut Mimarı (AWS &amp; Kubernetes)</a>
+                            <span class="pill-tag pill-tag-green">Tam Zamanlı</span>
                         </div>
-                        <a href="/jobs" class="card-arrow-link">İncele</a>
+                        <div class="feed-item-meta">
+                            <span>🏢 Trendyol Teknoloji</span>
+                            <span>📍 İstanbul (Hibrit)</span>
+                            <span>⏱️ Yeni</span>
+                        </div>
                     </div>
-
-                    <div class="feed-item-row">
-                        <div class="feed-item-details">
-                            <h5>Cloud Solutions Architect (AWS / Azure)</h5>
-                            <p>
-                                <span>Global Data Insights</span> &bull; 
-                                <span class="pill-badge pill-blue">Ankara (Remote)</span> &bull; 
-                                <span class="pill-badge pill-lavender">Hybrid</span>
-                            </p>
+                    <div class="feed-item">
+                        <div class="feed-item-top">
+                            <a href="/jobs" class="feed-item-title">Yapay Zeka &amp; Veri Bilimci</a>
+                            <span class="pill-tag pill-tag-green">Hibrit</span>
                         </div>
-                        <a href="/jobs" class="card-arrow-link">İncele</a>
+                        <div class="feed-item-meta">
+                            <span>🏢 Tübitak BİLGEM</span>
+                            <span>📍 Kocaeli / Gebze</span>
+                            <span>⏱️ 2 gün önce</span>
+                        </div>
                     </div>
-
-                    <div class="feed-item-row">
-                        <div class="feed-item-details">
-                            <h5>Data Science &amp; AI Research Intern</h5>
-                            <p>
-                                <span>IU Teknokent Labs</span> &bull; 
-                                <span class="pill-badge pill-blue">İstanbul</span> &bull; 
-                                <span class="pill-badge pill-mint">Staj</span>
-                            </p>
+                    <div class="feed-item">
+                        <div class="feed-item-top">
+                            <a href="/jobs" class="feed-item-title">Backend Developer (.NET 7 &amp; PostgreSQL)</a>
+                            <span class="pill-tag pill-tag-green">Uzaktan</span>
                         </div>
-                        <a href="/jobs" class="card-arrow-link">İncele</a>
+                        <div class="feed-item-meta">
+                            <span>🏢 FinTech Labs</span>
+                            <span>📍 Remote</span>
+                            <span>⏱️ 3 gün önce</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Feed 2: Announcements -->
             <div class="feed-container">
-                <div class="feed-header-line">
-                    <h4>📌 Üniversite Duyuruları &amp; Etkinlikler</h4>
-                    <a href="/announcements" class="view-all-text">Tümü &rarr;</a>
+                <div class="feed-header">
+                    <h3><span>📢</span> Güncel Mezun Duyuruları</h3>
+                    <a href="/announcements" class="btn btn-ghost" style="height: 32px; font-size: 0.8rem;">Tümünü Gör</a>
                 </div>
-                <div class="feed-item-stack">
-                    <div class="feed-item-row">
-                        <div class="feed-item-details">
-                            <h5>2026 Annual Alumni Homecoming Gala</h5>
-                            <p>
-                                <span>Mezunlar Ofisi</span> &bull; 
-                                <span>1 Mayıs 2026</span> &bull; 
-                                <span class="pill-badge pill-lavender">Reunion</span>
-                            </p>
+                <div class="feed-list">
+                    <div class="feed-item">
+                        <div class="feed-item-top">
+                            <a href="/announcements" class="feed-item-title">Geleneksel Mezunlar Günü (Homecoming 2026)</a>
+                            <span class="pill-tag pill-tag-gold">Etkinlik</span>
                         </div>
-                        <a href="/announcements" class="card-arrow-link">Detay</a>
+                        <div class="feed-item-meta">
+                            <span>🏛️ Beyazıt Tarihi Merkez Kampüs</span>
+                            <span>📅 24 Mayıs 2026</span>
+                        </div>
                     </div>
-
-                    <div class="feed-item-row">
-                        <div class="feed-item-details">
-                            <h5>Tech Mentorship Cohort 2026 Başvuruları Açıldı</h5>
-                            <p>
-                                <span>Kariyer Merkezi</span> &bull; 
-                                <span>10 Mayıs 2026</span> &bull; 
-                                <span class="pill-badge pill-mint">Mentorship</span>
-                            </p>
+                    <div class="feed-item">
+                        <div class="feed-item-top">
+                            <a href="/announcements" class="feed-item-title">2026 Akademik Mentorluk Eşleşmeleri Başladı</a>
+                            <span class="pill-tag pill-tag-green">Mentorluk</span>
                         </div>
-                        <a href="/announcements" class="card-arrow-link">Detay</a>
+                        <div class="feed-item-meta">
+                            <span>🎓 Kariyer Geliştirme Uygulama Merkezi</span>
+                            <span>⏱️ Aktif Başvuru</span>
+                        </div>
                     </div>
-
-                    <div class="feed-item-row">
-                        <div class="feed-item-details">
-                            <h5>Mühendislik Fakültesi Kariyer Zirvesi '26</h5>
-                            <p>
-                                <span>Avcılar Yerleşkesi</span> &bull; 
-                                <span>24 Mayıs 2026</span> &bull; 
-                                <span class="pill-badge pill-blue">Konferans</span>
-                            </p>
+                    <div class="feed-item">
+                        <div class="feed-item-top">
+                            <a href="/announcements" class="feed-item-title">Bilişim Sektöründe Mezun Buluşması ve Panel</a>
+                            <span class="pill-tag pill-tag-gold">Panel</span>
                         </div>
-                        <a href="/announcements" class="card-arrow-link">Detay</a>
+                        <div class="feed-item-meta">
+                            <span>💻 Fen Fakültesi Konferans Salonu</span>
+                            <span>📅 15 Haziran 2026</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Academic Lab / Evaluation Bench Panel -->
-        <section class="bench-table-section">
-            <div class="bench-table-header">
-                <h4>Akademik Laboratuvar &amp; Değerlendirme Tezgahı</h4>
-                <span class="bench-pill-label">Doç. Dr. Emre Akadal &bull; Web Programlama</span>
+        <!-- ─── 6. Academic Bench Evaluation Table (Nazife Türk Lab) ─── -->
+        <section class="bench-section">
+            <div class="bench-top">
+                <div>
+                    <span class="section-tag">Laboratuvar Değerlendirmesi</span>
+                    <h2 class="section-title" style="font-size: 1.85rem; margin-bottom: 4px;">Akademik Değerlendirme Tezgahı</h2>
+                    <p class="section-desc">Web Programlama dersi laboratuvar isterleri, parametrik yönlendirme anatomisi ve canlı test rotaları.</p>
+                </div>
+                <div class="bench-pill">
+                    <img src="/assets/iu-logo.svg" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg';" alt="IU" width="16" height="16">
+                    <span class="bench-pill-label">Nazife Türk &bull; Web Programlama</span>
+                </div>
             </div>
-            <p class="bench-table-desc">
-                Ders kapsamında tahtada atanan URL anatomisi, Minimal API, MVC Controller, 
-                PostgreSQL kalıcı ilişkisel veritabanı ve Error Guardian test bağlantıları:
-            </p>
-            <div class="table-responsive-wrapper">
-                <table class="minimal-bench-table">
+
+            <div class="bench-table-wrapper">
+                <table class="bench-table">
                     <thead>
                         <tr>
-                            <th>Method</th>
-                            <th>Uç Nokta (Route)</th>
-                            <th>Kategori / Amaç</th>
-                            <th>Beklenen Yanıt &amp; Test Linki</th>
+                            <th>İster / Hafta</th>
+                            <th>Açıklama &amp; Doğrulama Amacı</th>
+                            <th>Uç Nokta / URL Rotası</th>
+                            <th>Beklenen Yanıt</th>
+                            <th>HTTP Kodu</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><span class="method-chip method-chip-get">GET</span></td>
-                            <td><a class="endpoint-code-link" href="/ok">/ok</a></td>
-                            <td>Sağlık ve Başlangıç</td>
-                            <td><code>200 OK</code>: "ok" (text/plain)</td>
+                            <td><strong>İster ① (Düz Metin)</strong></td>
+                            <td>Konteyner ve ağ sağlığını kontrol eden temel endpoint</td>
+                            <td><a href="/ok" class="code-route">GET /ok</a></td>
+                            <td><code>ok</code> (text/plain)</td>
+                            <td><span class="status-badge status-200">200 OK</span></td>
                         </tr>
                         <tr>
-                            <td><span class="method-chip method-chip-get">GET</span></td>
-                            <td><a class="endpoint-code-link" href="/hello">/hello</a></td>
-                            <td>Statik Selamlama</td>
-                            <td><code>200 OK</code>: "Hello, World!"</td>
+                            <td><strong>İster ② (Selamlama)</strong></td>
+                            <td>Statik selamlama mesajı çıktısı</td>
+                            <td><a href="/hello" class="code-route">GET /hello</a></td>
+                            <td><code>Hello, World!</code></td>
+                            <td><span class="status-badge status-200">200 OK</span></td>
                         </tr>
                         <tr>
-                            <td><span class="method-chip method-chip-get">GET</span></td>
-                            <td><a class="endpoint-code-link" href="/hello/emre">/hello/{name}</a></td>
-                            <td>Dinamik Parametre</td>
-                            <td><code>200 OK</code>: "Hello, emre!"</td>
+                            <td><strong>İster ③ (Parametrik)</strong></td>
+                            <td>URL rotasından dinamik parametre yakalama</td>
+                            <td><a href="/hello/nazife" class="code-route">GET /hello/nazife</a></td>
+                            <td><code>Hello, nazife!</code></td>
+                            <td><span class="status-badge status-200">200 OK</span></td>
                         </tr>
                         <tr>
-                            <td><span class="method-chip method-chip-get">GET</span></td>
-                            <td><a class="endpoint-code-link" href="/sum/15/27">/sum/15/27</a></td>
-                            <td>Matematiksel Toplama</td>
-                            <td><code>200 OK</code>: 15 + 27 = 42</td>
+                            <td><strong>İster ④ (Hesaplama)</strong></td>
+                            <td>Parametrik toplama işlemi ve validasyon</td>
+                            <td><a href="/sum/15/25" class="code-route">GET /sum/15/25</a></td>
+                            <td><code>{"result": 40.0}</code></td>
+                            <td><span class="status-badge status-200">200 OK</span></td>
                         </tr>
                         <tr>
-                            <td><span class="method-chip method-chip-get">GET</span></td>
-                            <td><a class="endpoint-code-link" href="/api/users">/api/users</a></td>
-                            <td>PostgreSQL Kalıcı Mezunlar</td>
-                            <td><code>200 OK</code>: JSON Mezun Dizisi</td>
+                            <td><strong>İster ⑤ (Ana Sayfa)</strong></td>
+                            <td>Kurumsal Alabaster (#FAF9F6) &amp; Yeşil (#004225) tasarım arayüzü</td>
+                            <td><a href="/home" class="code-route">GET /home</a></td>
+                            <td>HTML Görünümü (Refero Grid)</td>
+                            <td><span class="status-badge status-200">200 OK</span></td>
                         </tr>
                         <tr>
-                            <td><span class="method-chip method-chip-get">GET</span></td>
-                            <td><a class="endpoint-code-link" href="/api/jobs">/api/jobs</a></td>
-                            <td>İlişkisel İş İlanları</td>
-                            <td><code>200 OK</code>: JSON İlan Dizisi</td>
+                            <td><strong>404 Guardian</strong></td>
+                            <td>Geçersiz istek yakalayıcı ve şablon sayfası</td>
+                            <td><a href="/404" class="code-route">GET /404</a></td>
+                            <td>Özel Branded 404 Sayfası</td>
+                            <td><span class="status-badge status-404">404 NOT FOUND</span></td>
                         </tr>
                         <tr>
-                            <td><span class="method-chip method-chip-get">GET</span></td>
-                            <td><a class="endpoint-code-link" href="/api/swagger">/api/swagger</a></td>
-                            <td>OpenAPI Swagger UI</td>
-                            <td>Etkileşimli Swagger Konsolu</td>
-                        </tr>
-                        <tr>
-                            <td><span class="method-chip method-chip-get">GET</span></td>
-                            <td><a class="endpoint-code-link" href="/api/test/500">/api/test/500</a></td>
-                            <td>5xx Guardian Hata Yakalama</td>
-                            <td><code>500 Server Error</code> + traceId</td>
-                        </tr>
-                        <tr>
-                            <td><span class="method-chip method-chip-get">GET</span></td>
-                            <td><a class="endpoint-code-link" href="/404">/404</a></td>
-                            <td>Generic 404 Sayfası</td>
-                            <td><code>404 Not Found</code> HTML Görünümü</td>
-                        </tr>
-                        <tr>
-                            <td><span class="method-chip method-chip-get">GET</span></td>
-                            <td><a class="endpoint-code-link" href="/some-invalid-sample">/some-invalid-sample</a></td>
-                            <td>Geçersiz İstek Yönlendirme</td>
-                            <td><code>302 Found</code> &rarr; /404 yönlendirmesi</td>
+                            <td><strong>Yönlendirme (302)</strong></td>
+                            <td>Geçersiz web isteklerinin 404'e otomatik yönlendirilmesi</td>
+                            <td><a href="/gecersiz-rota" class="code-route">GET /gecersiz-rota</a></td>
+                            <td>302 Found &rarr; /404?requestedPath=...</td>
+                            <td><span class="status-badge status-302">302 FOUND</span></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </section>
-    </main>
 
-    <!-- Minimal Institutional Footer -->
-    <footer class="site-footer">
-        <div class="page-container footer-flex-row">
-            <div>
-                <p><strong>İstanbul Üniversitesi</strong> &bull; Bilgisayar Bilimleri &amp; Web Programlama</p>
-                <p style="margin-top: 2px;">Öğrenci: <strong>Nazife Türk</strong> (<a href="mailto:nazife.turk@ogr.iu.edu.tr" style="color: var(--color-primary-action);">nazife.turk@ogr.iu.edu.tr</a>) &bull; Doç. Dr. Emre Akadal</p>
+    </div>
+
+    <!-- ─── 7. Institutional Footer ─── -->
+    <footer class="page-footer">
+        <div class="page-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-brand-header">
+                        <div class="footer-logo">
+                            <img src="/assets/iu-logo.svg" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg';" alt="İstanbul Üniversitesi Logo">
+                        </div>
+                        <div>
+                            <span class="footer-brand-title">İSTANBUL ÜNİVERSİTESİ</span>
+                            <div style="font-size: 0.75rem; color: var(--color-text-muted);">Mezun Takip ve Kariyer Ağı Sistemi</div>
+                        </div>
+                    </div>
+                    <p class="footer-brand-desc">
+                        1453 yılında kurulan İstanbul Üniversitesi'nin çağdaş mezun ilişkileri ve kariyer koordinasyon platformu.
+                    </p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Navigasyon</h4>
+                    <ul>
+                        <li><a href="/users">Mezun Rehberi</a></li>
+                        <li><a href="/jobs">Kariyer Havuzu</a></li>
+                        <li><a href="/announcements">Duyurular</a></li>
+                        <li><a href="/bench">Akademik Tezgah</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Geliştirici &amp; API</h4>
+                    <ul>
+                        <li><a href="/swagger">Swagger UI (OpenAPI)</a></li>
+                        <li><a href="/api/users">Mezun API (JSON)</a></li>
+                        <li><a href="/api/jobs">İş İlanları API</a></li>
+                        <li><a href="/ok">Sistem Sağlık Ucu</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Kurumsal</h4>
+                    <ul>
+                        <li><a href="https://istanbul.edu.tr" target="_blank" rel="noopener">Rektörlük Portalı</a></li>
+                        <li><a href="https://kariyer.istanbul.edu.tr" target="_blank" rel="noopener">Kariyer Merkezi</a></li>
+                        <li><a href="/brand.md">Tasarım İlkeleri</a></li>
+                        <li><a href="/DESIGN.MD">DESIGN.MD Spesifikasyonu</a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="footer-nav-links">
-                <a href="/">Ana Sayfa</a>
-                <a href="/users">Mezunlar</a>
-                <a href="/jobs">İş İlanları</a>
-                <a href="/announcements">Duyurular</a>
-                <a href="/about">Hakkında</a>
-                <a href="/swagger">Swagger API</a>
-                <a href="https://github.com/NazifeTurk/alumni" target="_blank" rel="noopener">GitHub ↗</a>
+
+            <div class="footer-bottom">
+                <div>
+                    &copy; 1453 &ndash; 2026 İstanbul Üniversitesi. Tüm hakları saklıdır.
+                    <div style="margin-top: 2px;">Geliştirici &amp; Sistem Mimarı: <strong>Nazife Türk</strong> (<a href="mailto:nazife.turk@ogr.iu.edu.tr" style="color: var(--color-primary-action);">nazife.turk@ogr.iu.edu.tr</a>)</div>
+                </div>
+                <div>
+                    <span>PostgreSQL 16 &bull; .NET 7 &bull; Docker Compose Live</span>
+                </div>
             </div>
         </div>
     </footer>
+
 </body>
 </html>

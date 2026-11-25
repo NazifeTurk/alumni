@@ -108,24 +108,34 @@ public class JobPostingController : Controller
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>İş ve Staj İlanları — İstanbul Üniversitesi Mezun Takip</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
             <style>
                 :root {
-                    --bg: #0f172a;
-                    --card-bg: #1e293b;
-                    --border: #334155;
-                    --text: #f8fafc;
-                    --text-muted: #94a3b8;
-                    --primary: #4f46e5;
-                    --primary-hover: #4338ca;
-                    --accent: #10b981;
+                    --bg: #FAF9F6;
+                    --card-bg: #FFFFFF;
+                    --border: #E2DFD6;
+                    --text: #1C2920;
+                    --text-muted: #55685C;
+                    --primary: #004225;
+                    --primary-hover: #065A35;
+                    --pill-bg: #E8F0EB;
+                    --pill-border: #C8DBCF;
                 }
                 * { box-sizing: border-box; margin: 0; padding: 0; }
                 body {
-                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                    font-family: 'Plus Jakarta Sans', sans-serif;
                     background-color: var(--bg);
+                    background-image: url('/assets/iu-gate-silhouette.svg');
+                    background-repeat: no-repeat;
+                    background-position: center 30px;
+                    background-size: 1100px auto;
+                    background-attachment: fixed;
                     color: var(--text);
                     line-height: 1.6;
                     padding: 2rem 1rem;
+                    -webkit-font-smoothing: antialiased;
                 }
                 .container { max-width: 960px; margin: 0 auto; }
                 header {
@@ -138,64 +148,75 @@ public class JobPostingController : Controller
                     flex-wrap: wrap;
                     gap: 1rem;
                 }
+                .header-brand { display: flex; align-items: center; gap: 0.85rem; }
+                .header-brand img { width: 44px; height: 44px; object-fit: contain; }
+                h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.9rem; font-weight: 400; color: var(--primary); letter-spacing: -0.02em; }
+                nav { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
                 nav a {
                     color: var(--text-muted);
                     text-decoration: none;
-                    margin-left: 1.25rem;
-                    font-weight: 500;
-                    transition: color 0.2s;
-                }
-                nav a:hover, nav a.active { color: #fff; }
-                .btn {
-                    display: inline-block;
-                    padding: 0.6rem 1.2rem;
-                    border-radius: 6px;
                     font-weight: 600;
+                    font-size: 0.9rem;
+                    transition: color 0.15s;
+                }
+                nav a:hover, nav a.active { color: var(--primary); }
+                .btn {
+                    display: inline-flex;
+                    align-items: center;
+                    padding: 0.5rem 1.2rem;
+                    border-radius: 9999px;
+                    font-weight: 700;
                     text-decoration: none;
                     cursor: pointer;
-                    border: none;
-                    transition: background 0.2s;
+                    border: 1px solid transparent;
+                    font-size: 0.88rem;
+                    transition: background 0.15s;
                 }
                 .btn-primary { background: var(--primary); color: #fff; }
                 .btn-primary:hover { background: var(--primary-hover); }
                 .job-card {
                     background: var(--card-bg);
                     border: 1px solid var(--border);
-                    border-radius: 12px;
-                    padding: 1.5rem;
+                    border-radius: 4px;
+                    padding: 1.75rem;
                     margin-bottom: 1.5rem;
+                    box-shadow: none;
                 }
                 .company-badge {
                     display: inline-block;
-                    background: rgba(56, 189, 248, 0.15);
-                    color: #38bdf8;
-                    border: 1px solid rgba(56, 189, 248, 0.3);
+                    background: var(--pill-bg);
+                    color: var(--primary);
+                    border: 1px solid var(--pill-border);
                     padding: 0.2rem 0.6rem;
-                    border-radius: 4px;
-                    font-size: 0.8rem;
+                    border-radius: 9999px;
+                    font-size: 0.78rem;
                     font-weight: 700;
+                    text-transform: uppercase;
                 }
                 .badge-status {
                     display: inline-block;
-                    padding: 0.25rem 0.7rem;
+                    padding: 0.25rem 0.75rem;
                     border-radius: 9999px;
-                    font-size: 0.8rem;
-                    font-weight: 600;
+                    font-size: 0.78rem;
+                    font-weight: 700;
                 }
-                .badge-active { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-                .badge-closed { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+                .badge-active { background: #D1FAE5; color: #065F46; border: 1px solid #A7F3D0; }
+                .badge-closed { background: #FFE4E6; color: #9F1239; border: 1px solid #FECDD3; }
             </style>
         </head>
         <body>
             <div class="container">
                 <header>
-                    <div>
-                        <h1 style="font-size: 1.7rem; color: #fff;">💼 İş ve Staj İlanları</h1>
-                        <p style="color: var(--text-muted); font-size: 0.9rem;">Mezunlarımızın çalıştığı şirketlerdeki açık pozisyonlar ve referral fırsatları</p>
+                    <div class="header-brand">
+                        <img src="/assets/iu-logo.svg" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg';" alt="IU Logo">
+                        <div>
+                            <h1>Kariyer &amp; İlan Havuzu</h1>
+                            <p style="color: var(--text-muted); font-size: 0.85rem;">İstanbul Üniversitesi Mezunlar Ağı Açık Pozisyonları</p>
+                        </div>
                     </div>
-                    <div>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
                         <a href="/jobs/create" class="btn btn-primary">+ Yeni İlan Ekle</a>
-                        <nav style="display: inline-block; margin-left: 1rem;">
+                        <nav>
                             <a href="/">Ana Sayfa</a>
                             <a href="/users">Mezunlar</a>
                             <a href="/announcements">Duyurular</a>
@@ -224,41 +245,50 @@ public class JobPostingController : Controller
             <meta charset="UTF-8">
             <title>Yeni İlan Paylaş — İstanbul Üniversitesi</title>
             <style>
-                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }
-                .container { max-width: 650px; margin: 0 auto; background: #1e293b; padding: 2.5rem; border-radius: 12px; border: 1px solid #334155; }
+                body { font-family: sans-serif; background: #FAF9F6; color: #1C2920; padding: 2rem 1rem; }
+                .container { max-width: 650px; margin: 0 auto; background: #FFFFFF; padding: 2.5rem; border-radius: 4px; border: 1px solid #E2DFD6; box-shadow: none; }
+                .logo { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+                .logo img { width: 44px; height: 44px; }
                 .form-group { margin-bottom: 1.25rem; }
-                label { display: block; margin-bottom: 0.5rem; color: #cbd5e1; font-weight: 600; font-size: 0.95rem; }
-                input, select, textarea { width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #fff; font-size: 1rem; box-sizing: border-box; }
-                button { background: #4f46e5; color: #fff; padding: 0.8rem 1.5rem; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
-                button:hover { background: #4338ca; }
-                a { color: #94a3b8; text-decoration: none; margin-left: 1rem; }
+                label { display: block; margin-bottom: 0.4rem; color: #55685C; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; }
+                input, select, textarea { width: 100%; padding: 0.65rem 0.75rem; background: #FFFFFF; border: 1px solid #E2DFD6; border-radius: 4px; color: #1C2920; font-size: 0.95rem; box-sizing: border-box; }
+                input:focus, select:focus, textarea:focus { outline: none; border-color: #004225; }
+                button { background: #004225; color: #fff; padding: 0.7rem 1.6rem; border: none; border-radius: 9999px; font-weight: 700; cursor: pointer; }
+                button:hover { background: #065A35; }
+                a { color: #55685C; text-decoration: none; margin-left: 1rem; font-size: 0.9rem; }
             </style>
         </head>
         <body>
             <div class="container">
-                <h2 style="margin-bottom: 1.5rem; color: #fff;">💼 Yeni İlan Paylaş</h2>
+                <div class="logo">
+                    <img src="/assets/iu-logo.svg" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg';" alt="IU">
+                    <div>
+                        <h2 style="color: #004225; font-size: 1.4rem;">Yeni Kariyer İlanı Yayınla</h2>
+                        <span style="color: #55685C; font-size: 0.82rem;">İstanbul Üniversitesi Mezun Takip Sistemi</span>
+                    </div>
+                </div>
                 <form method="POST" action="/jobs">
                     <div class="form-group">
-                        <label for="userId">İlanı Veren Mezun (Author):</label>
+                        <label for="userId">İlanı Veren Mezun (Yazar):</label>
                         <select name="userId" id="userId" required>
                             {{userOptions}}
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="title">Pozisyon Başlığı (Title):</label>
-                        <input type="text" name="title" id="title" placeholder="Örn: Junior Backend Developer" required />
+                        <input type="text" name="title" id="title" placeholder="Örn: Kıdemli Bulut Mimarı" required />
                     </div>
                     <div class="form-group">
-                        <label for="company">Şirket (Company):</label>
-                        <input type="text" name="company" id="company" placeholder="Örn: Acme Inc." required />
+                        <label for="company">Şirket / Kurum (Company):</label>
+                        <input type="text" name="company" id="company" placeholder="Örn: Trendyol Teknoloji" required />
                     </div>
                     <div class="form-group">
                         <label for="location">Konum (Location):</label>
-                        <input type="text" name="location" id="location" value="Istanbul / Remote" />
+                        <input type="text" name="location" id="location" value="İstanbul / Hibrit" />
                     </div>
                     <div class="form-group">
-                        <label for="description">Açıklama &amp; Gereksinimler:</label>
-                        <textarea name="description" id="description" rows="4" placeholder="İlan detayları, aranan nitelikler..." required></textarea>
+                        <label for="description">Açıklama &amp; Nitelikler:</label>
+                        <textarea name="description" id="description" rows="4" placeholder="İş tanımı, aranan teknolojiler ve başvuru koşulları..." required></textarea>
                     </div>
                     <button type="submit">İlanı Yayınla</button>
                     <a href="/jobs">İptal</a>
@@ -273,14 +303,14 @@ public class JobPostingController : Controller
     {
         var appRows = applications.Any()
             ? string.Join("\n", applications.Select(a => $"""
-                <tr style="border-bottom: 1px solid #334155;">
-                    <td style="padding: 0.6rem;"><strong>#{a.UserId}</strong> {(a.User != null ? a.User.Name : "Applicant")}</td>
-                    <td style="padding: 0.6rem;">{(a.User != null ? a.User.Email : "")}</td>
-                    <td style="padding: 0.6rem;"><span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">{a.Status}</span></td>
-                    <td style="padding: 0.6rem; color: #94a3b8; font-size: 0.85rem;">{a.CreatedAt:yyyy-MM-dd HH:mm}</td>
+                <tr style="border-bottom: 1px solid #EBE8E0;">
+                    <td style="padding: 0.75rem 1rem;"><strong>#{a.UserId}</strong> {(a.User != null ? a.User.Name : "Aday")}</td>
+                    <td style="padding: 0.75rem 1rem;">{(a.User != null ? a.User.Email : "")}</td>
+                    <td style="padding: 0.75rem 1rem;"><span style="background: #E8F0EB; color: #004225; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.78rem; font-weight: 700; border: 1px solid #C8DBCF;">{a.Status}</span></td>
+                    <td style="padding: 0.75rem 1rem; color: #55685C; font-size: 0.85rem;">{a.CreatedAt:yyyy-MM-dd HH:mm}</td>
                 </tr>
             """))
-            : "<tr><td colspan=\"4\" style=\"padding: 1rem; color: #94a3b8; text-align: center;\">Henüz başvuru yapılmamış. İlk başvuran siz olun!</td></tr>";
+            : "<tr><td colspan=\"4\" style=\"padding: 1.5rem; color: #55685C; text-align: center;\">Henüz başvuru yapılmamış. İlk başvuran siz olun!</td></tr>";
 
         var userSelect = string.Join("\n", allUsers.Select(u => $"<option value=\"{u.Id}\">{u.Name} (#{u.Id})</option>"));
 
@@ -291,33 +321,35 @@ public class JobPostingController : Controller
             <meta charset="UTF-8">
             <title>{{job.Title}} — {{job.Company}}</title>
             <style>
-                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }
+                body { font-family: sans-serif; background: #FAF9F6; color: #1C2920; padding: 2rem 1rem; }
                 .container { max-width: 850px; margin: 0 auto; }
-                .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; }
-                .btn { display: inline-block; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; }
-                .btn-primary { background: #4f46e5; color: #fff; }
-                a { color: #38bdf8; text-decoration: none; }
+                .card { background: #FFFFFF; border: 1px solid #E2DFD6; border-radius: 4px; padding: 2.25rem; margin-bottom: 2rem; box-shadow: none; }
+                .btn { display: inline-flex; align-items: center; padding: 0.55rem 1.25rem; border-radius: 9999px; font-weight: 700; text-decoration: none; cursor: pointer; border: none; font-size: 0.88rem; }
+                .btn-primary { background: #004225; color: #fff; }
+                .btn-primary:hover { background: #065A35; }
+                a { color: #004225; text-decoration: none; font-weight: 600; }
+                a:hover { text-decoration: underline; }
                 table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-                th { text-align: left; padding: 0.6rem; color: #94a3b8; border-bottom: 1px solid #334155; background: rgba(0,0,0,0.2); }
+                th { text-align: left; padding: 0.75rem 1rem; color: #55685C; border-bottom: 1px solid #E2DFD6; background: #F5F4EE; font-size: 0.8rem; text-transform: uppercase; }
             </style>
         </head>
         <body>
             <div class="container">
-                <p style="margin-bottom: 1rem;"><a href="/jobs">&larr; Tüm İlanlara Dön</a></p>
+                <p style="margin-bottom: 1.25rem;"><a href="/jobs">&larr; Tüm İlanlara Dön</a></p>
                 <div class="card">
-                    <span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: 700; font-size: 0.85rem;">{{job.Company}}</span>
-                    <h1 style="color: #fff; margin: 0.5rem 0 0.2rem 0;">{{job.Title}}</h1>
-                    <p style="color: #94a3b8; font-size: 0.95rem; margin-bottom: 1.5rem;">📍 {{job.Location}} &bull; İlanı Veren: <strong>{{(job.User != null ? job.User.Name : $"User #{job.UserId}")}}</strong> &bull; Tarih: {{job.CreatedAt:yyyy-MM-dd}}</p>
+                    <span style="background: #E8F0EB; color: #004225; padding: 0.2rem 0.7rem; border-radius: 9999px; font-weight: 700; font-size: 0.8rem; border: 1px solid #C8DBCF;">{{job.Company}}</span>
+                    <h1 style="color: #004225; margin: 0.6rem 0 0.25rem 0; font-size: 1.85rem;">{{job.Title}}</h1>
+                    <p style="color: #55685C; font-size: 0.95rem; margin-bottom: 1.75rem;">📍 {{job.Location}} &bull; İlanı Veren: <strong>{{(job.User != null ? job.User.Name : $"User #{job.UserId}")}}</strong> &bull; Tarih: {{job.CreatedAt:yyyy-MM-dd}}</p>
                     
-                    <h3 style="color: #fff; margin-bottom: 0.5rem;">İlan Açıklaması:</h3>
-                    <p style="color: #cbd5e1; line-height: 1.6; margin-bottom: 2rem;">{{job.Description}}</p>
+                    <h3 style="color: #0F2A1D; margin-bottom: 0.5rem; font-size: 1.1rem;">İlan Açıklaması:</h3>
+                    <p style="color: #1C2920; line-height: 1.6; margin-bottom: 2rem;">{{job.Description}}</p>
 
                     <!-- Quick Apply Box -->
-                    <div style="background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 1.25rem;">
-                        <h4 style="color: #fff; margin-bottom: 0.75rem;">🚀 Bu İlana Başvur:</h4>
+                    <div style="background: #F5F4EE; border: 1px solid #E2DFD6; border-radius: 4px; padding: 1.25rem;">
+                        <h4 style="color: #004225; margin-bottom: 0.75rem;">🚀 Bu İlana Başvur:</h4>
                         <form method="POST" action="/jobs/{{job.Id}}/apply" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-                            <label for="applicantUserId" style="color: #cbd5e1; font-size: 0.9rem;">Başvuran Mezun/Öğrenci:</label>
-                            <select name="userId" id="applicantUserId" style="padding: 0.5rem; background: #1e293b; color: #fff; border: 1px solid #334155; border-radius: 6px;">
+                            <label for="applicantUserId" style="color: #55685C; font-size: 0.9rem; font-weight: 600;">Başvuran Mezun:</label>
+                            <select name="userId" id="applicantUserId" style="padding: 0.55rem 0.75rem; background: #FFFFFF; color: #1C2920; border: 1px solid #E2DFD6; border-radius: 4px;">
                                 {{userSelect}}
                             </select>
                             <button type="submit" class="btn btn-primary">Başvuruyu Gönder</button>
@@ -326,7 +358,7 @@ public class JobPostingController : Controller
                 </div>
 
                 <div class="card">
-                    <h3 style="color: #fff; margin-bottom: 0.5rem;">📋 Gelen Başvurular (Applications - {{applications.Count()}}):</h3>
+                    <h3 style="color: #004225; margin-bottom: 0.5rem;">📋 Gelen Başvurular ({{applications.Count()}}):</h3>
                     <table>
                         <thead>
                             <tr>

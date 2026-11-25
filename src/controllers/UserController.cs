@@ -87,31 +87,43 @@ public class UserController : Controller
 
         return $$"""
         <!DOCTYPE html>
-        <html lang="en">
+        <html lang="tr">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Alumni Users (View Layer) - Week 04</title>
+            <title>Mezun Rehberi (Users) — İstanbul Üniversitesi</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
             <style>
                 :root {
-                    --bg: #0f172a;
-                    --card-bg: #1e293b;
-                    --text: #f8fafc;
-                    --text-muted: #94a3b8;
-                    --primary: #4f46e5;
-                    --accent: #10b981;
-                    --danger: #ef4444;
-                    --border: #334155;
+                    --bg: #FAF9F6;
+                    --card-bg: #FFFFFF;
+                    --text: #1C2920;
+                    --text-muted: #55685C;
+                    --primary: #004225;
+                    --primary-hover: #065A35;
+                    --accent: #059669;
+                    --danger: #BE123C;
+                    --border: #E2DFD6;
+                    --pill-bg: #E8F0EB;
+                    --pill-border: #C8DBCF;
                 }
                 * { box-sizing: border-box; margin: 0; padding: 0; }
                 body {
-                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                    font-family: 'Plus Jakarta Sans', sans-serif;
                     background-color: var(--bg);
+                    background-image: url('/assets/iu-gate-silhouette.svg');
+                    background-repeat: no-repeat;
+                    background-position: center 30px;
+                    background-size: 1100px auto;
+                    background-attachment: fixed;
                     color: var(--text);
                     line-height: 1.6;
-                    padding: 2rem;
+                    padding: 2rem 1rem;
+                    -webkit-font-smoothing: antialiased;
                 }
-                .container { max-width: 1000px; margin: 0 auto; }
+                .container { max-width: 1040px; margin: 0 auto; }
                 header {
                     display: flex;
                     justify-content: space-between;
@@ -119,64 +131,79 @@ public class UserController : Controller
                     border-bottom: 1px solid var(--border);
                     padding-bottom: 1.5rem;
                     margin-bottom: 2rem;
+                    flex-wrap: wrap;
+                    gap: 1rem;
                 }
-                h1 { font-size: 1.8rem; font-weight: 700; color: #fff; }
+                .header-brand { display: flex; align-items: center; gap: 0.85rem; }
+                .header-brand img { width: 44px; height: 44px; object-fit: contain; }
+                h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: 2rem; font-weight: 400; color: var(--primary); letter-spacing: -0.02em; }
+                nav { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
                 nav a {
                     color: var(--text-muted);
                     text-decoration: none;
-                    margin-left: 1.5rem;
-                    font-weight: 500;
-                    transition: color 0.2s;
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                    transition: color 0.15s;
                 }
-                nav a:hover, nav a.active { color: #fff; }
+                nav a:hover, nav a.active { color: var(--primary); }
                 .card {
                     background-color: var(--card-bg);
                     border: 1px solid var(--border);
-                    border-radius: 12px;
-                    padding: 1.5rem;
+                    border-radius: 4px;
+                    padding: 1.75rem;
                     margin-bottom: 2rem;
+                    box-shadow: none;
                 }
                 .card-header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 1rem;
+                    margin-bottom: 1.25rem;
                 }
                 table { width: 100%; border-collapse: collapse; }
                 th, td {
                     text-align: left;
                     padding: 0.85rem 1rem;
                     border-bottom: 1px solid var(--border);
+                    font-size: 0.9rem;
                 }
-                th { color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; background: rgba(0,0,0,0.15); }
+                th { color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase; background: #F5F4EE; letter-spacing: 0.04em; }
                 .badge-year {
-                    background: rgba(79, 70, 229, 0.2);
-                    color: #818cf8;
-                    padding: 0.2rem 0.5rem;
-                    border-radius: 4px;
-                    font-weight: 600;
+                    background: var(--pill-bg);
+                    color: var(--primary);
+                    padding: 0.2rem 0.55rem;
+                    border-radius: 9999px;
+                    font-weight: 700;
+                    font-size: 0.8rem;
+                    border: 1px solid var(--pill-border);
                 }
                 .badge-role {
-                    background: rgba(16, 185, 129, 0.2);
-                    color: #34d399;
-                    padding: 0.2rem 0.5rem;
-                    border-radius: 4px;
-                    font-size: 0.85rem;
+                    background: #FEF3C7;
+                    color: #92400E;
+                    padding: 0.2rem 0.55rem;
+                    border-radius: 9999px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
                 }
                 .btn {
-                    display: inline-block;
-                    padding: 0.4rem 0.8rem;
-                    border-radius: 6px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0.45rem 1rem;
+                    border-radius: 9999px;
                     font-size: 0.85rem;
-                    font-weight: 600;
+                    font-weight: 700;
                     text-decoration: none;
                     cursor: pointer;
-                    border: none;
+                    border: 1px solid transparent;
+                    transition: background 0.15s;
                 }
                 .btn-primary { background: var(--primary); color: #fff; }
-                .btn-secondary { background: #334155; color: #fff; }
-                .btn-danger { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-                .btn-danger:hover { background: var(--danger); color: #fff; }
+                .btn-primary:hover { background: var(--primary-hover); }
+                .btn-secondary { background: #FFFFFF; color: var(--primary); border: 1px solid var(--border); }
+                .btn-secondary:hover { background: var(--pill-bg); }
+                .btn-danger { background: #FFE4E6; color: var(--danger); border: 1px solid #FECDD3; }
+                .btn-danger:hover { background: #F43F5E; color: #fff; }
                 .form-grid {
                     display: grid;
                     grid-template-columns: 2fr 2fr 1fr 1fr auto;
@@ -185,17 +212,20 @@ public class UserController : Controller
                 }
                 .form-group label {
                     display: block;
-                    font-size: 0.85rem;
+                    font-size: 0.82rem;
+                    font-weight: 600;
                     color: var(--text-muted);
-                    margin-bottom: 0.3rem;
+                    margin-bottom: 0.35rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.03em;
                 }
                 .form-control {
                     width: 100%;
-                    padding: 0.5rem 0.75rem;
-                    border-radius: 6px;
+                    padding: 0.55rem 0.75rem;
+                    border-radius: 4px;
                     border: 1px solid var(--border);
-                    background: #0f172a;
-                    color: #fff;
+                    background: #FFFFFF;
+                    color: var(--text);
                     font-size: 0.9rem;
                 }
                 .form-control:focus { outline: none; border-color: var(--primary); }
@@ -204,41 +234,44 @@ public class UserController : Controller
         <body>
             <div class="container">
                 <header>
-                    <div>
-                        <h1>Alumni Management (View Layer)</h1>
-                        <p style="color: var(--text-muted); font-size: 0.9rem;">Week 04 — MVC Architecture: UserController serving HTML Views</p>
+                    <div class="header-brand">
+                        <img src="/assets/iu-logo.svg" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg';" alt="IU Logo">
+                        <div>
+                            <h1>Mezun Yönetimi (Rehber)</h1>
+                            <p style="color: var(--text-muted); font-size: 0.85rem;">İstanbul Üniversitesi &bull; Nazife Türk &bull; MVC UserController</p>
+                        </div>
                     </div>
                     <nav>
-                        <a href="/">Home</a>
-                        <a href="/users" class="active">Users (View)</a>
-                        <a href="/announcements">Announcements (View)</a>
-                        <a href="/api/users">API Users (JSON)</a>
-                        <a href="/api/swagger" style="color: #34d399; font-weight: 700;">Swagger ⚡</a>
+                        <a href="/">Ana Sayfa</a>
+                        <a href="/users" class="active">Mezunlar</a>
+                        <a href="/jobs">İş İlanları</a>
+                        <a href="/announcements">Duyurular</a>
+                        <a href="/swagger" style="color: var(--primary); font-weight: 700;">Swagger API</a>
                     </nav>
                 </header>
 
                 <!-- Create User Quick Form -->
                 <div class="card">
-                    <h3 style="margin-bottom: 1rem; font-size: 1.1rem; color: #fff;">➕ Add New Alumni Record (POST /users)</h3>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.1rem; color: var(--primary);">➕ Yeni Mezun Kaydı Ekle (POST /users)</h3>
                     <form method="POST" action="/users">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Full Name</label>
-                                <input type="text" name="name" class="form-control" placeholder="e.g. Nazife Türk" required>
+                                <label>Ad Soyad</label>
+                                <input type="text" name="name" class="form-control" placeholder="Örn: Nazife Türk" required>
                             </div>
                             <div class="form-group">
-                                <label>Email (Optional)</label>
+                                <label>E-posta</label>
                                 <input type="email" name="email" class="form-control" placeholder="nazife@ogr.iu.edu.tr">
                             </div>
                             <div class="form-group">
-                                <label>Grad Year</label>
+                                <label>Mezuniyet Yılı</label>
                                 <input type="number" name="graduationYear" class="form-control" value="2026" required>
                             </div>
                             <div class="form-group">
-                                <label>Role</label>
+                                <label>Rol / Unvan</label>
                                 <input type="text" name="role" class="form-control" value="alumni">
                             </div>
-                            <button type="submit" class="btn btn-primary" style="padding: 0.55rem 1.2rem;">Add User</button>
+                            <button type="submit" class="btn btn-primary" style="padding: 0.55rem 1.4rem;">Kaydet</button>
                         </div>
                     </form>
                 </div>
@@ -246,18 +279,18 @@ public class UserController : Controller
                 <!-- User Table -->
                 <div class="card">
                     <div class="card-header">
-                        <h3>📋 Registered Alumni List (GET /users)</h3>
-                        <span style="color: var(--text-muted); font-size: 0.9rem;">Total: {{users.Count()}} users</span>
+                        <h3 style="color: var(--primary);">📋 Kayıtlı Mezun Listesi (GET /users)</h3>
+                        <span style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600;">Toplam: {{users.Count()}} mezun</span>
                     </div>
                     <table>
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Year</th>
-                                <th>Role</th>
-                                <th>Actions</th>
+                                <th>Ad Soyad</th>
+                                <th>E-posta</th>
+                                <th>Mezuniyet</th>
+                                <th>Rol</th>
+                                <th>İşlemler</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -275,42 +308,49 @@ public class UserController : Controller
     {
         return """
         <!DOCTYPE html>
-        <html lang="en">
+        <html lang="tr">
         <head>
             <meta charset="UTF-8">
-            <title>Create User - Alumni</title>
+            <title>Yeni Mezun Ekle — İstanbul Üniversitesi</title>
             <style>
-                body { font-family: sans-serif; background: #0f172a; color: #fff; padding: 2rem; display: flex; justify-content: center; }
-                .card { background: #1e293b; border-radius: 12px; padding: 2rem; width: 100%; max-width: 500px; border: 1px solid #334155; }
+                body { font-family: sans-serif; background: #FAF9F6; color: #1C2920; padding: 2rem; display: flex; justify-content: center; }
+                .card { background: #FFFFFF; border-radius: 4px; padding: 2rem; width: 100%; max-width: 500px; border: 1px solid #E2DFD6; box-shadow: none; }
+                .logo { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+                .logo img { width: 40px; height: 40px; }
                 .form-group { margin-bottom: 1.2rem; }
-                label { display: block; margin-bottom: 0.4rem; color: #94a3b8; font-size: 0.9rem; }
-                input { width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; box-sizing: border-box; }
-                .btn { padding: 0.6rem 1.2rem; background: #4f46e5; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
-                a { color: #94a3b8; text-decoration: none; margin-left: 1rem; }
+                label { display: block; margin-bottom: 0.4rem; color: #55685C; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; }
+                input { width: 100%; padding: 0.6rem; border-radius: 4px; border: 1px solid #E2DFD6; background: #FFFFFF; color: #1C2920; box-sizing: border-box; }
+                input:focus { outline: none; border-color: #004225; }
+                .btn { padding: 0.65rem 1.4rem; background: #004225; color: #fff; border: none; border-radius: 9999px; cursor: pointer; font-weight: 700; text-decoration: none; display: inline-block; }
+                .btn:hover { background: #065A35; }
+                a.cancel { color: #55685C; text-decoration: none; margin-left: 1rem; font-size: 0.9rem; }
             </style>
         </head>
         <body>
             <div class="card">
-                <h2 style="margin-bottom: 1.5rem;">Create New Alumnus</h2>
+                <div class="logo">
+                    <img src="/assets/iu-logo.svg" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg';" alt="IU">
+                    <h2 style="color: #004225; font-size: 1.35rem;">Yeni Mezun Kaydı</h2>
+                </div>
                 <form method="POST" action="/users">
                     <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" name="name" required>
+                        <label>Ad Soyad</label>
+                        <input type="text" name="name" required placeholder="Örn: Nazife Türk">
                     </div>
                     <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" name="email">
+                        <label>E-posta</label>
+                        <input type="email" name="email" placeholder="nazife@ogr.iu.edu.tr">
                     </div>
                     <div class="form-group">
-                        <label>Graduation Year</label>
+                        <label>Mezuniyet Yılı</label>
                         <input type="number" name="graduationYear" value="2026" required>
                     </div>
                     <div class="form-group">
-                        <label>Role</label>
+                        <label>Rol / Unvan</label>
                         <input type="text" name="role" value="alumni">
                     </div>
-                    <button type="submit" class="btn">Save Alumnus</button>
-                    <a href="/users">Cancel</a>
+                    <button type="submit" class="btn">Mezunu Kaydet</button>
+                    <a href="/users" class="cancel">İptal</a>
                 </form>
             </div>
         </body>
@@ -322,31 +362,39 @@ public class UserController : Controller
     {
         return $$"""
         <!DOCTYPE html>
-        <html lang="en">
+        <html lang="tr">
         <head>
             <meta charset="UTF-8">
-            <title>User Detail - {{user.Name}}</title>
+            <title>Mezun Profili — {{user.Name}}</title>
             <style>
-                body { font-family: sans-serif; background: #0f172a; color: #fff; padding: 2rem; display: flex; justify-content: center; }
-                .card { background: #1e293b; border-radius: 12px; padding: 2rem; width: 100%; max-width: 550px; border: 1px solid #334155; }
-                .row { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #334155; }
-                .label { color: #94a3b8; }
-                .value { font-weight: 600; }
-                .btn { display: inline-block; margin-top: 1.5rem; padding: 0.6rem 1.2rem; background: #4f46e5; color: #fff; border-radius: 6px; text-decoration: none; font-weight: 600; }
+                body { font-family: sans-serif; background: #FAF9F6; color: #1C2920; padding: 2rem; display: flex; justify-content: center; }
+                .card { background: #FFFFFF; border-radius: 4px; padding: 2.25rem; width: 100%; max-width: 550px; border: 1px solid #E2DFD6; box-shadow: none; }
+                .logo { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+                .logo img { width: 44px; height: 44px; }
+                .row { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #EBE8E0; font-size: 0.95rem; }
+                .label { color: #55685C; font-weight: 600; }
+                .value { font-weight: 700; color: #004225; }
+                .btn { display: inline-block; margin-top: 1.5rem; padding: 0.65rem 1.4rem; background: #004225; color: #fff; border-radius: 9999px; text-decoration: none; font-weight: 700; }
+                .btn:hover { background: #065A35; }
             </style>
         </head>
         <body>
             <div class="card">
-                <h2>Alumnus Profile #{{user.Id}}</h2>
-                <p style="color: #94a3b8; margin-bottom: 1.5rem;">View Layer representation from UserController</p>
+                <div class="logo">
+                    <img src="/assets/iu-logo.svg" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/1/1e/%C4%B0stanbul_%C3%9Cniversitesi_Logo.svg';" alt="IU">
+                    <div>
+                        <h2 style="color: #004225; font-size: 1.4rem;">Mezun Profili #{{user.Id}}</h2>
+                        <span style="color: #55685C; font-size: 0.85rem;">İstanbul Üniversitesi &bull; Nazife Türk</span>
+                    </div>
+                </div>
                 
-                <div class="row"><span class="label">Name</span><span class="value">{{user.Name}}</span></div>
-                <div class="row"><span class="label">Email</span><span class="value">{{user.Email}}</span></div>
-                <div class="row"><span class="label">Graduation Year</span><span class="value">{{user.GraduationYear}}</span></div>
-                <div class="row"><span class="label">Role</span><span class="value">{{user.Role}}</span></div>
-                <div class="row"><span class="label">Registered At</span><span class="value">{{user.CreatedAt:yyyy-MM-dd HH:mm}} UTC</span></div>
+                <div class="row"><span class="label">Ad Soyad</span><span class="value">{{user.Name}}</span></div>
+                <div class="row"><span class="label">E-posta</span><span class="value">{{user.Email}}</span></div>
+                <div class="row"><span class="label">Mezuniyet Yılı</span><span class="value">{{user.GraduationYear}}</span></div>
+                <div class="row"><span class="label">Rol / Unvan</span><span class="value">{{user.Role}}</span></div>
+                <div class="row"><span class="label">Kayıt Tarihi</span><span class="value">{{user.CreatedAt:yyyy-MM-dd HH:mm}} UTC</span></div>
 
-                <a href="/users" class="btn">Back to Users List</a>
+                <a href="/users" class="btn">&larr; Mezunlar Listesine Dön</a>
             </div>
         </body>
         </html>

@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="100%" height="100%">
+  <!-- 
+    İstanbul Üniversitesi Tarihi Beyazıt Ana Giriş Kapısı (1865-1866)
+    Minimalist & Zarif Mimari Silüet (Architectural Watermark Silhouette)
+  -->
+  <defs>
+    <style>
+      .gate-fill { fill: #004225; fill-opacity: 0.045; }
+      .gate-stroke { stroke: #004225; stroke-opacity: 0.09; stroke-width: 1.5; fill: none; }
+      .gate-accent { fill: #004225; fill-opacity: 0.07; }
+    </style>
+  </defs>
+
+  <g id="iu-main-gate">
+    <!-- ── 1. Kaide ve Merdivenler (Base & Foundation Steps) ── -->
+    <rect class="gate-fill" x="80" y="560" width="1040" height="12" rx="2" />
+    <rect class="gate-fill" x="110" y="546" width="980" height="14" rx="2" />
+    <rect class="gate-fill" x="140" y="532" width="920" height="14" rx="2" />
+    <rect class="gate-fill" x="160" y="518" width="880" height="14" rx="2" />
+
+    <!-- ── 2. Sol Kanat Nöbetçi Köşkü / Kule (Left Sentry Pavilion) ── -->
+    <!-- Kule Gövdesi -->
+    <rect class="gate-fill" x="170" y="320" width="80" height="198" />
+    <rect class="gate-accent" x="160" y="306" width="100" height="14" />
+    <rect class="gate-fill" x="150" y="278" width="120" height="28" />
+    <!-- Üst Saçak ve Alem -->
+    <path class="gate-fill" d="M150 278 L170 240 L250 240 L270 278 Z" />
+    <rect class="gate-accent" x="195" y="224" width="30" height="16" />
+    <circle class="gate-accent" cx="210" cy="216" r="8" />
+    <path class="gate-stroke" d="M210 208 L210 196" />
+    <!-- Dekoratif Nişler -->
+    <rect class="gate-stroke" x="190" y="340" width="40" height="90" rx="20" />
+
+    <!-- ── 3. Sağ Kanat Nöbetçi Köşkü / Kule (Right Sentry Pavilion) ── -->
+    <!-- Kule Gövdesi -->
+    <rect class="gate-fill" x="950" y="320" width="80" height="198" />
+    <rect class="gate-accent" x="940" y="306" width="100" height="14" />
+    <rect class="gate-fill" x="930" y="278" width="120" height="28" />
+    <!-- Üst Saçak ve Alem -->
+    <path class="gate-fill" d="M930 278 L950 240 L1030 240 L1050 278 Z" />
+    <rect class="gate-accent" x="975" y="224" width="30" height="16" />
+    <circle class="gate-accent" cx="990" cy="216" r="8" />
+    <path class="gate-stroke" d="M990 208 L990 196" />
+    <!-- Dekoratif Nişler -->
+    <rect class="gate-stroke" x="970" y="340" width="40" height="90" rx="20" />
+
+    <!-- ── 4. Sol Yaya Giriş Kemeri Bloku (Left Pedestrian Archway) ── -->
+    <!-- Duvar Kütlesi (Kemer boşluğu hariç gövde) -->
+    <!-- Sol ayak: 250 - 285 -->
+    <rect class="gate-fill" x="250" y="306" width="35" height="212" />
+    <!-- Sağ ayak: 395 - 430 -->
+    <rect class="gate-fill" x="395" y="306" width="35" height="212" />
+    <!-- Kemer üstü alınlık duvarı: 250 - 430, y: 306 - 380 -->
+    <path class="gate-fill" d="M250 306 L430 306 L430 380 C430 380 395 330 340 330 C285 330 250 380 250 380 Z" />
+    <!-- Sol Kemer Çevreleme & Başlık Çizgileri -->
+    <path class="gate-stroke" d="M285 518 L285 380 C285 330 395 330 395 380 L395 518" />
+    <rect class="gate-accent" x="240" y="292" width="200" height="14" />
+    <rect class="gate-fill" x="230" y="264" width="220" height="28" />
+    <path class="gate-accent" d="M245 264 L265 238 L415 238 L435 264 Z" />
+    <!-- Sol Kemer Üstü Küçük Pencereler / Nişler -->
+    <rect class="gate-stroke" x="295" y="272" width="30" height="12" rx="2" />
+    <rect class="gate-stroke" x="355" y="272" width="30" height="12" rx="2" />
+
+    <!-- ── 5. Sağ Yaya Giriş Kemeri Bloku (Right Pedestrian Archway) ── -->
+    <!-- Sol ayak: 770 - 805 -->
+    <rect class="gate-fill" x="770" y="306" width="35" height="212" />
+    <!-- Sağ ayak: 915 - 950 -->
+    <rect class="gate-fill" x="915" y="306" width="35" height="212" />
+    <!-- Kemer üstü alınlık duvarı: 770 - 950, y: 306 - 380 -->
+    <path class="gate-fill" d="M770 306 L950 306 L950 380 C950 380 915 330 860 330 C805 330 770 380 770 380 Z" />
+    <!-- Sağ Kemer Çevreleme & Başlık Çizgileri -->
+    <path class="gate-stroke" d="M805 518 L805 380 C805 330 915 330 915 380 L915 518" />
+    <rect class="gate-accent" x="760" y="292" width="200" height="14" />
+    <rect class="gate-fill" x="750" y="264" width="220" height="28" />
+    <path class="gate-accent" d="M765 264 L785 238 L935 238 L955 264 Z" />
+    <!-- Sağ Kemer Üstü Küçük Pencereler / Nişler -->
+    <rect class="gate-stroke" x="815" y="272" width="30" height="12" rx="2" />
+    <rect class="gate-stroke" x="875" y="272" width="30" height="12" rx="2" />
+
+    <!-- ── 6. Merkezi Büyük Zafer Kemeri (Central Grand Triumphal Arch) ── -->
+    <!-- Sol Anıtsal Ayak & Çift Sütunlar: 430 - 490 -->
+    <rect class="gate-fill" x="430" y="230" width="60" height="288" />
+    <line class="gate-stroke" x1="450" y1="230" x2="450" y2="518" />
+    <line class="gate-stroke" x1="470" y1="230" x2="470" y2="518" />
+
+    <!-- Sağ Anıtsal Ayak & Çift Sütunlar: 710 - 770 -->
+    <rect class="gate-fill" x="710" y="230" width="60" height="288" />
+    <line class="gate-stroke" x1="730" y1="230" x2="730" y2="518" />
+    <line class="gate-stroke" x1="750" y1="230" x2="750" y2="518" />
+
+    <!-- Büyük Kemer Üstü Duvar Alanı: 430 - 770, y: 230 - 350 -->
+    <path class="gate-fill" d="M430 230 L770 230 L770 350 C770 350 710 240 600 240 C490 240 430 350 430 350 Z" />
+    <!-- Büyük Kemer Çevreleme & Arşivolt Çizgileri -->
+    <path class="gate-stroke" d="M490 518 L490 350 C490 240 710 240 710 350 L710 518" />
+    <path class="gate-stroke" d="M478 350 C478 226 722 226 722 350" />
+    <!-- Kemer Kilit Taşı (Keystone) -->
+    <polygon class="gate-accent" points="592,216 608,216 605,246 595,246" />
+
+    <!-- ── 7. Merkezi Taç Köşk & Kitabe Bloku (Upper Crown & Inscription Pavilion) ── -->
+    <!-- Ana Arşitrav & Friz -->
+    <rect class="gate-accent" x="410" y="206" width="380" height="24" />
+    <rect class="gate-fill" x="390" y="174" width="420" height="32" />
+    
+    <!-- Kitabe Alanı (Tarihi Kitabe Levhası) -->
+    <rect class="gate-stroke" x="480" y="180" width="240" height="20" rx="3" />
+    <line class="gate-stroke" x1="500" y1="190" x2="700" y2="190" stroke-dasharray="4,4" />
+
+    <!-- Taç Alınlık ve Kademeler -->
+    <path class="gate-fill" d="M410 174 L440 120 L760 120 L790 174 Z" />
+    <rect class="gate-accent" x="440" y="100" width="320" height="20" />
+    <rect class="gate-fill" x="470" y="76" width="260" height="24" />
+    
+    <!-- Zirve Kubbe / Alınlık ve 1453 Madalyonluğu -->
+    <path class="gate-fill" d="M490 76 L520 40 L680 40 L710 76 Z" />
+    <rect class="gate-accent" x="580" y="22" width="40" height="18" />
+    <path class="gate-fill" d="M570 22 L600 2 L630 22 Z" />
+    
+    <!-- Tarihi Alem / Zirve Finial -->
+    <line class="gate-stroke" x1="600" y1="2" x2="600" y2="-12" stroke-width="2" />
+    <circle class="gate-accent" cx="600" cy="-14" r="5" />
+    <path class="gate-stroke" d="M596 -18 C596 -24 604 -24 604 -18" />
+
+    <!-- Zirve Madalyonu (1453 Kuruluş Mührü) -->
+    <circle class="gate-accent" cx="600" cy="58" r="16" />
+    <circle class="gate-stroke" cx="600" cy="58" r="12" />
+
+    <!-- Köşk Üzeri Süsleme Kulecikleri / Akroterler -->
+    <circle class="gate-accent" cx="440" cy="116" r="6" />
+    <circle class="gate-accent" cx="760" cy="116" r="6" />
+    <circle class="gate-accent" cx="470" cy="94" r="5" />
+    <circle class="gate-accent" cx="730" cy="94" r="5" />
+  </g>
+</svg>

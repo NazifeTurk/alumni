@@ -7,7 +7,7 @@ public static class AlumniApiRoutes
     {
         new AlumnusRecord(
             Id: 42,
-            Name: "Emre Akadal",
+            Name: "Nazife Türk",
             Faculty: "Computer Science",
             GraduationYear: 2015,
             CurrentRole: "Senior Software Architect",
